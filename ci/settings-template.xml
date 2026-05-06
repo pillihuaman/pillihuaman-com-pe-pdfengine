@@ -1,0 +1,44 @@
+<settings xmlns="http://maven.apache.org/SETTINGS/1.0.0"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0 https://maven.apache.org/xsd/settings-1.0.0.xsd">
+
+    <!--
+      ✅ AWS CodeArtifact Maven configuration
+      Este archivo se inyecta dentro del contenedor durante el build (Dockerfile).
+      La variable {{AUTH_TOKEN}} se reemplaza automáticamente por el token
+      generado por GitHub Actions o AWS CLI.
+    -->
+
+    <servers>
+        <server>
+            <id>pillihuamanlib-pillihuaman-com-pe-lib</id>
+            <username>aws</username>
+            <password>${env.CODEARTIFACT_AUTH_TOKEN}</password>
+        </server>
+    </servers>
+
+    <profiles>
+        <profile>
+            <id>pillihuamanlib-pillihuaman-com-pe-lib</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <repositories>
+                <repository>
+                    <id>pillihuamanlib-pillihuaman-com-pe-lib</id>
+                    <url>https://pillihuamanlib-653464152705.d.codeartifact.us-east-1.amazonaws.com/maven/pillihuaman-com-pe-lib/</url>
+                </repository>
+            </repositories>
+        </profile>
+    </profiles>
+
+    <mirrors>
+        <mirror>
+            <id>pillihuamanlib-pillihuaman-com-pe-lib</id>
+            <name>pillihuamanlib-pillihuaman-com-pe-lib</name>
+            <url>https://pillihuamanlib-653464152705.d.codeartifact.us-east-1.amazonaws.com/maven/pillihuaman-com-pe-lib/</url>
+            <mirrorOf>*</mirrorOf>
+        </mirror>
+    </mirrors>
+
+</settings>

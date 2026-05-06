@@ -1,0 +1,17 @@
+db.contacts.aggregate([
+  {
+    $unwind: "$emails" // Descompone el array de emails
+  },
+  {
+    $group: {
+      _id: { tenantId: "$tenantId", email: "$emails.address" }, // Agrupa por tenant y email
+      uniqueIds: { $addToSet: "$_id" }, // Crea un array de los IDs de documento
+      count: { $sum: 1 } // Cuenta cuántos documentos hay en cada grupo
+    }
+  },
+  {
+    $match: {
+      count: { "$gt": 1 } // Muestra solo los grupos con más de un documento (los duplicados)
+    }
+  }
+])

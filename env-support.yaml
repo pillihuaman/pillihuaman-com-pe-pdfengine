@@ -1,0 +1,28 @@
+# PERSISTENCIA
+spring.data.mongodb.uri: "mongodb+srv://fibertechandia:fo82yPNOXU5GMQam@cluster0.13xuhrg.mongodb.net/fibertechia?retryWrites=true&w=majority&appName=Cluster0"
+spring.data.mongodb.database: "fibertechia"
+
+# SEGURIDAD Y TOKEN
+application.security.jwt.secret-key: "404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970"
+
+# COMUNICACIÓN INTER-SERVICE (DOMINIOS PRO)
+external-api.url: "https://security.alamodaperu.online"
+neuro-ia.api.url: "https://neuroia.alamodaperu.online"
+
+# ALIEXPRESS (CON VARIABLES SEGÚN PROPERTIES)
+ALI_APP_KEY: "523194"
+ALI_SECRET: "zwCKbC9UYZ37po7POTUzCN4BIcFTL4w4"
+ALI_TRACKING_ID: "default"
+
+# SHEIN
+SHEIN_SID: "IRD6oqsRvpYc6767451nktqwY6euEpEZW1"
+SHEIN_TOKEN: "oLPs2EB9fefKfSAZPAQ-CAnwgKrij_JM"
+
+# AMAZON
+AMAZON_TAG: "alamodaperu-20"
+
+# CORS (ESENCIAL PARA EL FRONTEND)
+CORS_ORIGINS: "https://alamodaperu.online,https://security.alamodaperu.online,https://support.alamodaperu.online,https://neuroia.alamodaperu.online,https://alamoda-frontend-1068521170727.us-central1.run.app"
+
+# OPTIMIZACIÓN DE COSTOS Y LOGS
+LOG_LEVEL: "ERROR"

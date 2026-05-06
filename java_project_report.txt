@@ -1,0 +1,3152 @@
+============================================
+FULL PROJECT STRUCTURE REPORT
+Generated on: Wed May  6 16:24:36 SAPST 2026
+Backend Root: /d/Config/TestAzure/Back-end/pillihuaman-com-pe-pdfengine/src
+Frontend Root: /d/Config/TestAzure/Front-end/src/app/@presentation/pages/tools/pdf-editor
+============================================
+
+---- BACKEND DIRECTORY STRUCTURE ----
+/d/Config/TestAzure/Back-end/pillihuaman-com-pe-pdfengine/src/main/java/pillihuaman/com/pe/pdfengine/application/dto/PdfEditableRequest.java
+/d/Config/TestAzure/Back-end/pillihuaman-com-pe-pdfengine/src/main/java/pillihuaman/com/pe/pdfengine/application/port/inbound/PdfUseCase.java
+/d/Config/TestAzure/Back-end/pillihuaman-com-pe-pdfengine/src/main/java/pillihuaman/com/pe/pdfengine/application/port/outbound/PdfAnalyzerPort.java
+/d/Config/TestAzure/Back-end/pillihuaman-com-pe-pdfengine/src/main/java/pillihuaman/com/pe/pdfengine/application/port/outbound/PdfPersistencePort.java
+/d/Config/TestAzure/Back-end/pillihuaman-com-pe-pdfengine/src/main/java/pillihuaman/com/pe/pdfengine/application/port/outbound/PdfProcessingPort.java
+/d/Config/TestAzure/Back-end/pillihuaman-com-pe-pdfengine/src/main/java/pillihuaman/com/pe/pdfengine/application/port/outbound/PdfStoragePort.java
+/d/Config/TestAzure/Back-end/pillihuaman-com-pe-pdfengine/src/main/java/pillihuaman/com/pe/pdfengine/application/port/outbound/PromptExternalPort.java
+/d/Config/TestAzure/Back-end/pillihuaman-com-pe-pdfengine/src/main/java/pillihuaman/com/pe/pdfengine/application/service/PdfService.java
+/d/Config/TestAzure/Back-end/pillihuaman-com-pe-pdfengine/src/main/java/pillihuaman/com/pe/pdfengine/Application.java
+/d/Config/TestAzure/Back-end/pillihuaman-com-pe-pdfengine/src/main/java/pillihuaman/com/pe/pdfengine/domain/exception/BusinessLogicException.java
+/d/Config/TestAzure/Back-end/pillihuaman-com-pe-pdfengine/src/main/java/pillihuaman/com/pe/pdfengine/domain/exception/ResourceNotFoundException.java
+/d/Config/TestAzure/Back-end/pillihuaman-com-pe-pdfengine/src/main/java/pillihuaman/com/pe/pdfengine/domain/model/external/AiClassificationResponse.java
+/d/Config/TestAzure/Back-end/pillihuaman-com-pe-pdfengine/src/main/java/pillihuaman/com/pe/pdfengine/domain/model/external/AiLayoutRequest.java
+/d/Config/TestAzure/Back-end/pillihuaman-com-pe-pdfengine/src/main/java/pillihuaman/com/pe/pdfengine/domain/model/external/PromptAndVersionDTO.java
+/d/Config/TestAzure/Back-end/pillihuaman-com-pe-pdfengine/src/main/java/pillihuaman/com/pe/pdfengine/domain/model/external/PromptVersion.java
+/d/Config/TestAzure/Back-end/pillihuaman-com-pe-pdfengine/src/main/java/pillihuaman/com/pe/pdfengine/domain/model/external/ReqPrompt.java
+/d/Config/TestAzure/Back-end/pillihuaman-com-pe-pdfengine/src/main/java/pillihuaman/com/pe/pdfengine/domain/model/external/RespPrompt.java
+/d/Config/TestAzure/Back-end/pillihuaman-com-pe-pdfengine/src/main/java/pillihuaman/com/pe/pdfengine/domain/model/GraphicElement.java
+/d/Config/TestAzure/Back-end/pillihuaman-com-pe-pdfengine/src/main/java/pillihuaman/com/pe/pdfengine/domain/model/PdfDocument.java
+/d/Config/TestAzure/Back-end/pillihuaman-com-pe-pdfengine/src/main/java/pillihuaman/com/pe/pdfengine/domain/model/PdfEditableStructure.java
+/d/Config/TestAzure/Back-end/pillihuaman-com-pe-pdfengine/src/main/java/pillihuaman/com/pe/pdfengine/domain/model/PdfMetadata.java
+/d/Config/TestAzure/Back-end/pillihuaman-com-pe-pdfengine/src/main/java/pillihuaman/com/pe/pdfengine/domain/model/PdfPageContent.java
+/d/Config/TestAzure/Back-end/pillihuaman-com-pe-pdfengine/src/main/java/pillihuaman/com/pe/pdfengine/domain/model/TextElement.java
+/d/Config/TestAzure/Back-end/pillihuaman-com-pe-pdfengine/src/main/java/pillihuaman/com/pe/pdfengine/infrastructure/adapter/inbound/rest/PdfRestController.java
+/d/Config/TestAzure/Back-end/pillihuaman-com-pe-pdfengine/src/main/java/pillihuaman/com/pe/pdfengine/infrastructure/adapter/outbound/external/AiLayoutClientAdapter.java
+/d/Config/TestAzure/Back-end/pillihuaman-com-pe-pdfengine/src/main/java/pillihuaman/com/pe/pdfengine/infrastructure/adapter/outbound/external/PdfNeuroiaStorageAdapter.java
+/d/Config/TestAzure/Back-end/pillihuaman-com-pe-pdfengine/src/main/java/pillihuaman/com/pe/pdfengine/infrastructure/adapter/outbound/external/PromptRestAdapter.java
+/d/Config/TestAzure/Back-end/pillihuaman-com-pe-pdfengine/src/main/java/pillihuaman/com/pe/pdfengine/infrastructure/adapter/outbound/PdfBoxAdapter.java
+/d/Config/TestAzure/Back-end/pillihuaman-com-pe-pdfengine/src/main/java/pillihuaman/com/pe/pdfengine/infrastructure/adapter/outbound/PdfBoxAnalyzerAdapter.java
+/d/Config/TestAzure/Back-end/pillihuaman-com-pe-pdfengine/src/main/java/pillihuaman/com/pe/pdfengine/infrastructure/adapter/outbound/persistence/PdfMetadataEntity.java
+/d/Config/TestAzure/Back-end/pillihuaman-com-pe-pdfengine/src/main/java/pillihuaman/com/pe/pdfengine/infrastructure/adapter/outbound/persistence/PdfMetadataRepository.java
+/d/Config/TestAzure/Back-end/pillihuaman-com-pe-pdfengine/src/main/java/pillihuaman/com/pe/pdfengine/infrastructure/adapter/outbound/persistence/PdfMongoAdapter.java
+/d/Config/TestAzure/Back-end/pillihuaman-com-pe-pdfengine/src/main/java/pillihuaman/com/pe/pdfengine/infrastructure/common/ReqBase.java
+/d/Config/TestAzure/Back-end/pillihuaman-com-pe-pdfengine/src/main/java/pillihuaman/com/pe/pdfengine/infrastructure/common/RespBase.java
+/d/Config/TestAzure/Back-end/pillihuaman-com-pe-pdfengine/src/main/java/pillihuaman/com/pe/pdfengine/infrastructure/config/MongoConfig.java
+/d/Config/TestAzure/Back-end/pillihuaman-com-pe-pdfengine/src/main/java/pillihuaman/com/pe/pdfengine/infrastructure/config/ReactiveGlobalExceptionHandler.java
+/d/Config/TestAzure/Back-end/pillihuaman-com-pe-pdfengine/src/main/java/pillihuaman/com/pe/pdfengine/infrastructure/config/WebClientConfig.java
+/d/Config/TestAzure/Back-end/pillihuaman-com-pe-pdfengine/src/main/java/pillihuaman/com/pe/pdfengine/infrastructure/security/JwtReactiveFilter.java
+/d/Config/TestAzure/Back-end/pillihuaman-com-pe-pdfengine/src/main/java/pillihuaman/com/pe/pdfengine/infrastructure/security/JwtTokenProvider.java
+/d/Config/TestAzure/Back-end/pillihuaman-com-pe-pdfengine/src/main/java/pillihuaman/com/pe/pdfengine/infrastructure/security/model/MyJsonWebToken.java
+/d/Config/TestAzure/Back-end/pillihuaman-com-pe-pdfengine/src/main/java/pillihuaman/com/pe/pdfengine/infrastructure/security/model/ResponseUser.java
+/d/Config/TestAzure/Back-end/pillihuaman-com-pe-pdfengine/src/main/java/pillihuaman/com/pe/pdfengine/infrastructure/security/SecurityConfig.java
+/d/Config/TestAzure/Back-end/pillihuaman-com-pe-pdfengine/src/main/java/pillihuaman/com/pe/pdfengine/infrastructure/security/TenantWebFilter.java
+/d/Config/TestAzure/Back-end/pillihuaman-com-pe-pdfengine/src/main/resources/application.properties
+/d/Config/TestAzure/Back-end/pillihuaman-com-pe-pdfengine/src/main/resources/config.properties
+/d/Config/TestAzure/Back-end/pillihuaman-com-pe-pdfengine/src/main/resources/config.yml
+/d/Config/TestAzure/Back-end/pillihuaman-com-pe-pdfengine/src/main/resources/log4j.properties
+/d/Config/TestAzure/Back-end/pillihuaman-com-pe-pdfengine/src/main/resources/log4j2.xml
+
+---- BACKEND JAVA FILE CONTENT ----
+
+============================================
+FILE: /d/Config/TestAzure/Back-end/pillihuaman-com-pe-pdfengine/src/main/java/pillihuaman/com/pe/pdfengine/application/dto/PdfEditableRequest.java
+============================================
+package pillihuaman.com.pe.pdfengine.application.dto;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import pillihuaman.com.pe.pdfengine.domain.model.PdfPageContent;
+
+import java.util.List;
+
+
+@JsonIgnoreProperties(ignoreUnknown = true)
+public record PdfEditableRequest(
+
+
+        @JsonProperty("base64OriginalPdf")
+        String base64OriginalPdf,
+
+        @JsonProperty("pages")
+        List<PdfPageContent> pages
+) {
+}
+
+============================================
+FILE: /d/Config/TestAzure/Back-end/pillihuaman-com-pe-pdfengine/src/main/java/pillihuaman/com/pe/pdfengine/application/port/inbound/PdfUseCase.java
+============================================
+package pillihuaman.com.pe.pdfengine.application.port.inbound;
+
+import pillihuaman.com.pe.pdfengine.application.dto.PdfEditableRequest;
+import pillihuaman.com.pe.pdfengine.domain.model.PdfDocument;
+import pillihuaman.com.pe.pdfengine.domain.model.PdfEditableStructure;
+import reactor.core.publisher.Mono;
+
+import java.util.List;
+
+public interface PdfUseCase {
+
+    Mono<String> mergeDocuments(List<PdfDocument> documents);
+
+
+    Mono<PdfEditableStructure> analyzeAndOptimize(byte[] pdfBytes, String bearerToken);
+
+    Mono<byte[]> updateDocumentContent(PdfEditableRequest request);
+}
+
+
+============================================
+FILE: /d/Config/TestAzure/Back-end/pillihuaman-com-pe-pdfengine/src/main/java/pillihuaman/com/pe/pdfengine/application/port/outbound/PdfAnalyzerPort.java
+============================================
+package pillihuaman.com.pe.pdfengine.application.port.outbound;
+
+import pillihuaman.com.pe.pdfengine.domain.model.PdfEditableStructure;
+import reactor.core.publisher.Mono;
+
+public interface PdfAnalyzerPort {
+  Mono<PdfEditableStructure> analyze(byte[] pdfBytes);
+}
+
+
+============================================
+FILE: /d/Config/TestAzure/Back-end/pillihuaman-com-pe-pdfengine/src/main/java/pillihuaman/com/pe/pdfengine/application/port/outbound/PdfPersistencePort.java
+============================================
+package pillihuaman.com.pe.pdfengine.application.port.outbound;
+
+import pillihuaman.com.pe.pdfengine.domain.model.PdfDocument;
+import reactor.core.publisher.Mono;
+
+/**
+ * Outbound Port for PDF metadata persistence.
+ */
+public interface PdfPersistencePort {
+    Mono<PdfDocument> saveMetadata(PdfDocument document);
+}
+
+
+============================================
+FILE: /d/Config/TestAzure/Back-end/pillihuaman-com-pe-pdfengine/src/main/java/pillihuaman/com/pe/pdfengine/application/port/outbound/PdfProcessingPort.java
+============================================
+package pillihuaman.com.pe.pdfengine.application.port.outbound;
+
+import pillihuaman.com.pe.pdfengine.domain.model.PdfDocument;
+import pillihuaman.com.pe.pdfengine.domain.model.PdfEditableStructure;
+import reactor.core.publisher.Mono;
+
+import java.util.List;
+
+public interface PdfProcessingPort {
+    Mono<PdfDocument> merge(List<PdfDocument> documents);
+
+    Mono<PdfDocument> compress(PdfDocument document);
+
+    Mono<byte[]> redraw(PdfEditableStructure structure);
+
+    Mono<byte[]> redrawWithTemplate(PdfEditableStructure structure, byte[] templateBytes);
+}
+
+
+============================================
+FILE: /d/Config/TestAzure/Back-end/pillihuaman-com-pe-pdfengine/src/main/java/pillihuaman/com/pe/pdfengine/application/port/outbound/PdfStoragePort.java
+============================================
+package pillihuaman.com.pe.pdfengine.application.port.outbound;
+
+import pillihuaman.com.pe.pdfengine.domain.model.PdfDocument;
+import reactor.core.publisher.Mono;
+
+public interface PdfStoragePort {
+  Mono<String> upload(PdfDocument document);
+
+  Mono<PdfDocument> download(String fileId);
+}
+
+
+============================================
+FILE: /d/Config/TestAzure/Back-end/pillihuaman-com-pe-pdfengine/src/main/java/pillihuaman/com/pe/pdfengine/application/port/outbound/PromptExternalPort.java
+============================================
+package pillihuaman.com.pe.pdfengine.application.port.outbound;
+
+import pillihuaman.com.pe.pdfengine.domain.model.external.PromptAndVersionDTO;
+import pillihuaman.com.pe.pdfengine.domain.model.external.ReqPrompt;
+import reactor.core.publisher.Mono;
+
+public interface PromptExternalPort {
+    Mono<PromptAndVersionDTO> getPromptByCharacteristics(ReqPrompt request, String bearerToken);
+}
+
+============================================
+FILE: /d/Config/TestAzure/Back-end/pillihuaman-com-pe-pdfengine/src/main/java/pillihuaman/com/pe/pdfengine/application/service/PdfService.java
+============================================
+package pillihuaman.com.pe.pdfengine.application.service;
+
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
+import pillihuaman.com.pe.pdfengine.application.dto.PdfEditableRequest;
+import pillihuaman.com.pe.pdfengine.application.port.inbound.PdfUseCase;
+import pillihuaman.com.pe.pdfengine.application.port.outbound.PdfAnalyzerPort;
+import pillihuaman.com.pe.pdfengine.application.port.outbound.PdfProcessingPort;
+import pillihuaman.com.pe.pdfengine.application.port.outbound.PdfStoragePort;
+import pillihuaman.com.pe.pdfengine.application.port.outbound.PromptExternalPort;
+import pillihuaman.com.pe.pdfengine.domain.model.PdfDocument;
+import pillihuaman.com.pe.pdfengine.domain.model.PdfEditableStructure;
+import pillihuaman.com.pe.pdfengine.domain.model.PdfPageContent;
+import pillihuaman.com.pe.pdfengine.domain.model.TextElement;
+import pillihuaman.com.pe.pdfengine.domain.model.external.AiClassificationResponse;
+import pillihuaman.com.pe.pdfengine.infrastructure.adapter.outbound.external.AiLayoutClientAdapter;
+import pillihuaman.com.pe.pdfengine.infrastructure.security.TenantWebFilter;
+import reactor.core.publisher.Mono;
+
+import java.util.Base64;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
+@Slf4j
+@Service
+@RequiredArgsConstructor
+public class PdfService implements PdfUseCase {
+
+    private final PdfProcessingPort pdfProcessingPort;
+    private final PdfStoragePort pdfStoragePort;
+
+    private final PdfAnalyzerPort pdfAnalyzerPort;
+    private final PromptExternalPort promptExternalPort;
+    private final AiLayoutClientAdapter aiLayoutClientAdapter;
+    @Value("${application.pdf.ai-prompt-code}")
+    private String aiPromptCode;
+
+    @Override
+    public Mono<String> mergeDocuments(List<PdfDocument> documents) {
+        if (documents == null || documents.isEmpty()) {
+            return Mono.error(new IllegalArgumentException("No documents provided for merging"));
+        }
+
+        return Mono.deferContextual(ctx -> {
+            String tenantId = ctx.getOrDefault(TenantWebFilter.TENANT_KEY, "UNKNOWN");
+            log.info("Starting Merge Operation for Tenant: {} | Total Docs: {}", tenantId, documents.size());
+
+            return pdfProcessingPort.merge(documents).flatMap(mergedDoc -> {
+
+                PdfDocument docWithTenant = new PdfDocument("merged_" + System.currentTimeMillis() + ".pdf", mergedDoc.content(), mergedDoc.size(), tenantId, Map.of("processedAt", String.valueOf(System.currentTimeMillis())), Collections.emptyList());
+
+                return pdfStoragePort.upload(docWithTenant);
+            }).doOnSuccess(fileId -> log.info("Successfully merged and stored PDF: {}", fileId)).doOnError(e -> log.error("Critical error during PDF merge: {}", e.getMessage()));
+        });
+    }
+
+    @Override
+    public Mono<byte[]> updateDocumentContent(PdfEditableRequest request) {
+        return Mono.fromCallable(
+                        () -> {
+                            String base64 = request.base64OriginalPdf();
+                            if (base64 != null && base64.contains(",")) {
+                                base64 = base64.split(",")[1];
+                            }
+                            return (base64 == null || base64.isEmpty()) ? new byte[0] : Base64.getDecoder().decode(base64);
+                        })
+                .flatMap(bytes -> {
+                    // null para documentId porque ya es stateless
+                    PdfEditableStructure structure = new PdfEditableStructure(null, request.pages(), null);
+                    return pdfProcessingPort.redrawWithTemplate(structure, bytes);
+                })
+                .doOnSuccess(r -> log.info("PDF stateless overlay successful"))
+                .doOnError(e -> log.error("Overlay error: {}", e.getMessage()));
+    }
+
+
+    @Override
+    public Mono<PdfEditableStructure> analyzeAndOptimize(byte[] pdfBytes, String bearerToken) {
+        log.info("Starting structural analysis for provided PDF bytes");
+        return pdfAnalyzerPort.analyze(pdfBytes)
+                .doOnSuccess(structure -> log.info("PDF Analysis completed: {} pages", structure.pages().size()));
+    }
+
+    private PdfEditableStructure performSemanticJoin(PdfEditableStructure geometry, List<AiClassificationResponse.ClassificationItem> classifications) {
+
+        // Mapa ID -> TYPE
+        Map<String, String> typeMap = classifications.stream().collect(Collectors.toMap(AiClassificationResponse.ClassificationItem::id, AiClassificationResponse.ClassificationItem::type, (existing, replacement) -> existing));
+
+        List<PdfPageContent> enrichedPages = geometry.pages().stream().map(page -> {
+            // >>> CHANGE
+            List<TextElement> enrichedElements = page.elements().stream().map(e -> new TextElement(
+                    e.id(), e.text(), e.left(), e.top(), e.width(), e.height(),
+                    e.fontSize(), e.fontName(), e.fontWeight(), e.isItalic(),
+                    typeMap.getOrDefault(e.id(), "text"), e.resourceReference()
+            )).collect(Collectors.toList());
+            // <<< CHANGE
+
+            return new PdfPageContent(page.pageNumber(), page.width(), page.height(), page.units(), page.rotation(), enrichedElements, page.graphics(), page.rawText(), page.hasImages(), page.fontCount());
+        }).collect(Collectors.toList());
+
+        return new PdfEditableStructure(geometry.documentId(), enrichedPages, geometry.info());
+    }
+
+}
+
+
+============================================
+FILE: /d/Config/TestAzure/Back-end/pillihuaman-com-pe-pdfengine/src/main/java/pillihuaman/com/pe/pdfengine/Application.java
+============================================
+package pillihuaman.com.pe.pdfengine;
+
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+@Slf4j
+@SpringBootApplication
+public class Application {
+
+    public static void main(final String[] args) {
+
+
+        SpringApplication app = new SpringApplication(Application.class);
+        app.setWebApplicationType(org.springframework.boot.WebApplicationType.REACTIVE);
+        app.run(args);
+
+
+        log.info("🚀 PDF Engine running in PURE WEBFLUX mode (NO SERVLET)");
+    }
+}
+
+============================================
+FILE: /d/Config/TestAzure/Back-end/pillihuaman-com-pe-pdfengine/src/main/java/pillihuaman/com/pe/pdfengine/domain/exception/BusinessLogicException.java
+============================================
+package pillihuaman.com.pe.pdfengine.domain.exception;
+
+
+public class BusinessLogicException extends RuntimeException {
+
+    public BusinessLogicException(String message) {
+        super(message);
+    }
+
+    public BusinessLogicException(String message, Throwable cause) {
+        super(message, cause);
+    }
+}
+
+
+============================================
+FILE: /d/Config/TestAzure/Back-end/pillihuaman-com-pe-pdfengine/src/main/java/pillihuaman/com/pe/pdfengine/domain/exception/ResourceNotFoundException.java
+============================================
+package pillihuaman.com.pe.pdfengine.domain.exception;
+
+
+public class ResourceNotFoundException extends BusinessLogicException {
+
+    public ResourceNotFoundException(String message) {
+        super(message);
+    }
+}
+
+
+
+============================================
+FILE: /d/Config/TestAzure/Back-end/pillihuaman-com-pe-pdfengine/src/main/java/pillihuaman/com/pe/pdfengine/domain/model/external/AiClassificationResponse.java
+============================================
+package pillihuaman.com.pe.pdfengine.domain.model.external;
+
+
+import java.util.List;
+
+public record AiClassificationResponse(
+        List<ClassificationItem> classifications
+) {
+    public record ClassificationItem(String id, String type) {
+    }
+}
+
+============================================
+FILE: /d/Config/TestAzure/Back-end/pillihuaman-com-pe-pdfengine/src/main/java/pillihuaman/com/pe/pdfengine/domain/model/external/AiLayoutRequest.java
+============================================
+package pillihuaman.com.pe.pdfengine.domain.model.external;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import pillihuaman.com.pe.pdfengine.domain.model.PdfEditableStructure;
+
+import java.util.List;
+import java.util.Map;
+
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+public class AiLayoutRequest {
+    private String systemPrompt;
+    private PdfEditableStructure rawPdfData;
+    private List<Map<String, String>> minimalData;
+}
+
+============================================
+FILE: /d/Config/TestAzure/Back-end/pillihuaman-com-pe-pdfengine/src/main/java/pillihuaman/com/pe/pdfengine/domain/model/external/PromptAndVersionDTO.java
+============================================
+package pillihuaman.com.pe.pdfengine.domain.model.external;
+
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+public class PromptAndVersionDTO {
+    private RespPrompt prompt;
+    private PromptVersion finalVersion;
+}
+
+============================================
+FILE: /d/Config/TestAzure/Back-end/pillihuaman-com-pe-pdfengine/src/main/java/pillihuaman/com/pe/pdfengine/domain/model/external/PromptVersion.java
+============================================
+package pillihuaman.com.pe.pdfengine.domain.model.external;
+
+import com.fasterxml.jackson.databind.JsonNode;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import java.util.List;
+
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+public class PromptVersion {
+    private String version;
+    private String template;
+    private List<String> variables;
+
+    private JsonNode id;
+    private JsonNode promptId;
+}
+
+============================================
+FILE: /d/Config/TestAzure/Back-end/pillihuaman-com-pe-pdfengine/src/main/java/pillihuaman/com/pe/pdfengine/domain/model/external/ReqPrompt.java
+============================================
+package pillihuaman.com.pe.pdfengine.domain.model.external;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+public class ReqPrompt {
+    private String id;
+    private String code;
+    private String name;
+    private String category;
+    private ModelConfigDTO modelConfig;
+
+    @Data
+    public static class ModelConfigDTO {
+        private Double temperature;
+        private Integer maxTokens;
+        private String modelName;
+    }
+}
+
+============================================
+FILE: /d/Config/TestAzure/Back-end/pillihuaman-com-pe-pdfengine/src/main/java/pillihuaman/com/pe/pdfengine/domain/model/external/RespPrompt.java
+============================================
+package pillihuaman.com.pe.pdfengine.domain.model.external;
+
+
+import com.fasterxml.jackson.databind.JsonNode;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+public class RespPrompt {
+    private JsonNode id;
+    private String code;
+    private String name;
+    private String category;
+    private String activeVersionId;
+}
+
+============================================
+FILE: /d/Config/TestAzure/Back-end/pillihuaman-com-pe-pdfengine/src/main/java/pillihuaman/com/pe/pdfengine/domain/model/GraphicElement.java
+============================================
+package pillihuaman.com.pe.pdfengine.domain.model;
+
+import java.io.Serializable;
+
+public record GraphicElement(
+        String type,
+        float x,
+        float y,
+        float width,
+        float height,
+        String strokeColor,
+        String resourceReference
+
+
+)
+        implements Serializable {
+}
+
+============================================
+FILE: /d/Config/TestAzure/Back-end/pillihuaman-com-pe-pdfengine/src/main/java/pillihuaman/com/pe/pdfengine/domain/model/PdfDocument.java
+============================================
+package pillihuaman.com.pe.pdfengine.domain.model;
+
+import java.util.List;
+import java.util.Map;
+
+public record PdfDocument(
+        String fileName,
+        byte[] content,
+        long size,
+        String tenantId,
+        Map<String, String> metadata,
+        List<String> permissions
+) {
+}
+
+
+
+============================================
+FILE: /d/Config/TestAzure/Back-end/pillihuaman-com-pe-pdfengine/src/main/java/pillihuaman/com/pe/pdfengine/domain/model/PdfEditableStructure.java
+============================================
+package pillihuaman.com.pe.pdfengine.domain.model;
+
+import com.fasterxml.jackson.annotation.JsonAlias;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+import java.util.List;
+
+
+@JsonIgnoreProperties(ignoreUnknown = true)
+public record PdfEditableStructure(
+        // >>> CHANGE
+        @JsonProperty("documentId")
+        @JsonAlias({"document_id", "docId", "doc_id"})
+        String documentId,
+
+        @JsonProperty("pages")
+        @JsonAlias({"pages", "web_ready_pages", "webReadyPages", "page_list"})
+        List<PdfPageContent> pages,
+
+        @JsonProperty("info")
+        PdfMetadata info
+) {
+}
+
+============================================
+FILE: /d/Config/TestAzure/Back-end/pillihuaman-com-pe-pdfengine/src/main/java/pillihuaman/com/pe/pdfengine/domain/model/PdfMetadata.java
+============================================
+package pillihuaman.com.pe.pdfengine.domain.model;
+
+import java.time.Instant;
+
+public record PdfMetadata(
+    String title,
+    String author,
+    String creator,
+    Instant creationDate,
+    String producer,
+    int pageCount) {}
+
+
+============================================
+FILE: /d/Config/TestAzure/Back-end/pillihuaman-com-pe-pdfengine/src/main/java/pillihuaman/com/pe/pdfengine/domain/model/PdfPageContent.java
+============================================
+package pillihuaman.com.pe.pdfengine.domain.model;
+
+import com.fasterxml.jackson.annotation.JsonAlias;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+import java.io.Serializable;
+import java.util.List;
+
+@JsonIgnoreProperties(ignoreUnknown = true)
+public record PdfPageContent(
+        // >>> CHANGE
+        @JsonProperty("pageNumber")
+        @JsonAlias({"page_number", "pageNo"})
+        int pageNumber,
+
+        @JsonProperty("width")
+        float width,
+
+        @JsonProperty("height")
+        float height,
+
+        @JsonProperty("units")
+        String units,
+
+        @JsonProperty("rotation")
+        int rotation,
+
+        @JsonProperty("elements")
+        @JsonAlias({"text_elements", "visual_elements", "textElements"})
+        List<TextElement> elements,
+
+        @JsonProperty("graphics")
+        List<GraphicElement> graphics,
+
+        @JsonProperty("rawText")
+        @JsonAlias("raw_text")
+        String rawText,
+
+        @JsonProperty("hasImages")
+        @JsonAlias("has_images")
+        boolean hasImages,
+
+        @JsonProperty("fontCount")
+        @JsonAlias("font_count")
+        int fontCount
+        // <<< CHANGE
+) implements Serializable {
+}
+
+============================================
+FILE: /d/Config/TestAzure/Back-end/pillihuaman-com-pe-pdfengine/src/main/java/pillihuaman/com/pe/pdfengine/domain/model/TextElement.java
+============================================
+package pillihuaman.com.pe.pdfengine.domain.model;
+
+import com.fasterxml.jackson.annotation.JsonAlias;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+import java.io.Serializable;
+
+@JsonIgnoreProperties(ignoreUnknown = true)
+public record TextElement(
+        // >>> CHANGE
+        @JsonProperty("id")
+        String id,
+
+        @JsonProperty("text")
+        @JsonAlias({"content", "value"})
+        String text,
+
+        float left,
+        float top,
+
+        @JsonProperty("width")
+        float width,
+
+        @JsonProperty("height")
+        float height,
+
+        @JsonProperty("fontSize")
+        @JsonAlias({"font_size", "size"})
+        float fontSize,
+
+        @JsonProperty("fontName")
+        @JsonAlias({"font_family", "font"})
+        String fontName,
+
+        @JsonProperty("fontWeight")
+        @JsonAlias("font_weight")
+        String fontWeight,
+
+        @JsonProperty("isItalic")
+        @JsonAlias("italic")
+        boolean isItalic,
+        @JsonProperty("type") String type,
+        @JsonProperty("resourceReference")
+        String resourceReference
+
+) implements Serializable {
+}
+
+============================================
+FILE: /d/Config/TestAzure/Back-end/pillihuaman-com-pe-pdfengine/src/main/java/pillihuaman/com/pe/pdfengine/infrastructure/adapter/inbound/rest/PdfRestController.java
+============================================
+package pillihuaman.com.pe.pdfengine.infrastructure.adapter.inbound.rest;
+
+import lombok.RequiredArgsConstructor;
+import org.springframework.core.io.buffer.DataBufferUtils;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.http.codec.multipart.FilePart;
+import org.springframework.web.bind.annotation.*;
+import pillihuaman.com.pe.pdfengine.application.dto.PdfEditableRequest;
+import pillihuaman.com.pe.pdfengine.application.port.inbound.PdfUseCase;
+import pillihuaman.com.pe.pdfengine.application.port.outbound.PdfAnalyzerPort;
+import pillihuaman.com.pe.pdfengine.domain.model.PdfDocument;
+import pillihuaman.com.pe.pdfengine.domain.model.PdfEditableStructure;
+import pillihuaman.com.pe.pdfengine.infrastructure.common.RespBase;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
+
+import java.util.Collections;
+
+@RestController
+@RequestMapping("/private/v1/pdf")
+@RequiredArgsConstructor
+public class PdfRestController {
+    private final PdfUseCase pdfUseCase;
+    private final PdfAnalyzerPort pdfAnalyzerPort;
+
+    /**
+     * Merges multiple PDFs and wraps result in RespBase.
+     */
+    @PostMapping(value = "/merge", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public Mono<RespBase<String>> mergePdfs(@RequestPart("files") Flux<FilePart> files) {
+        return files
+                .flatMap(this::mapToFilePart)
+                .collectList()
+                .flatMap(pdfUseCase::mergeDocuments)
+                .map(result -> new RespBase<String>().ok(result));
+    }
+
+    /**
+     * Analyzes PDF for structural editing and wraps in RespBase.
+     */
+    @PostMapping(value = "/analyze-for-edit", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public Mono<RespBase<PdfEditableStructure>> analyzeForEdit(
+            @RequestPart("file") Mono<FilePart> filePartMono,
+            // >>> CHANGE
+            @RequestHeader(HttpHeaders.AUTHORIZATION) String bearerToken) {
+        // <<< CHANGE
+
+        // >>> CHANGE
+        return filePartMono
+                .flatMap(this::mapToFileBytes)
+                .flatMap(bytes -> pdfUseCase.analyzeAndOptimize(bytes, bearerToken))
+                .map(result -> new RespBase<PdfEditableStructure>().ok(result));
+        // <<< CHANGE
+    }
+
+
+    @PutMapping(value = "/update-content",
+            consumes = MediaType.APPLICATION_JSON_VALUE,
+            produces = MediaType.APPLICATION_PDF_VALUE)
+    public Mono<ResponseEntity<byte[]>> updateContent(@RequestBody PdfEditableRequest request) {
+        return pdfUseCase.updateDocumentContent(request)
+                .map(bytes -> ResponseEntity.ok()
+                        .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_PDF_VALUE)
+                        .body(bytes));
+    }
+
+    private Mono<byte[]> mapToFileBytes(FilePart filePart) {
+        // >>> CHANGE
+        return DataBufferUtils.join(filePart.content())
+                .map(dataBuffer -> {
+                    byte[] bytes = new byte[dataBuffer.readableByteCount()];
+                    dataBuffer.read(bytes);
+                    DataBufferUtils.release(dataBuffer);
+                    return bytes;
+                });
+        // <<< CHANGE
+    }
+
+    private Mono<PdfDocument> mapToFilePart(FilePart filePart) {
+        return DataBufferUtils.join(filePart.content())
+                .map(dataBuffer -> {
+                    byte[] bytes = new byte[dataBuffer.readableByteCount()];
+                    dataBuffer.read(bytes);
+                    DataBufferUtils.release(dataBuffer);
+                    return new PdfDocument(
+                            filePart.filename(),
+                            bytes,
+                            (long) bytes.length,
+                            null,
+                            Collections.emptyMap(),
+                            Collections.emptyList()
+                    );
+                });
+    }
+}
+
+============================================
+FILE: /d/Config/TestAzure/Back-end/pillihuaman-com-pe-pdfengine/src/main/java/pillihuaman/com/pe/pdfengine/infrastructure/adapter/outbound/external/AiLayoutClientAdapter.java
+============================================
+package pillihuaman.com.pe.pdfengine.infrastructure.adapter.outbound.external;
+
+
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.stereotype.Component;
+import org.springframework.web.reactive.function.client.WebClient;
+import pillihuaman.com.pe.pdfengine.domain.model.PdfEditableStructure;
+import pillihuaman.com.pe.pdfengine.domain.model.external.AiClassificationResponse;
+import pillihuaman.com.pe.pdfengine.domain.model.external.AiLayoutRequest;
+import pillihuaman.com.pe.pdfengine.infrastructure.common.ReqBase;
+import pillihuaman.com.pe.pdfengine.infrastructure.common.RespBase;
+import reactor.core.publisher.Mono;
+
+import java.util.List;
+import java.util.Map;
+
+import static org.reflections.Reflections.log;
+
+@Component
+public class AiLayoutClientAdapter {
+
+    private final WebClient webClient;
+    private final String neuroIaUrl;
+    private final ObjectMapper objectMapper;
+
+    public AiLayoutClientAdapter(WebClient.Builder builder, @Value("${neuro-ia.api.url}") String neuroIaUrl, ObjectMapper objectMapper) {
+        this.webClient = builder.build();
+        this.neuroIaUrl = neuroIaUrl;
+        this.objectMapper = objectMapper;
+    }
+
+
+    public Mono<PdfEditableStructure> callNeuroIaToNormalize(PdfEditableStructure rawData, String promptTemplate, String bearerToken) {
+
+        AiLayoutRequest payload = AiLayoutRequest.builder().systemPrompt(promptTemplate).rawPdfData(rawData).build();
+
+        ReqBase<AiLayoutRequest> request = new ReqBase<>();
+        request.setPayload(payload);
+
+        return webClient.post().uri(neuroIaUrl + "/private/v1/ia/iaService/normalize-pdf-layout").header(HttpHeaders.AUTHORIZATION, bearerToken).contentType(MediaType.APPLICATION_JSON).bodyValue(request)
+
+                // 🔥 LOG RESPONSE RAW GLOBAL
+                .retrieve().bodyToMono(String.class)
+
+                .doOnNext(rawResponse -> {
+                    log.info("========== [IA RESPONSE RAW - WebClient] ==========");
+                    log.info("Respuesta cruda IA:\n{}", rawResponse);
+                })
+
+                .flatMap(rawResponse -> {
+                    try {
+
+                        String cleanJson = rawResponse.trim();
+
+                        if (cleanJson.contains("```json")) {
+                            cleanJson = cleanJson.substring(cleanJson.indexOf("```json") + 7);
+                            cleanJson = cleanJson.substring(0, cleanJson.lastIndexOf("```"));
+                        } else if (cleanJson.contains("```")) {
+                            cleanJson = cleanJson.substring(cleanJson.indexOf("```") + 3);
+                            cleanJson = cleanJson.substring(0, cleanJson.lastIndexOf("```"));
+                        }
+
+                        // 🔥 LOG CLEAN JSON
+                        log.info("========== [IA CLEAN JSON] ==========");
+                        log.info("JSON limpio:\n{}", cleanJson);
+
+                        RespBase<PdfEditableStructure> response = objectMapper.readValue(cleanJson, new TypeReference<RespBase<PdfEditableStructure>>() {
+                        });
+
+                        if (response != null && response.getStatus().getSuccess() && response.getPayload() != null) {
+
+                            log.info("========== [IA SUCCESS] ==========");
+                            return Mono.just(response.getPayload());
+                        }
+
+                        log.error("AI Response success but payload is empty. Raw: {}", cleanJson);
+                        return Mono.error(new RuntimeException("NeuroIA returned empty payload"));
+
+                    } catch (Exception e) {
+                        log.error("Failed to map AI response: ", e);
+                        return Mono.error(e);
+                    }
+                });
+    }
+
+    public Mono<List<AiClassificationResponse.ClassificationItem>> callNeuroIaToClassify(
+            List<Map<String, String>> minimalElements,
+            String promptTemplate,
+            String bearerToken) {
+
+        // Construimos el request con el campo minimalData
+        AiLayoutRequest payload = AiLayoutRequest.builder()
+                .systemPrompt(promptTemplate)
+                .minimalData(minimalElements) // Enviamos solo ID y Texto
+                .build();
+
+        ReqBase<AiLayoutRequest> request = new ReqBase<>();
+        request.setPayload(payload);
+
+        return webClient.post()
+                .uri(neuroIaUrl + "/private/v1/ia/iaService/normalize-pdf-layout")
+                .header(HttpHeaders.AUTHORIZATION, bearerToken)
+                .contentType(MediaType.APPLICATION_JSON)
+                .bodyValue(request)
+                .retrieve()
+                .bodyToMono(new org.springframework.core.ParameterizedTypeReference<RespBase<AiClassificationResponse>>() {
+                })
+                .flatMap(response -> {
+                    // Validación de seguridad de la respuesta
+                    if (response != null && response.getStatus().getSuccess() && response.getPayload() != null) {
+                        return Mono.just(response.getPayload().classifications());
+                    }
+                    return Mono.error(new RuntimeException("NeuroIA returned invalid classification payload"));
+                });
+    }
+}
+
+
+
+============================================
+FILE: /d/Config/TestAzure/Back-end/pillihuaman-com-pe-pdfengine/src/main/java/pillihuaman/com/pe/pdfengine/infrastructure/adapter/outbound/external/PdfNeuroiaStorageAdapter.java
+============================================
+package pillihuaman.com.pe.pdfengine.infrastructure.adapter.outbound.external;
+
+
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Component;
+import pillihuaman.com.pe.pdfengine.application.port.outbound.PdfStoragePort;
+import pillihuaman.com.pe.pdfengine.domain.model.PdfDocument;
+import reactor.core.publisher.Mono;
+
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+
+@Slf4j
+@Component
+public class PdfNeuroiaStorageAdapter implements PdfStoragePort {
+    private final Map<String, PdfDocument> storage = new ConcurrentHashMap<>();
+
+
+    @Override
+    public Mono<String> upload(PdfDocument document) {
+        return Mono.fromCallable(() -> {
+            String id = "ID-" + System.currentTimeMillis();
+            storage.put(id, document);
+            log.info("Stored document {} with id {}", document.fileName(), id);
+            return id;
+        });
+    }
+
+    @Override
+    public Mono<PdfDocument> download(String fileId) {
+        return Mono.fromCallable(() -> {
+            PdfDocument doc = storage.get(fileId);
+
+            if (doc == null) {
+                throw new IllegalStateException("Document not found for id: " + fileId);
+            }
+
+            return doc;
+        });
+    }
+}
+
+============================================
+FILE: /d/Config/TestAzure/Back-end/pillihuaman-com-pe-pdfengine/src/main/java/pillihuaman/com/pe/pdfengine/infrastructure/adapter/outbound/external/PromptRestAdapter.java
+============================================
+package pillihuaman.com.pe.pdfengine.infrastructure.adapter.outbound.external;
+
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.stereotype.Component;
+import org.springframework.web.reactive.function.client.WebClient;
+import pillihuaman.com.pe.pdfengine.application.port.outbound.PromptExternalPort;
+import pillihuaman.com.pe.pdfengine.domain.model.external.PromptAndVersionDTO;
+import pillihuaman.com.pe.pdfengine.domain.model.external.ReqPrompt;
+import pillihuaman.com.pe.pdfengine.infrastructure.common.ReqBase;
+import pillihuaman.com.pe.pdfengine.infrastructure.common.RespBase;
+import reactor.core.publisher.Mono;
+
+@Slf4j
+@Component
+public class PromptRestAdapter implements PromptExternalPort {
+
+    private final WebClient webClient;
+    private final String supportServiceUrl;
+
+
+    public PromptRestAdapter(
+            WebClient.Builder webClientBuilder, // <<< ESTE ES EL BEAN QUE FALTABA
+            @Value("${external-api.support-ms.url}") String supportServiceUrl) {
+
+        // >>> CHANGE
+        this.webClient = webClientBuilder.build();
+        // <<< CHANGE
+        this.supportServiceUrl = supportServiceUrl;
+    }
+
+    @Override
+    public Mono<PromptAndVersionDTO> getPromptByCharacteristics(ReqPrompt payload, String bearerToken) {
+        // REGION: Request Construction
+        ReqBase<ReqPrompt> request = new ReqBase<>();
+        request.setPayload(payload);
+
+        return webClient.post()
+                .uri(supportServiceUrl + "/private/v1/support/prompt/characteristics")
+                .header(HttpHeaders.AUTHORIZATION, bearerToken)
+                .contentType(MediaType.APPLICATION_JSON)
+                .bodyValue(request)
+                .retrieve()
+                .bodyToMono(new org.springframework.core.ParameterizedTypeReference<RespBase<PromptAndVersionDTO>>() {
+                })
+                .flatMap(response -> {
+                    if (response != null && response.getStatus().getSuccess()) {
+                        return Mono.just(response.getPayload());
+                    }
+                    return Mono.error(new RuntimeException("Error calling support service: " +
+                            (response != null ? response.getStatus().getError().getMessages() : "Unknown error")));
+                })
+                .doOnSuccess(dto -> log.info("Successfully retrieved prompt template for code: {}", payload.getCode()))
+                .doOnError(e -> log.error("Failed to retrieve prompt from support service: {}", e.getMessage()));
+    }
+}
+
+============================================
+FILE: /d/Config/TestAzure/Back-end/pillihuaman-com-pe-pdfengine/src/main/java/pillihuaman/com/pe/pdfengine/infrastructure/adapter/outbound/PdfBoxAdapter.java
+============================================
+package pillihuaman.com.pe.pdfengine.infrastructure.adapter.outbound;
+
+import lombok.extern.slf4j.Slf4j;
+import org.apache.pdfbox.Loader;
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.pdmodel.PDPage;
+import org.apache.pdfbox.pdmodel.PDPageContentStream;
+import org.apache.pdfbox.pdmodel.font.PDFont;
+import org.apache.pdfbox.pdmodel.font.PDType1Font;
+import org.apache.pdfbox.pdmodel.font.Standard14Fonts;
+import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
+import org.springframework.stereotype.Component;
+import pillihuaman.com.pe.pdfengine.application.port.outbound.PdfProcessingPort;
+import pillihuaman.com.pe.pdfengine.domain.model.GraphicElement;
+import pillihuaman.com.pe.pdfengine.domain.model.PdfDocument;
+import pillihuaman.com.pe.pdfengine.domain.model.PdfEditableStructure;
+import pillihuaman.com.pe.pdfengine.domain.model.TextElement;
+import reactor.core.publisher.Mono;
+import reactor.core.scheduler.Schedulers;
+
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.util.Base64;
+import java.util.List;
+import java.util.Map;
+
+/**
+ * Enterprise PDF Processing Adapter using Apache PDFBox 3.0.3.
+ * Optimized for High-Fidelity coordinate mapping and cross-platform font rendering.
+ */
+@Slf4j
+@Component
+public class PdfBoxAdapter implements PdfProcessingPort {
+
+    private static final float PX_TO_PT = 0.75f; // 72 DPI (PDF) / 96 DPI (Web)
+    private static final Map<String, Standard14Fonts.FontName> FONT_MAP =
+            Map.of(
+                    "Arial", Standard14Fonts.FontName.HELVETICA,
+                    "Helvetica", Standard14Fonts.FontName.HELVETICA,
+                    "Times New Roman", Standard14Fonts.FontName.TIMES_ROMAN,
+                    "Courier New", Standard14Fonts.FontName.COURIER);
+
+
+    private void renderPrecisionImageFromGraphic(
+            PDDocument doc, PDPageContentStream stream, GraphicElement graphic, float pageHeight) {
+        String ref = graphic.resourceReference();
+        if (ref == null || ref.isEmpty() || "IMG_DATA_STUB".equals(ref) || !ref.contains(",")) return;
+
+        try {
+            String base64Content = ref.substring(ref.indexOf(",") + 1).trim();
+            byte[] imageBytes = Base64.getMimeDecoder().decode(base64Content);
+
+            String uniqueImgName = "img_" + java.util.UUID.randomUUID().toString();
+            PDImageXObject pdImage = PDImageXObject.createFromByteArray(doc, imageBytes, uniqueImgName);
+
+            float w = graphic.width() * PX_TO_PT;
+            float h = graphic.height() * PX_TO_PT;
+            if (w <= 0) w = 100 * PX_TO_PT;
+            if (h <= 0) h = 100 * PX_TO_PT;
+
+            float x = graphic.x() * PX_TO_PT;
+            float y = pageHeight - (graphic.y() * PX_TO_PT) - h;
+
+            stream.drawImage(pdImage, x, y, w, h);
+        } catch (Exception e) {
+            log.error("Image rendering failed for graphic type {}: {}", graphic.type(), e.getMessage(), e);
+        }
+    }
+
+    @Override
+    public Mono<byte[]> redrawWithTemplate(PdfEditableStructure structure, byte[] templateBytes) {
+        return Mono.fromCallable(() -> {
+            boolean isNewDoc = templateBytes == null || templateBytes.length == 0;
+            try (PDDocument document = isNewDoc ? new PDDocument() : Loader.loadPDF(templateBytes)) {
+                if (isNewDoc) {
+                    for (int i = 0; i < structure.pages().size(); i++) document.addPage(new PDPage());
+                }
+
+                for (var pageData : structure.pages()) {
+                    int pageIndex = pageData.pageNumber() - 1;
+                    if (pageIndex < 0 || pageIndex >= document.getNumberOfPages()) continue;
+                    PDPage page = document.getPage(pageIndex);
+                    float pageHeight = page.getMediaBox().getHeight();
+
+                    // Usamos APPEND para preservar el fondo original
+                    try (PDPageContentStream stream = new PDPageContentStream(document, page,
+                            PDPageContentStream.AppendMode.APPEND, true, true)) {
+                        if (!isNewDoc && pageData.elements() != null) {
+                            stream.setNonStrokingColor(java.awt.Color.WHITE);
+                            for (TextElement el : pageData.elements()) {
+                                float w = el.width() * PX_TO_PT;
+                                float h = el.height() * PX_TO_PT;
+                                float x = el.left() * PX_TO_PT;
+                                float y = pageHeight - (el.top() * PX_TO_PT) - h;
+
+                                if (w > 0 && h > 0) {
+                                    stream.addRect(x, y, w, h);
+                                    stream.fill();
+                                }
+                            }
+                            stream.setNonStrokingColor(java.awt.Color.BLACK); // Restore black for drawing text
+                        }
+                        // CAPA 1: Graphics (Imágenes del JSON)
+                        if (pageData.graphics() != null) {
+                            for (GraphicElement g : pageData.graphics())
+                                renderPrecisionImageFromGraphic(document, stream, g, pageHeight);
+                        }
+
+                        // CAPA 2: Elements (Textos e imágenes sobrepuestas)
+                        if (pageData.elements() != null) {
+                            for (TextElement el : pageData.elements()) {
+                                if ("image".equalsIgnoreCase(el.type()) || (el.resourceReference() != null && el.resourceReference().startsWith("data:image"))) {
+                                    renderPrecisionImageFromElement(document, stream, el, pageHeight);
+                                } else {
+                                    renderPrecisionText(stream, el, pageHeight);
+                                }
+                            }
+                        }
+                    }
+                }
+                ByteArrayOutputStream out = new ByteArrayOutputStream();
+                document.save(out);
+                return out.toByteArray();
+            }
+        }).subscribeOn(Schedulers.boundedElastic());
+    }
+
+    private void renderPrecisionImageFromElement(
+            PDDocument doc, PDPageContentStream stream, TextElement el, float pageHeight) {
+        // 
+        String ref = el.resourceReference();
+        if (ref == null || ref.isEmpty() || !ref.contains(",")) return;
+
+        try {
+            // Remover el encabezado (ej: data:image/jpeg;base64,)
+            String base64Content = ref.substring(ref.indexOf(",") + 1).trim();
+
+            // Decodificar a bytes (MimeDecoder tolera saltos de línea y espacios)
+            byte[] imageBytes = Base64.getMimeDecoder().decode(base64Content);
+
+            // Nombre único para indexación y caché interna de PDFBox
+            String uniqueImgName = "img_" + java.util.UUID.randomUUID().toString();
+            PDImageXObject pdImage = PDImageXObject.createFromByteArray(doc, imageBytes, uniqueImgName);
+
+            // Escalar de pixeles (frontend) a puntos (PDF)
+            float w = el.width() * PX_TO_PT;
+            float h = el.height() * PX_TO_PT;
+
+            // Medidas de seguridad por si las dimensiones llegan en 0
+            if (w <= 0) w = 100 * PX_TO_PT;
+            if (h <= 0) h = 100 * PX_TO_PT;
+
+            // Extraer left y top nativos y escalar
+            float x = el.left() * PX_TO_PT;
+
+            // Conversión de origen: Top-Left (Frontend) -> Bottom-Left (PDFBox)
+            float y = pageHeight - (el.top() * PX_TO_PT) - h;
+
+            stream.drawImage(pdImage, x, y, w, h);
+        } catch (Exception e) {
+            log.error("Image rendering failed for element ID {}: {}", el.id(), e.getMessage(), e);
+        }
+        // <<< CHANGE
+    }
+
+
+    private void renderPrecisionText(PDPageContentStream stream, TextElement el, float pageHeight)
+            throws IOException {
+        // 
+        if (el.text() == null || el.text().isBlank()) return;
+
+        Standard14Fonts.FontName base =
+                FONT_MAP.getOrDefault(el.fontName(), Standard14Fonts.FontName.HELVETICA);
+
+        // Auto-detect style variants
+        boolean isBold = "bold".equalsIgnoreCase(el.fontWeight());
+        Standard14Fonts.FontName target;
+        if (isBold && el.isItalic()) target = Standard14Fonts.FontName.valueOf(base.name() + "_BOLD_OBLIQUE");
+        else if (isBold) target = Standard14Fonts.FontName.valueOf(base.name() + "_BOLD");
+        else if (el.isItalic()) target = Standard14Fonts.FontName.valueOf(base.name() + "_OBLIQUE");
+        else target = base;
+
+        PDFont font = new PDType1Font(target);
+        float fontSizePt = el.fontSize() * PX_TO_PT;
+
+        // SCALING & POSITIONING:
+        // PDF Y starts from bottom. Web Y starts from top.
+        // Ascent correction ensures the font baseline matches the CSS top coordinate.
+        float pdfX = el.left() * PX_TO_PT;
+        float pdfY = pageHeight - (el.top() * PX_TO_PT) - (fontSizePt * 0.85f);
+
+        stream.beginText();
+        stream.setFont(font, fontSizePt);
+        stream.newLineAtOffset(pdfX, pdfY);
+
+        // Dynamic width fitting
+        float expectedWidthPt = el.width() * PX_TO_PT;
+        float actualWidthPt = font.getStringWidth(el.text()) / 1000 * fontSizePt;
+        if (expectedWidthPt > actualWidthPt && el.text().length() > 1) {
+            stream.setCharacterSpacing((expectedWidthPt - actualWidthPt) / el.text().length());
+        }
+
+        stream.showText(el.text().trim());
+        stream.endText();
+        stream.setCharacterSpacing(0);
+
+    }
+
+    private void renderPrecisionImage(
+            PDDocument doc, PDPageContentStream stream, GraphicElement graphic, float pageHeight)
+            throws IOException {
+        // 
+        String ref = graphic.resourceReference();
+        if (ref == null || ref.isEmpty() || "IMG_DATA_STUB".equals(ref)) return;
+
+        try {
+            // Logic to strip "data:image/png;base64," if present
+            String base64Content = ref.contains(",") ? ref.split(",")[1] : ref;
+            byte[] imageBytes = Base64.getDecoder().decode(base64Content.trim());
+
+            PDImageXObject pdImage = PDImageXObject.createFromByteArray(doc, imageBytes, "overlay_img");
+
+            float x = graphic.x() * PX_TO_PT;
+            float w = graphic.width() * PX_TO_PT;
+            float h = graphic.height() * PX_TO_PT;
+            float y = pageHeight - (graphic.y() * PX_TO_PT) - h;
+
+            stream.drawImage(pdImage, x, y, w, h);
+        } catch (Exception e) {
+            log.error("Image rendering failed for type: {}", graphic.type());
+        }
+        // <<< CHANGE
+    }
+    // =====================================================
+    // 🟢🟢🟢 CHANGE END 🟢🟢🟢
+    // =====================================================
+
+    @Override
+    public Mono<PdfDocument> merge(List<PdfDocument> docs) {
+        return Mono.fromCallable(() -> {
+            return new PdfDocument("merged.pdf", new byte[0], 0, "SYSTEM", Map.of(), List.of());
+        });
+    }
+
+    @Override
+    public Mono<byte[]> redraw(PdfEditableStructure structure) {
+        return Mono.just(new byte[0]);
+    }
+
+    @Override
+    public Mono<PdfDocument> compress(PdfDocument document) {
+        return Mono.just(document);
+    }
+}
+
+============================================
+FILE: /d/Config/TestAzure/Back-end/pillihuaman-com-pe-pdfengine/src/main/java/pillihuaman/com/pe/pdfengine/infrastructure/adapter/outbound/PdfBoxAnalyzerAdapter.java
+============================================
+package pillihuaman.com.pe.pdfengine.infrastructure.adapter.outbound;
+
+import org.apache.pdfbox.Loader;
+import org.apache.pdfbox.contentstream.PDFGraphicsStreamEngine;
+import org.apache.pdfbox.cos.COSName;
+import org.apache.pdfbox.io.RandomAccessReadBuffer;
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.pdmodel.PDPage;
+import org.apache.pdfbox.pdmodel.common.PDRectangle;
+import org.apache.pdfbox.pdmodel.graphics.form.PDFormXObject;
+import org.apache.pdfbox.pdmodel.graphics.image.PDImage;
+import org.apache.pdfbox.text.PDFTextStripper;
+import org.apache.pdfbox.text.TextPosition;
+import org.apache.pdfbox.util.Matrix;
+import org.springframework.stereotype.Component;
+import pillihuaman.com.pe.pdfengine.application.port.outbound.PdfAnalyzerPort;
+import pillihuaman.com.pe.pdfengine.domain.model.GraphicElement;
+import pillihuaman.com.pe.pdfengine.domain.model.PdfEditableStructure;
+import pillihuaman.com.pe.pdfengine.domain.model.PdfPageContent;
+import pillihuaman.com.pe.pdfengine.domain.model.TextElement;
+import reactor.core.publisher.Mono;
+import reactor.core.scheduler.Schedulers;
+
+import javax.imageio.ImageIO;
+import java.awt.*;
+import java.awt.geom.Point2D;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.Writer;
+import java.util.*;
+import java.util.List;
+import java.util.stream.Collectors;
+
+/**
+ * Senior AI Geometry Compiler & Layout Restorer.
+ * Especializado en reconstrucción de layouts perfectos para edición web desde PDFBox 3.0.3.
+ */
+@Component
+public class PdfBoxAnalyzerAdapter implements PdfAnalyzerPort {
+
+    // Constantes Determinísticas de Compilación
+    private static final float FACTOR_ESCALA = 1.333333f; // 72 DPI -> 96 DPI (CSS Pixels)
+    private static final float WIDTH_RATIO = 0.55f;       // Factor de corrección de ancho de fuente
+    private static final float HEIGHT_RATIO = 1.2f;       // Line-height para editabilidad
+    private static final float Y_THRESHOLD = 3.0f;        // Tolerancia de alineación vertical (puntos)
+
+    @Override
+    public Mono<PdfEditableStructure> analyze(final byte[] pdfBytes) {
+        return Mono.fromCallable(() -> {
+            try (PDDocument document = Loader.loadPDF(new RandomAccessReadBuffer(pdfBytes))) {
+                final List<PdfPageContent> pages = new ArrayList<>();
+
+                for (int i = 0; i < document.getNumberOfPages(); i++) {
+                    final PDPage page = document.getPage(i);
+                    final PDRectangle mediaBox = page.getMediaBox();
+                    final float pageHeight = mediaBox.getHeight();
+
+                    // Fase 1: Extracción Cruda de Elementos con Atributos
+                    List<TextElement> rawElements = extractRawElements(document, i + 1);
+
+                    // Fase 2: Compilación Geométrica Heurística (Agrupación y Normalización)
+                    List<TextElement> compiledElements = compileGeometry(rawElements);
+
+                    // Fase 3: Extracción de Gráficos Vectoriales e Imágenes
+                    List<GraphicElement> graphics = extractGraphics(page, pageHeight);
+
+                    pages.add(new PdfPageContent(i + 1, mediaBox.getWidth() * FACTOR_ESCALA, mediaBox.getHeight() * FACTOR_ESCALA, "px", page.getRotation(), compiledElements, graphics, "", !graphics.isEmpty(), compiledElements.size()));
+                }
+                return new PdfEditableStructure("doc_" + System.currentTimeMillis(), pages, null);
+            }
+        }).subscribeOn(Schedulers.boundedElastic());
+    }
+
+    private List<TextElement> compileGeometry(List<TextElement> rawElements) {
+        if (rawElements.isEmpty()) return rawElements;
+
+        // Agrupación por proximidad en el eje Y (Líneas)
+        Map<Integer, List<TextElement>> lineGroups = rawElements.stream().collect(Collectors.groupingBy(e -> Math.round(e.top() / Y_THRESHOLD)));
+
+        List<TextElement> compiledList = new ArrayList<>();
+
+        lineGroups.keySet().stream().sorted().forEach(yKey -> {
+            List<TextElement> line = lineGroups.get(yKey);
+            line.sort(Comparator.comparingDouble(TextElement::left));
+
+            TextElement current = null;
+
+            for (TextElement next : line) {
+                if (current == null) {
+                    current = next;
+                    continue;
+                }
+
+                // Heurística de Fusión: Si la distancia X es menor que el tamaño de fuente, unir.
+                float distanceX = next.left() - (current.left() + current.width());
+                if (distanceX < current.fontSize() * 0.8f) {
+                    current = mergeElements(current, next);
+                } else {
+                    compiledList.add(applyGeometricRepair(current));
+                    current = next;
+                }
+            }
+            if (current != null) {
+                compiledList.add(applyGeometricRepair(current));
+            }
+        });
+
+        return compiledList;
+    }
+
+    private TextElement mergeElements(TextElement a, TextElement b) {
+        // >>> CHANGE
+        return new TextElement(UUID.randomUUID().toString(), a.text() + " " + b.text(), a.left(), a.top(), (b.left() + b.width()) - a.left(), Math.max(a.height(), b.height()), a.fontSize(), a.fontName(), a.fontWeight(), a.isItalic(), "text", null);
+        // <<< CHANGE
+    }
+
+
+    private TextElement applyGeometricRepair(TextElement e) {
+        float scaledLeft = e.left() * FACTOR_ESCALA;
+        float scaledTop = (e.top() * FACTOR_ESCALA) - (e.fontSize() * 0.1f);
+        float repairedWidth = (e.text().length() * e.fontSize() * WIDTH_RATIO) * FACTOR_ESCALA;
+        float repairedHeight = (e.fontSize() * HEIGHT_RATIO) * FACTOR_ESCALA;
+
+        // Ajuste: Redondear las dimensiones para evitar deformaciones
+        repairedWidth = Math.round(repairedWidth);
+        repairedHeight = Math.round(repairedHeight);
+
+        // >>> CHANGE
+        return new TextElement(e.id(), e.text(), scaledLeft, scaledTop, repairedWidth, repairedHeight, e.fontSize() * FACTOR_ESCALA, normalizeFontName(e.fontName()), e.fontWeight(), e.isItalic(), "text", e.resourceReference());
+        // <<< CHANGE
+    }
+
+    private List<TextElement> extractRawElements(PDDocument doc, int pageNum) throws IOException {
+        final List<TextElement> elements = new ArrayList<>();
+        PDFTextStripper stripper = new PDFTextStripper() {
+            @Override
+            protected void writeString(String string, List<TextPosition> textPositions) {
+                if (textPositions == null || textPositions.isEmpty()) return;
+                TextPosition first = textPositions.get(0);
+                float webTopY = first.getYDirAdj() - first.getHeightDir();
+                // >>> CHANGE
+                elements.add(new TextElement(UUID.randomUUID().toString(), string.trim(), first.getXDirAdj(), webTopY, calculateTotalWidth(textPositions), first.getHeightDir(), first.getFontSizeInPt(), first.getFont().getName(), detectWeight(first), isItalic(first), "text", null));
+                // <<< CHANGE
+            }
+        };
+        stripper.setStartPage(pageNum);
+        stripper.setEndPage(pageNum);
+        stripper.writeText(doc, new Writer() {
+            @Override
+            public void write(char[] cbuf, int off, int len) {
+            }
+
+            @Override
+            public void flush() {
+            }
+
+            @Override
+            public void close() {
+            }
+        });
+        return elements;
+    }
+
+    private String normalizeFontName(String font) {
+        if (font == null) return "Arial";
+        String f = font.toLowerCase();
+        if (f.contains("arial")) return "Arial";
+        if (f.contains("helvetica")) return "Helvetica";
+        if (f.contains("times")) return "Times New Roman";
+        return "Arial";
+    }
+
+
+    private List<GraphicElement> extractGraphics(final PDPage page, final float pageHeight) throws IOException {
+        final List<GraphicElement> graphics = new ArrayList<>();
+        final PDFGraphicsStreamEngine engine = new PDFGraphicsStreamEngine(page) {
+            private final Point2D lastPoint = new Point2D.Float(0, 0);
+
+
+            @Override
+            public void drawImage(final PDImage pdImage) throws IOException {
+                processImageResource(pdImage, getGraphicsState().getCurrentTransformationMatrix());
+            }
+
+            // >>> CHANGE: Helper para procesar imágenes tanto normales como dentro de Forms
+            private void processImageResource(PDImage pdImage, Matrix ctm) throws IOException {
+                String base64Image = "";
+                try {
+                    BufferedImage bi = pdImage.getImage();
+                    if (bi != null) {
+                        BufferedImage standardized = new BufferedImage(bi.getWidth(), bi.getHeight(), BufferedImage.TYPE_INT_ARGB);
+                        Graphics2D g2d = standardized.createGraphics();
+                        g2d.drawImage(bi, 0, 0, null);
+                        g2d.dispose();
+
+                        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                        ImageIO.write(standardized, "png", baos);
+                        base64Image = "data:image/png;base64," + Base64.getEncoder().encodeToString(baos.toByteArray());
+                    }
+                } catch (Exception e) {
+                    base64Image = "IMG_ERR";
+                }
+
+                if (!base64Image.isEmpty() && !base64Image.equals("IMG_ERR")) {
+                    float x = ctm.getTranslateX() * FACTOR_ESCALA;
+                    float width = ctm.getScalingFactorX() * FACTOR_ESCALA;
+                    float height = ctm.getScalingFactorY() * FACTOR_ESCALA;
+                    float y = (pageHeight - (ctm.getTranslateY() + ctm.getScalingFactorY())) * FACTOR_ESCALA;
+                    graphics.add(new GraphicElement("IMAGE", x, y, width, height, "", base64Image));
+                }
+            }
+
+
+            @Override
+            public void showForm(PDFormXObject form) throws IOException {
+                // El motor entra en el sub-stream del objeto para buscar imágenes dentro
+                processChildStream(form);
+            }
+
+            private void processChildStream(PDFormXObject form) throws IOException {
+                // Recursividad controlada para extraer recursos de FormXObjects
+                Iterable<COSName> xObjects = form.getResources().getXObjectNames();
+                for (COSName name : xObjects) {
+                    if (form.getResources().isImageXObject(name)) {
+                        PDImage img = (PDImage) form.getResources().getXObject(name);
+                        processImageResource(img, getGraphicsState().getCurrentTransformationMatrix());
+                    }
+                }
+            }
+
+
+            @Override
+            public void appendRectangle(Point2D p0, Point2D p1, Point2D p2, Point2D p3) {
+                float x = (float) Math.min(p0.getX(), p2.getX()) * FACTOR_ESCALA;
+                float pdfY = (float) Math.max(p0.getY(), p2.getY());
+                float width = (float) Math.abs(p0.getX() - p2.getX()) * FACTOR_ESCALA;
+                float height = (float) Math.abs(p0.getY() - p2.getY()) * FACTOR_ESCALA;
+                graphics.add(new GraphicElement("RECT", x, (pageHeight - pdfY) * FACTOR_ESCALA, width, height, "#000000", null));
+            }
+
+            @Override
+            public void moveTo(float x, float y) {
+                lastPoint.setLocation(x, y);
+            }
+
+            @Override
+            public void lineTo(float x, float y) {
+                float x1 = (float) lastPoint.getX() * FACTOR_ESCALA;
+                float y1 = (pageHeight - (float) lastPoint.getY()) * FACTOR_ESCALA;
+                float x2 = x * FACTOR_ESCALA;
+                float y2 = (pageHeight - y) * FACTOR_ESCALA;
+                graphics.add(new GraphicElement("RECT", Math.min(x1, x2), Math.min(y1, y2), Math.max(1, Math.abs(x2 - x1)), Math.max(1, Math.abs(y2 - y1)), "#000000", null));
+                lastPoint.setLocation(x, y);
+            }
+
+            @Override
+            public void clip(int i) {
+            }
+
+            @Override
+            public void curveTo(float x1, float y1, float x2, float y2, float x3, float y3) {
+                lastPoint.setLocation(x3, y3);
+            }
+
+            @Override
+            public Point2D getCurrentPoint() {
+                return lastPoint;
+            }
+
+            @Override
+            public void closePath() {
+            }
+
+            @Override
+            public void endPath() {
+            }
+
+            @Override
+            public void strokePath() {
+            }
+
+            @Override
+            public void fillPath(int i) {
+            }
+
+            @Override
+            public void fillAndStrokePath(int i) {
+            }
+
+            @Override
+            public void shadingFill(COSName shadingName) {
+            }
+        };
+        engine.processPage(page);
+        return graphics;
+    }
+
+    private boolean isItalic(TextPosition tp) {
+        boolean descriptorItalic = tp.getFont().getFontDescriptor() != null && tp.getFont().getFontDescriptor().isItalic();
+        return descriptorItalic || tp.getFont().getName().toLowerCase().contains("italic") || tp.getFont().getName().toLowerCase().contains("oblique");
+    }
+
+    private String detectWeight(TextPosition tp) {
+        String name = tp.getFont().getName().toLowerCase();
+        return (name.contains("bold") || name.contains("black") || name.contains("w7")) ? "bold" : "normal";
+    }
+
+    private float calculateTotalWidth(List<TextPosition> positions) {
+        float width = 0;
+        for (TextPosition tp : positions) width += tp.getWidthDirAdj();
+        return width;
+    }
+
+
+}
+
+============================================
+FILE: /d/Config/TestAzure/Back-end/pillihuaman-com-pe-pdfengine/src/main/java/pillihuaman/com/pe/pdfengine/infrastructure/adapter/outbound/persistence/PdfMetadataEntity.java
+============================================
+package pillihuaman.com.pe.pdfengine.infrastructure.adapter.outbound.persistence;
+
+import java.util.Map;
+import lombok.Builder;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+
+/** MongoDB Entity for PDF Metadata. */
+@Builder
+@Document(collection = "pdf_metadata")
+public record PdfMetadataEntity(
+    @Id String id,
+    String fileName,
+    long size,
+    String tenantId,
+    Map<String, String> metadata,
+    long processedA) {}
+
+
+============================================
+FILE: /d/Config/TestAzure/Back-end/pillihuaman-com-pe-pdfengine/src/main/java/pillihuaman/com/pe/pdfengine/infrastructure/adapter/outbound/persistence/PdfMetadataRepository.java
+============================================
+package pillihuaman.com.pe.pdfengine.infrastructure.adapter.outbound.persistence;
+
+import org.springframework.data.mongodb.repository.ReactiveMongoRepository;
+import org.springframework.stereotype.Repository;
+
+@Repository
+public interface PdfMetadataRepository extends ReactiveMongoRepository<PdfMetadataEntity, String> {}
+
+
+============================================
+FILE: /d/Config/TestAzure/Back-end/pillihuaman-com-pe-pdfengine/src/main/java/pillihuaman/com/pe/pdfengine/infrastructure/adapter/outbound/persistence/PdfMongoAdapter.java
+============================================
+package pillihuaman.com.pe.pdfengine.infrastructure.adapter.outbound.persistence;
+
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
+import pillihuaman.com.pe.pdfengine.application.port.outbound.PdfPersistencePort;
+import pillihuaman.com.pe.pdfengine.domain.model.PdfDocument;
+import reactor.core.publisher.Mono;
+
+/** MongoDB Adapter implementation. */
+@Component
+@RequiredArgsConstructor
+public class PdfMongoAdapter implements PdfPersistencePort {
+  private final PdfMetadataRepository repository;
+
+  @Override
+  public Mono<PdfDocument> saveMetadata(PdfDocument document) {
+    PdfMetadataEntity entity =
+        PdfMetadataEntity.builder()
+            .fileName(document.fileName())
+            .size(document.size())
+            .tenantId(document.tenantId())
+            .metadata(document.metadata())
+            .build();
+    return repository.save(entity).thenReturn(document);
+  }
+}
+
+
+============================================
+FILE: /d/Config/TestAzure/Back-end/pillihuaman-com-pe-pdfengine/src/main/java/pillihuaman/com/pe/pdfengine/infrastructure/common/ReqBase.java
+============================================
+package pillihuaman.com.pe.pdfengine.infrastructure.common;
+
+public class ReqBase<T> {
+
+    private RespBase.Trace trace;
+    private T payload;
+
+    public ReqBase() {
+        super();
+    }
+
+    public RespBase.Trace getTrace() {
+        return trace;
+    }
+
+    public void setTrace(RespBase.Trace trace) {
+        this.trace = trace;
+    }
+
+    public T getPayload() {
+        return payload;
+    }
+
+    public void setPayload(T payload) {
+        this.payload = payload;
+    }
+}
+
+
+============================================
+FILE: /d/Config/TestAzure/Back-end/pillihuaman-com-pe-pdfengine/src/main/java/pillihuaman/com/pe/pdfengine/infrastructure/common/RespBase.java
+============================================
+package pillihuaman.com.pe.pdfengine.infrastructure.common;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.Getter;
+
+import java.util.ArrayList;
+import java.util.List;
+
+@Getter
+@JsonIgnoreProperties(ignoreUnknown = true)
+@Builder
+@AllArgsConstructor
+public class RespBase<T> {
+
+    private Trace trace;
+    private Status status;
+
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private T payload;
+
+    public RespBase(T payload) {
+        this.payload = payload;
+    }
+
+    public Trace getTrace() {
+        return trace;
+    }
+
+    public void setTrace(Trace trace) {
+        this.trace = trace;
+    }
+
+    public Status getStatus() {
+        return status;
+    }
+
+    public void setStatus(Status status) {
+        this.status = status;
+    }
+
+    public T getPayload() {
+        return payload;
+    }
+
+    public void setPayload(T payload) {
+        this.payload = payload;
+    }
+
+    public RespBase() {
+        super();
+        trace = new Trace();
+        status = new Status();
+    }
+
+    public RespBase<T> ok(T payload) {
+        RespBase<T> response = new RespBase<>();
+        response.setPayload(payload);
+        response.getStatus().setSuccess(Boolean.TRUE);
+        return response;
+    }
+
+    /**
+     * Subclase plantilla para trazabilidad
+     */
+    @Builder
+    @AllArgsConstructor
+    public static class Trace {
+        private String traceId;
+
+        public Trace() {
+        }
+
+        public String getTraceId() {
+            return traceId;
+        }
+
+        public void setTraceId(String traceId) {
+            this.traceId = traceId;
+        }
+    }
+
+    /**
+     * Subclase plantilla para status
+     */
+    @Builder
+    @AllArgsConstructor
+    public static class Status {
+        private Boolean success;
+        private Error error;
+
+        public Status() {
+        }
+
+        public Boolean getSuccess() {
+            return success;
+        }
+
+        public void setSuccess(Boolean success) {
+            this.success = success;
+        }
+
+        public Error getError() {
+            return error;
+        }
+
+        public void setError(Error error) {
+            this.error = error;
+        }
+
+        /**
+         * Subclase plantilla para error
+         */
+        @Builder
+        @AllArgsConstructor
+        @Data
+        public static class Error {
+            private String code;
+            private String httpCode;
+            private List<String> messages;
+
+            public Error() {
+                super();
+                messages = new ArrayList<>();
+            }
+        }
+    }
+}
+
+
+============================================
+FILE: /d/Config/TestAzure/Back-end/pillihuaman-com-pe-pdfengine/src/main/java/pillihuaman/com/pe/pdfengine/infrastructure/config/MongoConfig.java
+============================================
+package pillihuaman.com.pe.pdfengine.infrastructure.config;
+
+import org.springframework.context.annotation.Configuration;
+import org.springframework.data.mongodb.config.AbstractReactiveMongoConfiguration;
+import org.springframework.data.mongodb.repository.config.EnableReactiveMongoRepositories;
+
+/** Configuration class for Reactive MongoDB. */
+@Configuration
+@EnableReactiveMongoRepositories(
+    basePackages = "pillihuaman.com.pe.pdfengine.infrastructure.adapter.outbound.persistence")
+public class MongoConfig extends AbstractReactiveMongoConfiguration {
+  @Override
+  protected String getDatabaseName() {
+    return "fibertechia";
+  }
+}
+
+
+============================================
+FILE: /d/Config/TestAzure/Back-end/pillihuaman-com-pe-pdfengine/src/main/java/pillihuaman/com/pe/pdfengine/infrastructure/config/ReactiveGlobalExceptionHandler.java
+============================================
+package pillihuaman.com.pe.pdfengine.infrastructure.config;
+
+import lombok.extern.log4j.Log4j2;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.bind.support.WebExchangeBindException;
+import org.springframework.web.server.NotAcceptableStatusException;
+import org.springframework.web.server.ServerWebInputException;
+import pillihuaman.com.pe.pdfengine.domain.exception.BusinessLogicException;
+import pillihuaman.com.pe.pdfengine.domain.exception.ResourceNotFoundException;
+import pillihuaman.com.pe.pdfengine.infrastructure.common.RespBase;
+
+import java.util.List;
+import java.util.UUID;
+import java.util.stream.Collectors;
+
+@Log4j2
+@RestControllerAdvice
+public class ReactiveGlobalExceptionHandler {
+
+    private static final String VALIDATION_CODE = "VALIDATION_ERROR";
+    private static final String INTERNAL_CODE = "INTERNAL_SERVER_ERROR";
+
+    @ExceptionHandler({BusinessLogicException.class, ResourceNotFoundException.class})
+    public ResponseEntity<RespBase<Object>> handleBusinessException(RuntimeException ex) {
+
+        HttpStatus status = (ex instanceof ResourceNotFoundException) ? HttpStatus.NOT_FOUND : HttpStatus.UNPROCESSABLE_ENTITY;
+
+        String code = (ex instanceof ResourceNotFoundException) ? "RESOURCE_NOT_FOUND" : "BUSINESS_RULE_VIOLATION";
+
+        return buildErrorResponse(status, code, List.of(ex.getMessage()));
+    }
+
+    @ExceptionHandler(WebExchangeBindException.class)
+    public ResponseEntity<RespBase<Object>> handleValidationException(WebExchangeBindException ex) {
+
+        List<String> errors = ex.getBindingResult().getFieldErrors().stream().map(error -> "Field '" + error.getField() + "' " + error.getDefaultMessage()).collect(Collectors.toList());
+
+        return buildErrorResponse(HttpStatus.BAD_REQUEST, VALIDATION_CODE, errors);
+    }
+
+    @ExceptionHandler(ServerWebInputException.class)
+    public ResponseEntity<RespBase<Object>> handleWebInputException(ServerWebInputException ex) {
+
+        return buildErrorResponse(HttpStatus.BAD_REQUEST, "MALFORMED_REQUEST", List.of("JSON inválido o request incorrecto"));
+    }
+
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<RespBase<Object>> handleGenericException(Exception ex) {
+
+        String traceId = UUID.randomUUID().toString();
+
+        log.error("[TraceID: {}] Unexpected System Error", traceId, ex);
+
+        String message = "System error. TraceId: " + traceId;
+
+        return buildErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR, INTERNAL_CODE, List.of(message), traceId);
+    }
+
+    private ResponseEntity<RespBase<Object>> buildErrorResponse(HttpStatus status, String code, List<String> messages) {
+        return buildErrorResponse(status, code, messages, UUID.randomUUID().toString());
+    }
+
+    private ResponseEntity<RespBase<Object>> buildErrorResponse(HttpStatus status, String code, List<String> messages, String traceId) {
+
+        RespBase<Object> response = new RespBase<>();
+
+        RespBase.Status respStatus = new RespBase.Status();
+        RespBase.Status.Error error = new RespBase.Status.Error();
+
+        error.setCode(code);
+        error.setHttpCode(String.valueOf(status.value()));
+        error.setMessages(messages);
+
+        respStatus.setSuccess(false);
+        respStatus.setError(error);
+
+        response.setStatus(respStatus);
+        response.setTrace(new RespBase.Trace(traceId));
+        response.setPayload(null);
+
+        return new ResponseEntity<>(response, status);
+    }
+
+    @ExceptionHandler(NotAcceptableStatusException.class)
+    public ResponseEntity<RespBase<Object>> handleNotAcceptableException(NotAcceptableStatusException ex) {
+        log.error("Content Negotiation Failure: Accept header not compatible.");
+        return buildErrorResponse(HttpStatus.NOT_ACCEPTABLE, "NOT_ACCEPTABLE", List.of("Accept header must be application/pdf"));
+    }
+}
+
+============================================
+FILE: /d/Config/TestAzure/Back-end/pillihuaman-com-pe-pdfengine/src/main/java/pillihuaman/com/pe/pdfengine/infrastructure/config/WebClientConfig.java
+============================================
+package pillihuaman.com.pe.pdfengine.infrastructure.config;
+
+
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.http.codec.ServerCodecConfigurer;
+import org.springframework.web.reactive.config.WebFluxConfigurer;
+import org.springframework.web.reactive.function.client.ExchangeStrategies;
+import org.springframework.web.reactive.function.client.WebClient;
+
+/**
+ * Enterprise WebClient and WebFlux Infrastructure Configuration.
+ * Optimized to handle large PDF payloads and binary streams.
+ */
+@Configuration
+public class WebClientConfig implements WebFluxConfigurer {
+    private static final int MAX_BUFFER_SIZE = 100 * 1024 * 1024; // 100MB
+
+    @Override
+    public void configureHttpMessageCodecs(ServerCodecConfigurer configurer) {
+
+        configurer.defaultCodecs().maxInMemorySize(MAX_BUFFER_SIZE);
+
+    }
+
+    @Bean
+    public WebClient.Builder webClientBuilder() {
+        return WebClient.builder()
+                .exchangeStrategies(ExchangeStrategies.builder()
+                        .codecs(configurer -> configurer
+                                .defaultCodecs()
+                                .maxInMemorySize(MAX_BUFFER_SIZE))
+                        .build());
+    }
+}
+
+============================================
+FILE: /d/Config/TestAzure/Back-end/pillihuaman-com-pe-pdfengine/src/main/java/pillihuaman/com/pe/pdfengine/infrastructure/security/JwtReactiveFilter.java
+============================================
+package pillihuaman.com.pe.pdfengine.infrastructure.security;
+
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.ReactiveSecurityContextHolder;
+import org.springframework.stereotype.Component;
+import org.springframework.web.server.ServerWebExchange;
+import org.springframework.web.server.WebFilter;
+import org.springframework.web.server.WebFilterChain;
+import reactor.core.publisher.Mono;
+
+import java.util.List;
+import java.util.stream.Collectors;
+
+@Component
+@RequiredArgsConstructor
+public class JwtReactiveFilter implements WebFilter {
+
+    private final JwtTokenProvider jwtTokenProvider;
+
+    @Override
+    public Mono<Void> filter(ServerWebExchange exchange, WebFilterChain chain) {
+        String authHeader = exchange.getRequest().getHeaders().getFirst(HttpHeaders.AUTHORIZATION);
+
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+            return chain.filter(exchange);
+        }
+
+        String jwt = authHeader.substring(7);
+
+        try {
+
+            if (jwtTokenProvider.isTokenExpired(jwt)) {
+                return chain.filter(exchange);
+            }
+
+            String username = jwtTokenProvider.extractUsername(jwt);
+            List<String> permissions = jwtTokenProvider.extractPermissions(jwt);
+
+
+            List<SimpleGrantedAuthority> authorities = permissions.stream()
+                    .map(SimpleGrantedAuthority::new)
+                    .collect(Collectors.toList());
+
+            UsernamePasswordAuthenticationToken auth =
+                    new UsernamePasswordAuthenticationToken(username, null, authorities);
+
+            return chain.filter(exchange)
+                    .contextWrite(ReactiveSecurityContextHolder.withAuthentication(auth));
+
+        } catch (Exception e) {
+            return chain.filter(exchange);
+        }
+    }
+}
+
+
+============================================
+FILE: /d/Config/TestAzure/Back-end/pillihuaman-com-pe-pdfengine/src/main/java/pillihuaman/com/pe/pdfengine/infrastructure/security/JwtTokenProvider.java
+============================================
+package pillihuaman.com.pe.pdfengine.infrastructure.security;
+
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.io.Decoders;
+import io.jsonwebtoken.security.Keys;
+import lombok.RequiredArgsConstructor;
+import org.bson.types.ObjectId;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.stereotype.Component;
+import pillihuaman.com.pe.pdfengine.infrastructure.security.model.MyJsonWebToken;
+import pillihuaman.com.pe.pdfengine.infrastructure.security.model.ResponseUser;
+
+import javax.crypto.SecretKey;
+import java.security.Key;
+import java.util.Collections;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
+
+@Component
+@RequiredArgsConstructor
+public class JwtTokenProvider {
+    @Value("${application.security.jwt.secret-key}")
+    private String secretKey;
+
+    public String extractUsername(String token) {
+        return extractClaim(token, Claims::getSubject);
+    }
+
+    public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
+        final Claims claims = extractAllClaims(token);
+        return claimsResolver.apply(claims);
+    }
+
+    public boolean isTokenValid(String token, UserDetails userDetails) {
+        final String username = extractUsername(token);
+        return (username.equals(userDetails.getUsername())) && !isTokenExpired(token);
+    }
+
+    public boolean isTokenExpired(String token) {
+        return extractExpiration(token).before(new Date());
+    }
+
+    private Date extractExpiration(String token) {
+        return extractClaim(token, Claims::getExpiration);
+    }
+
+    private Claims extractAllClaims(String token) {
+        return Jwts.parser().verifyWith((SecretKey) getSignInKey()).build().parseSignedClaims(token).getPayload();
+    }
+
+    private Key getSignInKey() {
+        byte[] keyBytes = Decoders.BASE64.decode(secretKey);
+        return Keys.hmacShaKeyFor(keyBytes);
+    }
+
+    @SuppressWarnings("unchecked")
+    public MyJsonWebToken parseTokenToMyJsonWebToken(String bearerToken) {
+        if (bearerToken == null || !bearerToken.startsWith("Bearer ")) {
+            return null;
+        }
+        String token = bearerToken.substring(7);
+        Claims claims;
+        try {
+            claims = extractAllClaims(token);
+        } catch (Exception e) {
+            return null;
+        }
+
+        MyJsonWebToken myJsonWebToken = new MyJsonWebToken();
+        Map<String, Object> userMap = (Map<String, Object>) claims.get("user");
+        String tenantIdFromToken = (String) claims.get("tenantId");
+        List<Map<String, Object>> rolesFromToken = (List<Map<String, Object>>) claims.get("role");
+
+        if (userMap != null) {
+            ResponseUser user = new ResponseUser();
+            Object rawId = userMap.get("id");
+            if (rawId != null) {
+                user.setId(new ObjectId(rawId.toString()));
+            }
+            user.setMail((String) userMap.get("email"));
+            user.setAlias((String) userMap.get("alias"));
+
+            if (tenantIdFromToken != null) {
+                user.setTenantId(tenantIdFromToken.replace("\"", ""));
+            }
+
+            if (rolesFromToken != null) {
+                user.setRoles(rolesFromToken.stream().map(roleMap -> (String) roleMap.get("name")).toList());
+            }
+            myJsonWebToken.setUser(user);
+        }
+        return myJsonWebToken;
+    }
+
+    @SuppressWarnings("unchecked")
+    public List<String> extractPermissions(String token) {
+        // >>> CHANGE
+        final Claims claims = extractAllClaims(token);
+        Object permissions = claims.get("permissions");
+        return permissions instanceof List ? (List<String>) permissions : Collections.emptyList();
+        // <<< CHANGE
+    }
+}
+
+
+============================================
+FILE: /d/Config/TestAzure/Back-end/pillihuaman-com-pe-pdfengine/src/main/java/pillihuaman/com/pe/pdfengine/infrastructure/security/model/MyJsonWebToken.java
+============================================
+package pillihuaman.com.pe.pdfengine.infrastructure.security.model;
+
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.bson.types.ObjectId;
+
+import java.io.Serializable;
+import java.util.List;
+
+@Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
+public class MyJsonWebToken implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+
+    private ResponseUser user;
+    private Application application;
+    private String tenantId;
+    private List<String> permissions;
+
+    @Data
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class Application {
+        private ObjectId aplicationID;
+        private String name;
+        private String multiSession;
+    }
+}
+
+
+============================================
+FILE: /d/Config/TestAzure/Back-end/pillihuaman-com-pe-pdfengine/src/main/java/pillihuaman/com/pe/pdfengine/infrastructure/security/model/ResponseUser.java
+============================================
+package pillihuaman.com.pe.pdfengine.infrastructure.security.model;
+
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.bson.types.ObjectId;
+
+import java.util.List;
+
+
+@Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
+public class ResponseUser {
+
+    private ObjectId id;
+    private String alias;
+    private ObjectId idSystem;
+    private String mail;
+    private String mobilPhone;
+    private String user;
+    private String username;
+    private int enabled;
+    private List<String> roles;
+    private String tenantId;
+}
+
+
+============================================
+FILE: /d/Config/TestAzure/Back-end/pillihuaman-com-pe-pdfengine/src/main/java/pillihuaman/com/pe/pdfengine/infrastructure/security/SecurityConfig.java
+============================================
+package pillihuaman.com.pe.pdfengine.infrastructure.security;
+
+import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.method.configuration.EnableReactiveMethodSecurity;
+import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
+import org.springframework.security.config.web.server.SecurityWebFiltersOrder;
+import org.springframework.security.config.web.server.ServerHttpSecurity;
+import org.springframework.security.web.server.SecurityWebFilterChain;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.reactive.CorsConfigurationSource;
+import org.springframework.web.cors.reactive.UrlBasedCorsConfigurationSource;
+
+import java.util.Arrays;
+import java.util.List;
+
+/**
+ * Enterprise Reactive Security Configuration.
+ * Optimized for WebFlux and Hexagonal Infrastructure requirements.
+ */
+@Configuration
+@EnableWebFluxSecurity
+@EnableReactiveMethodSecurity
+@RequiredArgsConstructor
+public class SecurityConfig {
+    private final JwtReactiveFilter jwtFilter;
+
+    @Bean
+    public SecurityWebFilterChain springSecurityFilterChain(ServerHttpSecurity http) {
+        // >>> CHANGE
+        return http
+                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+                .csrf(ServerHttpSecurity.CsrfSpec::disable)
+                .formLogin(ServerHttpSecurity.FormLoginSpec::disable)
+                .httpBasic(ServerHttpSecurity.HttpBasicSpec::disable)
+                .logout(ServerHttpSecurity.LogoutSpec::disable)
+                .authorizeExchange(exchanges -> exchanges
+                        .pathMatchers("/private/v1/pdf/**").authenticated()
+                        .pathMatchers("/actuator/**").permitAll()
+                        .anyExchange().authenticated()
+                )
+                .addFilterAt(jwtFilter, SecurityWebFiltersOrder.AUTHENTICATION)
+                .build();
+        // <<< CHANGE
+    }
+    
+
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+        configuration.setAllowedOrigins(Arrays.asList(
+                "http://localhost:4200",
+                "http://localhost:8099",
+                "https://neuroia.alamodaperu.online",
+                "https://alamodaperu.online",
+                "https://security.alamodaperu.online",
+                "https://support.alamodaperu.online",
+                "https://alamoda-frontend-1068521170727.us-central1.run.app"
+        ));
+
+        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+
+        configuration.setAllowedHeaders(Arrays.asList(
+                "Authorization",
+                "Content-Type",
+                "X-Tenant-ID",
+                "Accept",
+                "Origin",
+                "X-Requested-With"
+        ));
+
+        configuration.setExposedHeaders(List.of("Authorization"));
+        configuration.setAllowCredentials(true);
+        configuration.setMaxAge(3600L);
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
+        return source;
+    }
+}
+
+============================================
+FILE: /d/Config/TestAzure/Back-end/pillihuaman-com-pe-pdfengine/src/main/java/pillihuaman/com/pe/pdfengine/infrastructure/security/TenantWebFilter.java
+============================================
+package pillihuaman.com.pe.pdfengine.infrastructure.security;
+
+import org.springframework.stereotype.Component;
+import org.springframework.web.server.ServerWebExchange;
+import org.springframework.web.server.WebFilter;
+import org.springframework.web.server.WebFilterChain;
+import reactor.core.publisher.Mono;
+import reactor.util.context.Context;
+
+@Component
+public class TenantWebFilter implements WebFilter {
+  public static final String TENANT_KEY = "tenantId";
+
+  @Override
+  public Mono<Void> filter(ServerWebExchange exchange, WebFilterChain chain) {
+    String tenantId = exchange.getRequest().getHeaders().getFirst("X-Tenant-ID");
+    return chain
+        .filter(exchange)
+        .contextWrite(Context.of(TENANT_KEY, tenantId != null ? tenantId : "DEFAULT"));
+  }
+}
+
+
+---- BACKEND CONFIG FILE CONTENT (.properties/.xml) ----
+
+============================================
+FILE: /d/Config/TestAzure/Back-end/pillihuaman-com-pe-pdfengine/src/main/resources/application.properties
+============================================
+server.port=8078
+server.address=0.0.0.0
+spring.data.mongodb.uri=mongodb+srv://fibertechandia:fo82yPNOXU5GMQam@cluster0.13xuhrg.mongodb.net/fibertechia?retryWrites=true&w=majority&appName=Cluster0
+spring.data.mongodb.database=fibertechia
+application.security.jwt.secret-key=404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970
+application.security.jwt.expiration=3600000
+application.security.jwt.refresh-token.expiration=86400000
+external-api.support-ms.url=http://localhost:8091
+neuro-ia.api.url=http://localhost:8099
+cors.allowed-origins=http://localhost:8099,https://alamodaperu.online,https://security.alamodaperu.online,https://support.alamodaperu.online,https://neuroia.alamodaperu.online,https://alamoda-frontend-1068521170727.us-central1.run.app
+cors.allowed-methods=GET,POST,PUT,DELETE,OPTIONS
+cors.allowed-headers=*
+cors.allow-credentials=true
+logging.level.root=DEBUG
+logging.level.org.springframework=DEBUG
+logging.level.org.springframework.web=DEBUG
+logging.level.org.springframework.data.mongodb.core=ERROR
+logging.level.pillihuaman.com.pe=DEBUG
+logging.level.p.c.p.s=DEBUG
+spring.servlet.multipart.enabled=true
+spring.servlet.multipart.max-file-size=50MB
+spring.servlet.multipart.max-request-size=50MB
+spring.codec.max-in-memory-size=100MB
+spring.cache.type=caffeine
+spring.mvc.pathmatch.matching-strategy=ant_path_matcher
+external-api.aliexpress.url=https://api-sg.aliexpress.com
+external-api.aliexpress.app-key=${ALI_APP_KEY:523194}
+external-api.aliexpress.secret=${ALI_SECRET:zwCKbC9UYZ37po7POTUzCN4BIcFTL4w4}
+external-api.aliexpress.tracking-id=${ALI_TRACKING_ID:default}
+external-api.amazon.access-key=${AMAZON_ACCESS_KEY:}
+external-api.amazon.secret-key=${AMAZON_SECRET_KEY:}
+external-api.amazon.tag=${AMAZON_TAG:alamodaperu-20}
+external-api.shein.account-sid=${SHEIN_SID:IRD6oqsRvpYc6767451nktqwY6euEpEZW1}
+external-api.shein.auth-token=${SHEIN_TOKEN:oLPs2EB9fefKfSAZPAQ-CAnwgKrij_JM}
+external-api.linio.api-key=${LINIO_API_KEY:}
+external-api.temu.app-id=${TEMU_APP_ID:}
+spring.main.web-application-type=reactive
+spring.webflux.static-path-pattern=none
+spring.mvc.view.prefix=
+spring.mvc.view.suffix=
+application.pdf.ai-prompt-code=PDF_LAYOUT_AI_GEOMETRY_COMPILER_V2
+logging.level.org.mongodb.driver.cluster=OFF
+logging.level.org.mongodb.driver.connection=OFF
+logging.level.org.mongodb.driver.protocol=OFF
+
+
+============================================
+FILE: /d/Config/TestAzure/Back-end/pillihuaman-com-pe-pdfengine/src/main/resources/config.properties
+============================================
+
+
+============================================
+FILE: /d/Config/TestAzure/Back-end/pillihuaman-com-pe-pdfengine/src/main/resources/log4j.properties
+============================================
+
+
+============================================
+FILE: /d/Config/TestAzure/Back-end/pillihuaman-com-pe-pdfengine/src/main/resources/log4j2.xml
+============================================
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="DEBUG">
+    <Appenders>
+        <Console name="LogToConsole" target="SYSTEM_OUT">
+            <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
+        </Console>
+        <File name="LogToFile" fileName="logs/app.log">
+            <PatternLayout>
+                <Pattern>%d %p %c{1.} [%t] %m%n</Pattern>
+            </PatternLayout>
+        </File>
+    </Appenders>
+    <Loggers>
+        <Logger name="com.mkyong" level="debug" additivity="false">
+            <AppenderRef ref="LogToFile"/>
+            <AppenderRef ref="LogToConsole"/>
+        </Logger>
+        <Logger name="org.springframework.boot" level="error" additivity="false">
+            <AppenderRef ref="LogToConsole"/>
+        </Logger>
+        <Root level="error">
+            <AppenderRef ref="LogToFile"/>
+            <AppenderRef ref="LogToConsole"/>
+        </Root>
+    </Loggers>
+</Configuration>
+
+---- FRONTEND DIRECTORY STRUCTURE ----
+/d/Config/TestAzure/Front-end/src/app/@presentation/pages/tools/pdf-editor/pdf-editor.component.html
+/d/Config/TestAzure/Front-end/src/app/@presentation/pages/tools/pdf-editor/pdf-editor.component.scss
+/d/Config/TestAzure/Front-end/src/app/@presentation/pages/tools/pdf-editor/pdf-editor.component.ts
+
+---- FRONTEND FILE CONTENT (.ts/.html/.css/.scss) ----
+
+============================================
+FILE: /d/Config/TestAzure/Front-end/src/app/@presentation/pages/tools/pdf-editor/pdf-editor.component.html
+============================================
+<div class="studio-container">
+  <!-- Interactive Sidebar -->
+  <aside class="sidebar">
+    <nb-card class="tool-card">
+      <nb-card-header class="d-flex justify-content-between align-items-center">
+        Propiedades
+        <button *ngIf="selectedElement" nbButton status="danger" size="tiny" (click)="deleteSelectedElement()"
+          nbTooltip="Eliminar seleccionado">
+          <nb-icon icon="trash-2-outline"></nb-icon>
+        </button>
+      </nb-card-header>
+
+      <nb-card-body *ngIf="selectedElement">
+        <ng-container *ngIf="selectedElement.type === 'text'">
+          <label class="label">Contenido Texto</label>
+          <textarea nbInput fullWidth [(ngModel)]="selectedElement.text"
+            (ngModelChange)="selectedElement.isModified = true" rows="5"></textarea>
+
+          <div class="mt-3">
+            <label class="label">Tamaño Fuente: {{selectedElement.fontSize}}px</label>
+            <input type="range" nbInput fullWidth min="6" max="50" [(ngModel)]="selectedElement.fontSize">
+          </div>
+        </ng-container>
+
+        <ng-container *ngIf="selectedElement.type === 'image'">
+          <label class="label">Dimensiones Imagen</label>
+          <div class="row">
+            <div class="col-6">
+              <input nbInput fullWidth type="number" [(ngModel)]="selectedElement.width" placeholder="Ancho">
+            </div>
+            <div class="col-6">
+              <input nbInput fullWidth type="number" [(ngModel)]="selectedElement.height" placeholder="Alto">
+            </div>
+          </div>
+        </ng-container>
+      </nb-card-body>
+
+      <nb-card-body *ngIf="!selectedElement" class="text-center">
+        <p class="text-hint">Seleccione un elemento del PDF para comenzar a editar</p>
+      </nb-card-body>
+    </nb-card>
+  </aside>
+
+  <!-- Workspace -->
+  <main class="workspace">
+    <div class="top-actions">
+      <button nbButton status="primary" (click)="pdfInput.click()">
+        <nb-icon icon="file-add-outline"></nb-icon> CARGAR PDF
+      </button>
+
+      <div class="action-divider"></div>
+
+      <button nbButton status="info" outline [disabled]="!isDocLoaded" (click)="insertText()">
+        <nb-icon icon="text-outline"></nb-icon> TEXTO
+      </button>
+
+      <button nbButton status="info" outline [disabled]="!isDocLoaded" (click)="imageInput.click()">
+        <nb-icon icon="image-outline"></nb-icon> IMAGEN
+      </button>
+
+      <div class="action-divider"></div>
+
+      <button nbButton status="success" [disabled]="!isDocLoaded" (click)="saveDocument()">
+        <nb-icon icon="checkmark-circle-outline"></nb-icon> EXPORTAR FINAL
+      </button>
+    </div>
+
+    <!-- Hidden Inputs -->
+    <input type="file" #pdfInput hidden (change)="onFileSelected($event)" accept="application/pdf">
+    <input type="file" #imageInput hidden (change)="insertImage($event)" accept="image/*">
+
+    <!-- PDF Viewport -->
+    <div class="pdf-viewport" *ngIf="isDocLoaded">
+      <div *ngFor="let page of pages; let i = index" class="page-container"
+        [class.active-page]="selectedPageIndex === i" [style.width.px]="page.width" [style.height.px]="page.height"
+        (mousedown)="setActivePage(i)">
+
+        <canvas [id]="'canvas-' + i" class="pdf-canvas"></canvas>
+        <div class="interaction-layer">
+          <div *ngFor="let el of page.elements" cdkDrag (cdkDragEnded)="onDragEnded($event, el)"
+            [ngClass]="getElementClass(el)" [style.left.px]="el.x" [style.top.px]="el.y" [style.width.px]="el.width"
+            [style.height.px]="el.height" (mousedown)="selectedElement = el; $event.stopPropagation()">
+
+            <textarea *ngIf="el.type === 'text'" class="inner-editor" [(ngModel)]="el.text"
+              [style.font-size.px]="el.fontSize" [style.font-family]="el.fontName"
+              [style.font-weight]="el.fontWeight"></textarea>
+
+            <div *ngIf="el.type === 'image'" class="image-wrapper">
+              <img [src]="$any(el).safeResourceReference" [style.width.px]="el.width" [style.height.px]="el.height">
+            </div>
+
+            <div *ngIf="el.type === 'rect'" class="vector-rect" [style.border-color]="$any(el).strokeColor || '#000'"
+              [style.width.px]="el.width" [style.height.px]="el.height">
+            </div>
+
+            <div class="drag-handle" cdkDragHandle>
+              <nb-icon icon="move-outline"></nb-icon>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+
+============================================
+FILE: /d/Config/TestAzure/Front-end/src/app/@presentation/pages/tools/pdf-editor/pdf-editor.component.scss
+============================================
+.studio-container {
+  display: grid;
+  grid-template-columns: 340px 1fr; // Sidebar un poco más ancho
+  height: calc(100vh - 64px);
+  background: #e9ecef;
+}
+
+.sidebar {
+  padding: 1.5rem;
+  background: white;
+  border-right: 1px solid #cfd8dc;
+  z-index: 100;
+  overflow-y: auto;
+  box-shadow: 4px 0 10px rgba(0, 0, 0, 0.05);
+}
+
+.workspace {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  overflow-y: auto;
+  padding: 3rem;
+  width: 100%;
+
+  .top-actions {
+    background: white;
+    padding: 1rem 3rem;
+    border-radius: 60px;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+    display: flex;
+    align-items: center;
+    gap: 1.2rem;
+    margin-bottom: 3rem;
+    position: sticky;
+    top: 0;
+    z-index: 500;
+
+    .action-divider {
+      width: 2px;
+      height: 30px;
+      background: #eceff1;
+    }
+  }
+}
+
+.page-container {
+  position: relative;
+  background: white;
+  margin-bottom: 4rem;
+  box-shadow: 0 30px 70px rgba(0, 0, 0, 0.25);
+  transform-origin: top center;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+.image-wrapper {
+  width: 100%;
+  height: 100%;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+
+  img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: contain; // Cambio a contain para no deformar visualmente
+    background: #f8f9fa;
+  }
+}
+
+.drag-handle {
+  position: absolute;
+  top: -28px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #3366ff;
+  color: white;
+  border-radius: 6px;
+  padding: 4px 10px;
+  opacity: 0;
+  transition: all 0.2s ease;
+  cursor: grabbing;
+  box-shadow: 0 6px 12px rgba(51, 102, 255, 0.4);
+
+  nb-icon {
+    font-size: 1.2rem;
+  }
+}
+
+.label {
+  font-size: 0.75rem;
+  font-weight: 800;
+  color: #546e7a;
+  text-transform: uppercase;
+  margin-bottom: 0.8rem;
+  letter-spacing: 1px;
+}
+
+
+.page-wrapper {
+  margin-bottom: 4rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.page-container {
+  position: relative;
+  background: white;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15);
+  overflow: hidden;
+}
+
+.page-label {
+  margin-top: 1rem;
+  font-weight: 800;
+  color: #8f9bb3;
+  text-transform: uppercase;
+  font-size: 0.75rem;
+}
+
+
+.pdf-canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1;
+  background-color: white !important;
+  /* Evita el bloque negro si el render es lento */
+  width: 100% !important;
+  height: 100% !important;
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: crisp-edges;
+
+}
+
+.interaction-layer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 10;
+}
+
+.editable-item {
+  position: absolute;
+  border: 1px solid transparent;
+  box-sizing: border-box;
+  cursor: move;
+  display: flex;
+  align-items: center;
+
+  &:hover {
+    border: 1px dashed #3366ff;
+    background: rgba(51, 102, 255, 0.04);
+
+    .drag-handle {
+      opacity: 1;
+    }
+  }
+
+  &.is-active {
+    border: 2px solid #00d68f;
+    z-index: 1000 !important;
+    background: white;
+
+    /* Cubre el ruido del fondo */
+    .drag-handle {
+      opacity: 1;
+    }
+  }
+
+  &.modified {
+    border-left: 5px solid #ffa000;
+  }
+}
+
+.inner-editor {
+  width: 100%;
+  height: 100%;
+  border: none;
+  outline: none;
+  background: transparent;
+  color: #000;
+  font-family: inherit;
+  white-space: pre-wrap;
+  overflow: hidden;
+  padding: 0 !important;
+  margin: 0 !important;
+  line-height: 1.0 !important;
+  resize: none;
+  display: block;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+.active-page { border-color: #3366ff; box-shadow: 0 0 50px rgba(51, 102, 255, 0.4); }
+.vector-rect { border: 1px solid black; box-sizing: border-box; }
+
+============================================
+FILE: /d/Config/TestAzure/Front-end/src/app/@presentation/pages/tools/pdf-editor/pdf-editor.component.ts
+============================================
+import {
+  Component, inject, OnInit, PLATFORM_ID, ChangeDetectorRef, OnDestroy
+} from '@angular/core';
+import { CommonModule, isPlatformBrowser } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import {
+  NbButtonModule, NbCardModule, NbIconModule, NbSpinnerModule, NbTooltipModule, NbAlertModule,
+  NbDialogService
+} from '@nebular/theme';
+import { BaseImplementation } from '../../../../utils/baseImplementation';
+import { PdfEngineService } from '../../../../@data/services/pdf-engine.service';
+import { PdfPageContent, VisualElement } from '../../../../@data/model/pdf/pdf-editor.model';
+import { ModalRepository } from '../../../../@domain/repository/repository/modal.repository';
+import { SpinnerService } from '../../../../@data/services/spinner.service';
+import { ErrorHandlingService } from '../../../../@data/services/error-handling.service';
+import { finalize } from 'rxjs';
+import { DragDropModule, CdkDragEnd } from '@angular/cdk/drag-drop';
+import { DomSanitizer } from '@angular/platform-browser';
+
+@Component({
+  selector: 'app-pdf-editor',
+  standalone: true,
+  imports: [CommonModule, FormsModule, NbCardModule, NbButtonModule, NbIconModule, NbSpinnerModule, NbTooltipModule, NbAlertModule, DragDropModule],
+  templateUrl: './pdf-editor.component.html',
+  styleUrls: ['./pdf-editor.component.scss']
+})
+export class PdfEditorComponent extends BaseImplementation<any> implements OnInit {
+
+  private pdfService = inject(PdfEngineService);
+  private platformId = inject(PLATFORM_ID);
+  private cd = inject(ChangeDetectorRef);
+
+  pages: PdfPageContent[] = [];
+  documentId: string = '';
+  isDocLoaded = false;
+  selectedElement: VisualElement | null = null;
+  selectedPageIndex: number = 0;
+  loadingProgress = false;
+  private pdfjsLib: any;
+  private pdfArrayBuffer: ArrayBuffer | null = null;
+  base64OriginalPdf: string = '';
+  private sanitizer = inject(DomSanitizer);
+  private readonly RENDER_SCALE = 2.0;
+
+  constructor(
+    modalRepository: ModalRepository,
+    spinnerService: SpinnerService,
+    dialogService: NbDialogService,
+    errorHandlingService: ErrorHandlingService
+  ) {
+    super(modalRepository, spinnerService, dialogService, errorHandlingService);
+  }
+
+
+
+  async ngOnInit(): Promise<void> {
+    if (isPlatformBrowser(this.platformId)) {
+      try {
+        const pdfjs = await import('pdfjs-dist');
+        this.pdfjsLib = pdfjs;
+        // Local worker reference for high performance
+        this.pdfjsLib.GlobalWorkerOptions.workerSrc = './pdf.worker.min.mjs';
+      } catch (err) {
+        console.error('Failed to initialize PDF.js library:', err);
+      }
+    }
+  }
+
+onFileSelected(event: Event): void {
+const input = event.target as HTMLInputElement;
+const file = input.files?.[0];
+if (!file) return;
+const reader = new FileReader();
+reader.onload = (e) => this.base64OriginalPdf = (e.target?.result as string) || '';
+reader.readAsDataURL(file);
+this.loadingProgress = true;
+this.spinnerService.show();
+this.executeServiceCall(this.pdfService.analyzeForEdit(file), (payload) => {
+  this.pages = payload.pages.map((page: any, pIdx: number) => ({
+    ...page,
+    elements: [
+      ...(page.elements || []).map((el: any, index: number) => ({
+        ...el,
+        id: el.id || `txt-${pIdx}-${index}`,
+        x: Number(el.left) || 0,
+        y: Number(el.top) || 0,
+        width: Number(el.width) || 10,
+        height: Number(el.height) || 15,
+        fontSize: Number(el.fontSize) || 12,
+        fontName: el.fontName || 'Helvetica',
+        fontWeight: el.fontWeight || 'normal',
+        isModified: false,
+        type: 'text'
+      })),
+      ...(page.graphics || []).map((g: any, index: number) => ({
+        id: `graph-${pIdx}-${index}`,
+        type: g.type.toLowerCase(), 
+        x: Number(g.x),
+        y: Number(g.y),
+        width: Number(g.width),
+        height: Number(g.height),
+        strokeColor: g.strokeColor || '#000000',
+        resourceReference: g.resourceReference || null,
+        safeResourceReference: g.resourceReference ? this.sanitizer.bypassSecurityTrustUrl(g.resourceReference) : null,
+        isModified: false,
+        text: '', fontSize: 0, fontName: 'Arial', fontWeight: 'normal', isItalic: false
+      }))
+    ]
+  }));
+
+  this.isDocLoaded = true;
+  this.selectedPageIndex = 0;
+  this.cd.detectChanges();
+
+  setTimeout(async () => {
+    this.pdfArrayBuffer = await file.arrayBuffer();
+    for (let i = 0; i < this.pages.length; i++) {
+      await this.refreshCanvasWithPatches(i);
+    }
+    this.loadingProgress = false;
+    this.spinnerService.hide();
+  }, 300);
+});
+}
+
+  setActivePage(index: number): void {
+    this.selectedPageIndex = index;
+    this.cd.detectChanges();
+  }
+  async insertImage(event: Event): Promise<void> {
+    const file = (event.target as HTMLInputElement).files?.[0];
+    if (!file || !this.isDocLoaded) return;
+    const reader = new FileReader();
+    reader.onload = async (e) => {
+      const rawBase64 = e.target?.result as string;
+      const compressedBase64 = await this.compressImage(rawBase64);
+      const newImgEl: VisualElement = {
+        id: `new-img-${Date.now()}`,
+        type: 'image',
+        x: 50, y: 50, width: 150, height: 150,
+        resourceReference: compressedBase64,
+        isModified: true,
+        text: '', fontSize: 0, fontName: 'Arial', fontWeight: 'normal', isItalic: false
+      };
+      (newImgEl as any).safeResourceReference = this.sanitizer.bypassSecurityTrustUrl(compressedBase64);
+
+      if (this.pages[this.selectedPageIndex]) {
+        this.pages[this.selectedPageIndex].elements.push(newImgEl);
+        this.selectedElement = newImgEl;
+      }
+      this.cd.detectChanges();
+    };
+    reader.readAsDataURL(file);
+    (event.target as HTMLInputElement).value = '';
+  }
+  private async compressImage(base64Str: string): Promise<string> {
+    return new Promise((resolve) => {
+      const img = new Image();
+      img.src = base64Str;
+      img.onload = () => {
+        const canvas = document.createElement('canvas');
+        const MAX_DIMENSION = 600;
+        const scale = Math.min(MAX_DIMENSION / img.width, MAX_DIMENSION / img.height, 1);
+
+        canvas.width = img.width * scale;
+        canvas.height = img.height * scale;
+
+        const ctx = canvas.getContext('2d');
+        ctx?.drawImage(img, 0, 0, canvas.width, canvas.height);
+
+        resolve(canvas.toDataURL('image/png'));
+      };
+      img.onerror = () => resolve(base64Str);
+    });
+  }
+  saveDocument(): void {
+    if (this.pages.length === 0) return;
+    this.spinnerService.show();
+
+    const exportPayload = {
+      base64OriginalPdf: this.base64OriginalPdf,
+      pages: this.pages.map(page => ({
+        pageNumber: page.pageNumber,
+        width: Number(page.width),
+        height: Number(page.height),
+        units: (page as any).units || 'px',
+        rotation: (page as any).rotation || 0,
+
+        graphics: (page.graphics || []).map(g => ({
+          id: g.id,
+          type: (g as any).type || 'IMAGE',
+          x: Number(g.x),
+          y: Number(g.y),
+          width: Number(g.width),
+          height: Number(g.height),
+          strokeColor: (g as any).strokeColor || '#000000',
+          fillColor: (g as any).fillColor || '',
+          lineWidth: Number((g as any).lineWidth) || 1.5,
+          resourceReference: g.resourceReference || ''
+        })),
+
+        elements: (page.elements || []).map(el => ({
+          ...el,
+          left: Number(el.x),
+          top: Number(el.y),
+          width: Number(el.width),
+          height: Number(el.height),
+          resourceReference: el.resourceReference || ''
+        }))
+      }))
+    };
+
+    this.pdfService.updateContent(exportPayload as any)
+      .pipe(finalize(() => this.spinnerService.hide()))
+      .subscribe({
+        next: (blob: Blob) => {
+          if (!isPlatformBrowser(this.platformId)) return;
+          const url = window.URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = `documento_final_${Date.now()}.pdf`;
+          a.click();
+          window.URL.revokeObjectURL(url);
+          this.showSuccessMessage('Documento generado con éxito.', 'Completado');
+        },
+        error: (err: any) => this.handleErrorResponseSaveOrUpdate(err)
+      });
+  }
+
+
+  onDragEnded(event: CdkDragEnd, el: VisualElement): void {
+    const translation = event.source.getFreeDragPosition();
+    el.x += translation.x;
+    el.y += translation.y;
+    el.isModified = true;
+    event.source.reset();
+
+    if (!this.pdfArrayBuffer) return;
+
+    // Synchronize canvas position and size with the moved element
+    const canvas = document.getElementById('canvas-' + this.selectedPageIndex) as HTMLCanvasElement;
+    if (canvas) {
+      const context = canvas.getContext('2d', { alpha: false });
+      if (context) {
+        // Redraw the original PDF page from the stored buffer
+        const loadingTask = this.pdfjsLib.getDocument({ data: this.pdfArrayBuffer });
+        loadingTask.promise.then(async (pdf: any) => {
+          const page = await pdf.getPage(this.selectedPageIndex + 1);
+          const pageData = this.pages[this.selectedPageIndex];
+
+          // Ensure canvas size is correct
+          canvas.width = pageData.width;
+          canvas.height = pageData.height;
+
+          const viewport = page.getViewport({ scale: 1.0 });
+          const scaleX = canvas.width / viewport.width;
+          const scaleY = canvas.height / viewport.height;
+          const scale = Math.min(scaleX, scaleY);
+          const adjustedViewport = page.getViewport({ scale });
+
+          await page.render({ canvasContext: context, viewport: adjustedViewport }).promise;
+
+          // Apply white patches to mask original text
+          context.fillStyle = '#FFFFFF';
+          pageData.elements.forEach(element => {
+            if (element.x !== undefined && element.y !== undefined && element.width !== undefined && element.height !== undefined) {
+              // Use same logic as renderMasterCanvas
+              context.fillRect(element.x, element.y, element.width, element.height);
+            }
+          });
+          this.cd.detectChanges();
+        }).catch((err: any) => {
+          console.error('Error re-rendering page:', err);
+        });
+      }
+    }
+
+    this.cd.detectChanges();
+  }
+  getElementClass(el: VisualElement) {
+    return {
+      'editable-item': true,
+      'is-active': this.selectedElement?.id === el.id,
+      'modified': el.isModified
+    };
+  }
+
+  // Define constants as class properties
+  private readonly FACTOR_ESCALA = 1.333333;
+  private readonly WIDTH_RATIO = 0.55;
+  private readonly HEIGHT_RATIO = 1.2;
+
+  normalizeFontName(font: string | null): string {
+    if (!font) return 'Arial';
+    const f = font.toLowerCase();
+    if (f.includes('arial')) return 'Arial';
+    if (f.includes('helvetica')) return 'Helvetica';
+    if (f.includes('times')) return 'Times New Roman';
+    return 'Arial';
+  }
+
+  private applyGeometricRepair(e: VisualElement): VisualElement {
+    const scaledLeft: number = e.x; // Already scaled
+    const scaledTop: number = e.y; // Already scaled
+    const repairedWidth: number = e.width; // Already scaled
+    const repairedHeight: number = e.height; // Already scaled
+
+    return {
+      ...e,
+      x: scaledLeft,
+      y: scaledTop,
+      width: repairedWidth,
+      height: repairedHeight
+    };
+  }
+
+
+  /**
+   * Compute a safe max-width for an editable element so it cannot overflow the page.
+   * Kept as a method so templates can call it (Angular templates cannot access global Math).
+   */
+  computeMaxWidth(page: any, el: any): number {
+    if (!page) return 0;
+    const pageW = Number(page.width) || 0;
+    const ex = Number(el?.x) || 0;
+    const remaining = pageW - ex;
+    return Math.max(0, Math.ceil(remaining));
+  }
+  insertText(): void {
+    if (!this.isDocLoaded) return;
+    const newEl: VisualElement = {
+      id: `new-txt-${Date.now()}`,
+      text: 'Texto de ejemplo',
+      x: 100, y: 100, width: 200, height: 30,
+      fontSize: 14, fontName: 'Helvetica', fontWeight: 'normal',
+      isItalic: false, type: 'text', isModified: true
+    };
+    this.pages[this.selectedPageIndex].elements.push(newEl);
+    this.selectedElement = newEl;
+  }
+
+
+
+  deleteSelectedElement(): void {
+    if (!this.selectedElement) return;
+    this.pages[this.selectedPageIndex].elements = this.pages[this.selectedPageIndex].elements
+      .filter(el => el.id !== this.selectedElement?.id);
+    this.selectedElement = null;
+    this.cd.detectChanges();
+  }
+  private async refreshCanvasWithPatches(pageIndex: number) {
+    if (!this.pdfArrayBuffer || !this.pdfjsLib || !isPlatformBrowser(this.platformId)) return;
+
+    const canvas = document.getElementById('canvas-' + pageIndex) as HTMLCanvasElement;
+    if (!canvas) return;
+
+    const context = canvas.getContext('2d', { alpha: true })!; // Permitimos alpha o gestionamos fondo manual
+    const pdf = await this.pdfjsLib.getDocument({ data: this.pdfArrayBuffer }).promise;
+    const page = await pdf.getPage(pageIndex + 1);
+    const pageData = this.pages[pageIndex];
+
+    const viewport = page.getViewport({ scale: 1.0 });
+    const baseScale = Math.min(pageData.width / viewport.width, pageData.height / viewport.height);
+    const upscale = baseScale * this.RENDER_SCALE;
+    const adjustedViewport = page.getViewport({ scale: upscale });
+
+    canvas.width = pageData.width * this.RENDER_SCALE;
+    canvas.height = pageData.height * this.RENDER_SCALE;
+
+    // LIMPIEZA PREVENTIVA: Forzamos fondo blanco antes de pintar el PDF
+    context.fillStyle = 'white';
+    context.fillRect(0, 0, canvas.width, canvas.height);
+
+    await page.render({ canvasContext: context, viewport: adjustedViewport }).promise;
+
+    // Aplicamos los parches blancos para limpiar el ruido
+    context.fillStyle = '#FFFFFF';
+    pageData.elements.forEach(el => {
+      if (el.type === 'text') {
+        context.fillRect(
+          (el.x * this.RENDER_SCALE) - 1,
+          (el.y * this.RENDER_SCALE) - 1,
+          (el.width * this.RENDER_SCALE) + 2,
+          (el.height * this.RENDER_SCALE) + 2
+        );
+      }
+    });
+    this.cd.detectChanges();
+  }
+}

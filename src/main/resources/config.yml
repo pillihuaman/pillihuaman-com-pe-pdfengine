@@ -1,0 +1,57 @@
+# Server Configuration
+server:
+  port: 8081  # Change to the desired port for your Spring Boot application
+
+# MongoDB Configuration
+mongodb:
+  conexiones:
+    - credenciales:
+        usuario: "root"
+        clave: "123456" # Here, you can use a placeholder for the password.
+      nodos:
+        - host: "localhost"
+          port: 27017
+        - host: "localhost"
+          port: 27017
+      database: "alamodaperu"
+      replicaset: "alamodaperu"
+      dsname: "alamodaperu"
+      poolconfig:
+        maxPoolSize: 100
+        minPoolSize: 10
+        maxIdleTimeMS: 30000
+        waitQueueMultiple: 5
+        waitQueueTimeoutMS: 10000
+      readpreference: "primaryPreferred"
+      writeconcern: "majority"
+      pojos:
+        - "pillihuaman.com.basebd.config"
+        - "pillihuaman.com.basebd"
+        - "pillihuaman.com.basebd.user"
+        - "pillihuaman.com.security"
+
+# Application Configuration
+application:
+  security:
+    jwt:
+      secret-key: 404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970
+      expiration: 86400000 # a day
+      refresh-token:
+        expiration: 604800000 # 7 days
+
+# Logging Configuration (Optional)
+logging:
+  level:
+    root: INFO
+    org.springframework.web: DEBUG
+    org.springframework.security: DEBUG
+    pillihuaman.com.support: DEBUG  # Change to the package name of your application
+
+# Other Application Specific Configurations
+# Add your custom configurations here as needed.
+spring:
+  main:
+    web-application-type: reactive
+external-api:
+  url: http://localhost:8085/api/v1/auth
+logging.level.org.springframework.data.mongodb.core.MongoTemplate: DEBUG
