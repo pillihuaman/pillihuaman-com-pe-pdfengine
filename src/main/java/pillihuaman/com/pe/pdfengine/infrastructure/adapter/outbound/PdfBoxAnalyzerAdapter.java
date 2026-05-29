@@ -41,9 +41,9 @@ public class PdfBoxAnalyzerAdapter implements PdfAnalyzerPort {
 
     // Constantes Determinísticas de Compilación
     private static final float FACTOR_ESCALA = 1.333333f; // 72 DPI -> 96 DPI (CSS Pixels)
-    private static final float WIDTH_RATIO = 0.55f;       // Factor de corrección de ancho de fuente
     private static final float HEIGHT_RATIO = 1.2f;       // Line-height para editabilidad
-    private static final float Y_THRESHOLD = 3.0f;        // Tolerancia de alineación vertical (puntos)
+    private static final float Y_THRESHOLD = 5.0f;
+    private static final float WIDTH_RATIO = 0.68f;       // Incrementado de 0.55f a 0.68f para prevenir truncamiento ("FACTU", "MONE")
 
     @Override
     public Mono<PdfEditableStructure> analyze(final byte[] pdfBytes) {
@@ -110,38 +110,56 @@ public class PdfBoxAnalyzerAdapter implements PdfAnalyzerPort {
     }
 
     private TextElement mergeElements(TextElement a, TextElement b) {
-        // >>> CHANGE
-        return new TextElement(UUID.randomUUID().toString(), a.text() + " " + b.text(), a.left(), a.top(), (b.left() + b.width()) - a.left(), Math.max(a.height(), b.height()), a.fontSize(), a.fontName(), a.fontWeight(), a.isItalic(), "text", null);
-        // <<< CHANGE
+        return new TextElement(
+                UUID.randomUUID().toString(),
+                a.text() + " " + b.text(),
+                a.left(), a.top(),
+                (b.left() + b.width()) - a.left(),
+                Math.max(a.height(), b.height()),
+                a.fontSize(), a.fontName(), a.fontWeight(), a.isItalic(),
+                "text", null,
+                null, null, null, null // 16 argumentos
+        );
     }
-
 
     private TextElement applyGeometricRepair(TextElement e) {
         float scaledLeft = e.left() * FACTOR_ESCALA;
         float scaledTop = (e.top() * FACTOR_ESCALA) - (e.fontSize() * 0.1f);
-        float repairedWidth = (e.text().length() * e.fontSize() * WIDTH_RATIO) * FACTOR_ESCALA;
-        float repairedHeight = (e.fontSize() * HEIGHT_RATIO) * FACTOR_ESCALA;
+        float repairedWidth = Math.round((e.text().length() * e.fontSize() * WIDTH_RATIO) * FACTOR_ESCALA);
+        float repairedHeight = Math.round((e.fontSize() * HEIGHT_RATIO) * FACTOR_ESCALA);
 
-        // Ajuste: Redondear las dimensiones para evitar deformaciones
-        repairedWidth = Math.round(repairedWidth);
-        repairedHeight = Math.round(repairedHeight);
-
-        // >>> CHANGE
-        return new TextElement(e.id(), e.text(), scaledLeft, scaledTop, repairedWidth, repairedHeight, e.fontSize() * FACTOR_ESCALA, normalizeFontName(e.fontName()), e.fontWeight(), e.isItalic(), "text", e.resourceReference());
-        // <<< CHANGE
+        return new TextElement(
+                e.id(), e.text(), scaledLeft, scaledTop, repairedWidth, repairedHeight,
+                e.fontSize() * FACTOR_ESCALA, normalizeFontName(e.fontName()), e.fontWeight(), e.isItalic(),
+                "text", e.resourceReference(),
+                null, null, null, null // 16 argumentos
+        );
     }
 
     private List<TextElement> extractRawElements(PDDocument doc, int pageNum) throws IOException {
         final List<TextElement> elements = new ArrayList<>();
+        PDPage pageObj = doc.getPage(pageNum - 1);
+        final PDRectangle mediaBox = pageObj.getMediaBox();
+        final float originX = mediaBox.getLowerLeftX();
+        final float originY = mediaBox.getLowerLeftY();
+
         PDFTextStripper stripper = new PDFTextStripper() {
             @Override
             protected void writeString(String string, List<TextPosition> textPositions) {
                 if (textPositions == null || textPositions.isEmpty()) return;
                 TextPosition first = textPositions.get(0);
-                float webTopY = first.getYDirAdj() - first.getHeightDir();
-                // >>> CHANGE
-                elements.add(new TextElement(UUID.randomUUID().toString(), string.trim(), first.getXDirAdj(), webTopY, calculateTotalWidth(textPositions), first.getHeightDir(), first.getFontSizeInPt(), first.getFont().getName(), detectWeight(first), isItalic(first), "text", null));
-                // <<< CHANGE
+
+                // Subtract mediaBox translation offsets to map 1:1 on actual page viewport space
+                float normalizedX = first.getXDirAdj() - originX;
+                float webTopY = (first.getYDirAdj() - originY) - first.getHeightDir();
+
+                elements.add(new TextElement(
+                        UUID.randomUUID().toString(), string.trim(), normalizedX, webTopY,
+                        calculateTotalWidth(textPositions), first.getHeightDir(), first.getFontSizeInPt(),
+                        first.getFont().getName(), detectWeight(first), isItalic(first),
+                        "text", null,
+                        null, null, null, null // 16 argumentos
+                ));
             }
         };
         stripper.setStartPage(pageNum);
@@ -161,6 +179,7 @@ public class PdfBoxAnalyzerAdapter implements PdfAnalyzerPort {
         });
         return elements;
     }
+
 
     private String normalizeFontName(String font) {
         if (font == null) return "Arial";

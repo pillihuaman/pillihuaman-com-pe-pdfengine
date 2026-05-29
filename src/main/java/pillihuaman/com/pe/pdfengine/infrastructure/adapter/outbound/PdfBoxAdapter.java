@@ -71,48 +71,110 @@ public class PdfBoxAdapter implements PdfProcessingPort {
         }
     }
 
-
     @Override
-    public Mono<byte[]> redrawWithTemplate(PdfEditableStructure structure, byte[] templateBytes) {
+    public Mono<byte[]> redrawWithTemplate(
+            PdfEditableStructure structure,
+            byte[] templateBytes
+    ) {
+
         return Mono.fromCallable(() -> {
-            boolean isNewDoc = templateBytes == null || templateBytes.length == 0;
-            try (PDDocument document = isNewDoc ? new PDDocument() : Loader.loadPDF(templateBytes)) {
-                for (var pageData : structure.pages()) {
-                    int pageIndex = pageData.pageNumber() - 1;
-                    if (pageIndex < 0 || pageIndex >= document.getNumberOfPages()) continue;
-                    PDPage page = document.getPage(pageIndex);
-                    float pageHeight = page.getMediaBox().getHeight();
 
-                    try (PDPageContentStream stream = new PDPageContentStream(document, page,
-                            PDPageContentStream.AppendMode.APPEND, true, true)) {
+                    try (PDDocument doc = Loader.loadPDF(templateBytes)) {
 
-                        // Procesar todos los elementos de la capa interactiva
-                        if (pageData.elements() != null) {
-                            for (TextElement el : pageData.elements()) {
-                                // >>> CHANGE: Switch por tipo de elemento
-                                String type = el.type() != null ? el.type().toLowerCase() : "text";
+                        for (var pageData : structure.pages()) {
 
-                                switch (type) {
-                                    case "rect":
-                                        drawVectorRect(stream, el, pageHeight);
-                                        break;
-                                    case "image":
-                                        drawSafeImage(document, stream, el, pageHeight);
-                                        break;
-                                    default:
-                                        renderPrecisionText(stream, el, pageHeight);
-                                        break;
+                            PDPage page = doc.getPage(pageData.pageNumber() - 1);
+
+                            float pageHeight = page.getMediaBox().getHeight();
+
+                            try (PDPageContentStream stream =
+                                         new PDPageContentStream(
+                                                 doc,
+                                                 page,
+                                                 PDPageContentStream.AppendMode.APPEND,
+                                                 true,
+                                                 true
+                                         )) {
+
+                                for (TextElement el : pageData.elements()) {
+
+                                    stream.beginText();
+
+                                    stream.setFont(
+                                            new PDType1Font(Standard14Fonts.FontName.HELVETICA),
+                                            el.fontSize() * 0.75f
+                                    );
+
+                                    stream.newLineAtOffset(
+                                            el.left() * 0.75f,
+                                            pageHeight - (el.top() * 0.75f)
+                                    );
+
+                                    stream.showText(
+                                            el.text() != null ? el.text() : ""
+                                    );
+
+                                    stream.endText();
                                 }
-                                // <<< CHANGE
                             }
                         }
+
+                        ByteArrayOutputStream out = new ByteArrayOutputStream();
+
+                        doc.save(out);
+
+                        return out.toByteArray();
                     }
-                }
-                ByteArrayOutputStream out = new ByteArrayOutputStream();
-                document.save(out);
-                return out.toByteArray();
-            }
-        }).subscribeOn(Schedulers.boundedElastic());
+                })
+                
+                .subscribeOn(Schedulers.boundedElastic());
+    }
+
+    private void drawOriginalGraphic(PDPageContentStream stream, GraphicElement graph, float pageHeight) throws IOException {
+        if ("RECT".equalsIgnoreCase(graph.type())) {
+            stream.setStrokingColor(Color.decode(graph.strokeColor() != null ? graph.strokeColor() : "#000000"));
+            float x = graph.x() * PX_TO_PT;
+            float w = graph.width() * PX_TO_PT;
+            float h = graph.height() * PX_TO_PT;
+            float y = pageHeight - (graph.y() * PX_TO_PT) - h;
+            stream.addRect(x, y, w, h);
+            stream.stroke();
+        }
+    }
+
+    private void drawVectorRectFromElement(PDPageContentStream stream, TextElement el, float pageHeight) throws IOException {
+        stream.setStrokingColor(Color.BLACK);
+        float x = el.left() * PX_TO_PT;
+        float w = el.width() * PX_TO_PT;
+        float h = el.height() * PX_TO_PT;
+        float y = pageHeight - (el.top() * PX_TO_PT) - h;
+        stream.addRect(x, y, w, h);
+        stream.stroke();
+    }
+
+    private void renderFidelityText(PDPageContentStream stream, TextElement el, float pageHeight) throws IOException {
+        if (el.text() == null || el.text().isBlank()) return;
+        PDFont font = new PDType1Font(Standard14Fonts.FontName.HELVETICA);
+        float fontSizePt = el.fontSize() * PX_TO_PT;
+
+        stream.beginText();
+        stream.setFont(font, fontSizePt);
+
+        // Ajuste de interlineado (lineHeight) si la IA lo proporcionó
+        float leading = (el.lineHeight() != null) ? Float.parseFloat(el.lineHeight()) : fontSizePt;
+        stream.setLeading(leading);
+
+        // Posicionamiento con ajuste de Baseline
+        float y = pageHeight - (el.top() * PX_TO_PT) - (fontSizePt * 0.9f);
+        stream.newLineAtOffset(el.left() * PX_TO_PT, y);
+
+        // Aquí podrías implementar el letterSpacing si es necesario con stream.setCharacterSpacing()
+        if (el.letterSpacing() != null) {
+            stream.setCharacterSpacing(Float.parseFloat(el.letterSpacing()));
+        }
+
+        stream.showText(el.text().trim());
+        stream.endText();
     }
 
     private void drawVectorRect(PDPageContentStream stream, TextElement el, float pageHeight) throws IOException {

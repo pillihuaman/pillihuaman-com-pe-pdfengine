@@ -42,7 +42,11 @@ public record TextElement(
         boolean isItalic,
         @JsonProperty("type") String type,
         @JsonProperty("resourceReference")
-        String resourceReference
+        String resourceReference,
+        @JsonProperty("letterSpacing") String letterSpacing,
+        @JsonProperty("lineHeight") String lineHeight,
+        @JsonProperty("textAlign") String textAlign,
+        @JsonProperty("cssTransform") String cssTransform
 
 ) implements Serializable {
 }

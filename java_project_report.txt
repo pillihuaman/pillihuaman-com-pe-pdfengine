@@ -1,12 +1,13 @@
 ============================================
 FULL PROJECT STRUCTURE REPORT
-Generated on: Wed May  6 16:24:36 SAPST 2026
+Generated on: Thu May 21 05:25:09 SAPST 2026
 Backend Root: /d/Config/TestAzure/Back-end/pillihuaman-com-pe-pdfengine/src
 Frontend Root: /d/Config/TestAzure/Front-end/src/app/@presentation/pages/tools/pdf-editor
 ============================================
 
 ---- BACKEND DIRECTORY STRUCTURE ----
 /d/Config/TestAzure/Back-end/pillihuaman-com-pe-pdfengine/src/main/java/pillihuaman/com/pe/pdfengine/application/dto/PdfEditableRequest.java
+/d/Config/TestAzure/Back-end/pillihuaman-com-pe-pdfengine/src/main/java/pillihuaman/com/pe/pdfengine/application/dto/PdfFidelityRequest.java
 /d/Config/TestAzure/Back-end/pillihuaman-com-pe-pdfengine/src/main/java/pillihuaman/com/pe/pdfengine/application/port/inbound/PdfUseCase.java
 /d/Config/TestAzure/Back-end/pillihuaman-com-pe-pdfengine/src/main/java/pillihuaman/com/pe/pdfengine/application/port/outbound/PdfAnalyzerPort.java
 /d/Config/TestAzure/Back-end/pillihuaman-com-pe-pdfengine/src/main/java/pillihuaman/com/pe/pdfengine/application/port/outbound/PdfPersistencePort.java
@@ -82,6 +83,24 @@ public record PdfEditableRequest(
 }
 
 ============================================
+FILE: /d/Config/TestAzure/Back-end/pillihuaman-com-pe-pdfengine/src/main/java/pillihuaman/com/pe/pdfengine/application/dto/PdfFidelityRequest.java
+============================================
+package pillihuaman.com.pe.pdfengine.application.dto;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import pillihuaman.com.pe.pdfengine.domain.model.PdfEditableStructure;
+
+@JsonIgnoreProperties(ignoreUnknown = true)
+public record PdfFidelityRequest(
+        @JsonProperty("layout")
+        PdfEditableStructure layout,
+        @JsonProperty("screenshot")
+        String screenshot
+) {
+}
+
+============================================
 FILE: /d/Config/TestAzure/Back-end/pillihuaman-com-pe-pdfengine/src/main/java/pillihuaman/com/pe/pdfengine/application/port/inbound/PdfUseCase.java
 ============================================
 package pillihuaman.com.pe.pdfengine.application.port.inbound;
@@ -101,6 +120,10 @@ public interface PdfUseCase {
     Mono<PdfEditableStructure> analyzeAndOptimize(byte[] pdfBytes, String bearerToken);
 
     Mono<byte[]> updateDocumentContent(PdfEditableRequest request);
+
+
+    Mono<PdfEditableStructure> refineFidelity(PdfEditableStructure currentStructure, String base64Image, String bearerToken);
+
 }
 
 
@@ -207,10 +230,7 @@ import pillihuaman.com.pe.pdfengine.infrastructure.adapter.outbound.external.AiL
 import pillihuaman.com.pe.pdfengine.infrastructure.security.TenantWebFilter;
 import reactor.core.publisher.Mono;
 
-import java.util.Base64;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -265,33 +285,82 @@ public class PdfService implements PdfUseCase {
                 .doOnError(e -> log.error("Overlay error: {}", e.getMessage()));
     }
 
+    @Override
+    public Mono<PdfEditableStructure> refineFidelity(PdfEditableStructure currentStructure, String base64Image, String bearerToken) {
+        log.info("Starting Extreme Mathematical Alignment pass (Logical Snapping)...");
+
+        return aiLayoutClientAdapter.callNeuroIaToRefineVisuals(
+                currentStructure,
+                null, // Screenshot es null para alineación lógica matemática
+                "PDF_VIS_AL_FIDELITY_V1",
+                bearerToken
+        ).map(refinedStructure -> {
+            List<PdfPageContent> mergedPages = new ArrayList<>();
+            for (PdfPageContent refinedPage : refinedStructure.pages()) {
+                PdfPageContent originalPage = currentStructure.pages().stream()
+                        .filter(p -> p.pageNumber() == refinedPage.pageNumber())
+                        .findFirst()
+                        .orElse(null);
+
+                if (originalPage != null) {
+                    mergedPages.add(new PdfPageContent(
+                            refinedPage.pageNumber(),
+                            refinedPage.width(),
+                            refinedPage.height(),
+                            refinedPage.units(),
+                            refinedPage.rotation(),
+                            refinedPage.elements(),
+                            originalPage.graphics(), // Safely Preserve Native Graphic Elements
+                            originalPage.rawText(),  // Preserve RawText
+                            originalPage.hasImages(),
+                            originalPage.fontCount()
+                    ));
+                } else {
+                    mergedPages.add(refinedPage);
+                }
+            }
+            return new PdfEditableStructure(refinedStructure.documentId(), mergedPages, refinedStructure.info());
+        }).doOnSuccess(res -> log.info("Logical Snapping completed successfully"));
+    }
 
     @Override
     public Mono<PdfEditableStructure> analyzeAndOptimize(byte[] pdfBytes, String bearerToken) {
-        log.info("Starting structural analysis for provided PDF bytes");
         return pdfAnalyzerPort.analyze(pdfBytes)
-                .doOnSuccess(structure -> log.info("PDF Analysis completed: {} pages", structure.pages().size()));
+                .flatMap(rawStructure -> {
+                    // Extraer data mínima (ID y Texto) para la IA
+                    List<Map<String, String>> minimalData = rawStructure.pages().stream()
+                            .flatMap(p -> p.elements().stream())
+                            .map(e -> Map.of("id", e.id(), "text", e.text()))
+                            .collect(Collectors.toList());
+
+                    // Llamamos a la IA y unimos los resultados
+                    return aiLayoutClientAdapter.callNeuroIaToClassify(minimalData, "PDF_LAYOUT_AI_GEOMETRY_COMPILER_V2", bearerToken)
+                            .map(classifications -> performSemanticJoin(rawStructure, classifications))
+                            .onErrorReturn(rawStructure); // Fallback seguro
+                });
     }
 
     private PdfEditableStructure performSemanticJoin(PdfEditableStructure geometry, List<AiClassificationResponse.ClassificationItem> classifications) {
-
-        // Mapa ID -> TYPE
-        Map<String, String> typeMap = classifications.stream().collect(Collectors.toMap(AiClassificationResponse.ClassificationItem::id, AiClassificationResponse.ClassificationItem::type, (existing, replacement) -> existing));
+        Map<String, String> typeMap = classifications.stream()
+                .collect(Collectors.toMap(AiClassificationResponse.ClassificationItem::id, AiClassificationResponse.ClassificationItem::type, (a, b) -> a));
 
         List<PdfPageContent> enrichedPages = geometry.pages().stream().map(page -> {
-            // >>> CHANGE
             List<TextElement> enrichedElements = page.elements().stream().map(e -> new TextElement(
                     e.id(), e.text(), e.left(), e.top(), e.width(), e.height(),
                     e.fontSize(), e.fontName(), e.fontWeight(), e.isItalic(),
-                    typeMap.getOrDefault(e.id(), "text"), e.resourceReference()
+                    typeMap.getOrDefault(e.id(), "text"), // <--- AQUÍ SE ASIGNA EL TIPO DE LA IA
+                    e.resourceReference(), null, // letterSpacing
+                    null, // lineHeight
+                    null, // textAlign
+                    null
             )).collect(Collectors.toList());
-            // <<< CHANGE
 
             return new PdfPageContent(page.pageNumber(), page.width(), page.height(), page.units(), page.rotation(), enrichedElements, page.graphics(), page.rawText(), page.hasImages(), page.fontCount());
         }).collect(Collectors.toList());
 
         return new PdfEditableStructure(geometry.documentId(), enrichedPages, geometry.info());
     }
+
 
 }
 
@@ -675,7 +744,11 @@ public record TextElement(
         boolean isItalic,
         @JsonProperty("type") String type,
         @JsonProperty("resourceReference")
-        String resourceReference
+        String resourceReference,
+        @JsonProperty("letterSpacing") String letterSpacing,
+        @JsonProperty("lineHeight") String lineHeight,
+        @JsonProperty("textAlign") String textAlign,
+        @JsonProperty("cssTransform") String cssTransform
 
 ) implements Serializable {
 }
@@ -693,6 +766,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.http.codec.multipart.FilePart;
 import org.springframework.web.bind.annotation.*;
 import pillihuaman.com.pe.pdfengine.application.dto.PdfEditableRequest;
+import pillihuaman.com.pe.pdfengine.application.dto.PdfFidelityRequest;
 import pillihuaman.com.pe.pdfengine.application.port.inbound.PdfUseCase;
 import pillihuaman.com.pe.pdfengine.application.port.outbound.PdfAnalyzerPort;
 import pillihuaman.com.pe.pdfengine.domain.model.PdfDocument;
@@ -779,6 +853,15 @@ public class PdfRestController {
                     );
                 });
     }
+
+    @PostMapping("/refine-fidelity")
+    public Mono<RespBase<PdfEditableStructure>> refineFidelity(
+            @RequestBody PdfFidelityRequest request,
+            @RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
+
+        return pdfUseCase.refineFidelity(request.layout(), request.screenshot(), token)
+                .map(result -> new RespBase<PdfEditableStructure>().ok(result));
+    }
 }
 
 ============================================
@@ -801,6 +884,7 @@ import pillihuaman.com.pe.pdfengine.infrastructure.common.ReqBase;
 import pillihuaman.com.pe.pdfengine.infrastructure.common.RespBase;
 import reactor.core.publisher.Mono;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -878,10 +962,9 @@ public class AiLayoutClientAdapter {
             String promptTemplate,
             String bearerToken) {
 
-        // Construimos el request con el campo minimalData
         AiLayoutRequest payload = AiLayoutRequest.builder()
                 .systemPrompt(promptTemplate)
-                .minimalData(minimalElements) // Enviamos solo ID y Texto
+                .minimalData(minimalElements)
                 .build();
 
         ReqBase<AiLayoutRequest> request = new ReqBase<>();
@@ -893,15 +976,82 @@ public class AiLayoutClientAdapter {
                 .contentType(MediaType.APPLICATION_JSON)
                 .bodyValue(request)
                 .retrieve()
-                .bodyToMono(new org.springframework.core.ParameterizedTypeReference<RespBase<AiClassificationResponse>>() {
-                })
-                .flatMap(response -> {
-                    // Validación de seguridad de la respuesta
-                    if (response != null && response.getStatus().getSuccess() && response.getPayload() != null) {
-                        return Mono.just(response.getPayload().classifications());
+                .bodyToMono(String.class)
+                .flatMap(rawResponse -> {
+                    try {
+                        String cleanJson = rawResponse.trim();
+                        // Limpieza de Markdown si la IA lo devuelve
+                        if (cleanJson.contains("```json")) {
+                            cleanJson = cleanJson.substring(cleanJson.indexOf("```json") + 7);
+                            cleanJson = cleanJson.substring(0, cleanJson.lastIndexOf("```"));
+                        }
+
+                        // >>> CHANGE: Mapeo a la estructura de clasificación, NO a PdfEditableStructure
+                        RespBase<AiClassificationResponse> response = objectMapper.readValue(
+                                cleanJson, new TypeReference<RespBase<AiClassificationResponse>>() {
+                                });
+
+                        if (response != null && response.getStatus().getSuccess() && response.getPayload() != null) {
+                            return Mono.just(response.getPayload().classifications());
+                        }
+                        return Mono.error(new RuntimeException("IA Response payload is null"));
+                    } catch (Exception e) {
+                        log.error("Failed to parse IA classification: {}", e.getMessage());
+                        return Mono.error(e);
                     }
-                    return Mono.error(new RuntimeException("NeuroIA returned invalid classification payload"));
                 });
+    }
+
+
+    public Mono<PdfEditableStructure> callNeuroIaToRefineVisuals(
+            PdfEditableStructure layout,
+            String base64Image,
+            String promptTemplate, // >>> CHANGE: Template from support-ms
+            String bearerToken) {
+
+        // >>> CHANGE
+        // Construimos un payload que incluya el systemPrompt y el contexto visual
+        // Reutilizamos el objeto ReqBase para consistencia en el protocolo
+        Map<String, Object> payloadMap = new HashMap<>();
+        payloadMap.put("systemPrompt", promptTemplate);
+        payloadMap.put("rawPdfData", layout);
+        payloadMap.put("screenshot", base64Image);
+
+        ReqBase<Map<String, Object>> request = new ReqBase<>();
+        request.setPayload(payloadMap);
+
+        return webClient.post()
+                .uri(neuroIaUrl + "/private/v1/ia/iaService/normalize-pdf-layout")
+                .header(HttpHeaders.AUTHORIZATION, bearerToken)
+                .contentType(MediaType.APPLICATION_JSON)
+                .bodyValue(request)
+                .retrieve()
+                .bodyToMono(String.class)
+                .flatMap(rawResponse -> {
+                    try {
+                        String cleanJson = cleanMarkdown(rawResponse);
+                        log.debug("NeuroIA Refined JSON: {}", cleanJson);
+
+                        RespBase<PdfEditableStructure> response = objectMapper.readValue(
+                                cleanJson, new TypeReference<RespBase<PdfEditableStructure>>() {
+                                });
+
+                        if (response != null && response.getPayload() != null) {
+                            return Mono.just(response.getPayload());
+                        }
+                        return Mono.error(new RuntimeException("Fidelity Refinement returned empty payload"));
+                    } catch (Exception e) {
+                        log.error("Failed to parse Fidelity Refinement response: {}", e.getMessage());
+                        return Mono.error(e);
+                    }
+                });
+    }
+
+    private String cleanMarkdown(String json) {
+        if (json.contains("```json")) {
+            return json.substring(json.indexOf("```json") + 7, json.lastIndexOf("```")).trim();
+        }
+        return json.trim();
     }
 }
 
@@ -988,14 +1138,14 @@ public class PromptRestAdapter implements PromptExternalPort {
         this.supportServiceUrl = supportServiceUrl;
     }
 
+
     @Override
     public Mono<PromptAndVersionDTO> getPromptByCharacteristics(ReqPrompt payload, String bearerToken) {
-        // REGION: Request Construction
         ReqBase<ReqPrompt> request = new ReqBase<>();
         request.setPayload(payload);
 
         return webClient.post()
-                .uri(supportServiceUrl + "/private/v1/support/prompt/characteristics")
+                .uri(supportServiceUrl + "/private/v1/prompt/characteristics")
                 .header(HttpHeaders.AUTHORIZATION, bearerToken)
                 .contentType(MediaType.APPLICATION_JSON)
                 .bodyValue(request)
@@ -1037,6 +1187,10 @@ import pillihuaman.com.pe.pdfengine.domain.model.TextElement;
 import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Schedulers;
 
+import javax.imageio.ImageIO;
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.Base64;
@@ -1087,62 +1241,169 @@ public class PdfBoxAdapter implements PdfProcessingPort {
     }
 
     @Override
-    public Mono<byte[]> redrawWithTemplate(PdfEditableStructure structure, byte[] templateBytes) {
+    public Mono<byte[]> redrawWithTemplate(
+            PdfEditableStructure structure,
+            byte[] templateBytes
+    ) {
+
         return Mono.fromCallable(() -> {
-            boolean isNewDoc = templateBytes == null || templateBytes.length == 0;
-            try (PDDocument document = isNewDoc ? new PDDocument() : Loader.loadPDF(templateBytes)) {
-                if (isNewDoc) {
-                    for (int i = 0; i < structure.pages().size(); i++) document.addPage(new PDPage());
-                }
 
-                for (var pageData : structure.pages()) {
-                    int pageIndex = pageData.pageNumber() - 1;
-                    if (pageIndex < 0 || pageIndex >= document.getNumberOfPages()) continue;
-                    PDPage page = document.getPage(pageIndex);
-                    float pageHeight = page.getMediaBox().getHeight();
+                    try (PDDocument doc = Loader.loadPDF(templateBytes)) {
 
-                    // Usamos APPEND para preservar el fondo original
-                    try (PDPageContentStream stream = new PDPageContentStream(document, page,
-                            PDPageContentStream.AppendMode.APPEND, true, true)) {
-                        if (!isNewDoc && pageData.elements() != null) {
-                            stream.setNonStrokingColor(java.awt.Color.WHITE);
-                            for (TextElement el : pageData.elements()) {
-                                float w = el.width() * PX_TO_PT;
-                                float h = el.height() * PX_TO_PT;
-                                float x = el.left() * PX_TO_PT;
-                                float y = pageHeight - (el.top() * PX_TO_PT) - h;
+                        for (var pageData : structure.pages()) {
 
-                                if (w > 0 && h > 0) {
-                                    stream.addRect(x, y, w, h);
-                                    stream.fill();
-                                }
-                            }
-                            stream.setNonStrokingColor(java.awt.Color.BLACK); // Restore black for drawing text
-                        }
-                        // CAPA 1: Graphics (Imágenes del JSON)
-                        if (pageData.graphics() != null) {
-                            for (GraphicElement g : pageData.graphics())
-                                renderPrecisionImageFromGraphic(document, stream, g, pageHeight);
-                        }
+                            PDPage page = doc.getPage(pageData.pageNumber() - 1);
 
-                        // CAPA 2: Elements (Textos e imágenes sobrepuestas)
-                        if (pageData.elements() != null) {
-                            for (TextElement el : pageData.elements()) {
-                                if ("image".equalsIgnoreCase(el.type()) || (el.resourceReference() != null && el.resourceReference().startsWith("data:image"))) {
-                                    renderPrecisionImageFromElement(document, stream, el, pageHeight);
-                                } else {
-                                    renderPrecisionText(stream, el, pageHeight);
+                            float pageHeight = page.getMediaBox().getHeight();
+
+                            try (PDPageContentStream stream =
+                                         new PDPageContentStream(
+                                                 doc,
+                                                 page,
+                                                 PDPageContentStream.AppendMode.APPEND,
+                                                 true,
+                                                 true
+                                         )) {
+
+                                for (TextElement el : pageData.elements()) {
+
+                                    stream.beginText();
+
+                                    stream.setFont(
+                                            new PDType1Font(Standard14Fonts.FontName.HELVETICA),
+                                            el.fontSize() * 0.75f
+                                    );
+
+                                    stream.newLineAtOffset(
+                                            el.left() * 0.75f,
+                                            pageHeight - (el.top() * 0.75f)
+                                    );
+
+                                    stream.showText(
+                                            el.text() != null ? el.text() : ""
+                                    );
+
+                                    stream.endText();
                                 }
                             }
                         }
+
+                        ByteArrayOutputStream out = new ByteArrayOutputStream();
+
+                        doc.save(out);
+
+                        return out.toByteArray();
                     }
-                }
-                ByteArrayOutputStream out = new ByteArrayOutputStream();
-                document.save(out);
-                return out.toByteArray();
-            }
-        }).subscribeOn(Schedulers.boundedElastic());
+                })
+                
+                .subscribeOn(Schedulers.boundedElastic());
     }
+
+    private void drawOriginalGraphic(PDPageContentStream stream, GraphicElement graph, float pageHeight) throws IOException {
+        if ("RECT".equalsIgnoreCase(graph.type())) {
+            stream.setStrokingColor(Color.decode(graph.strokeColor() != null ? graph.strokeColor() : "#000000"));
+            float x = graph.x() * PX_TO_PT;
+            float w = graph.width() * PX_TO_PT;
+            float h = graph.height() * PX_TO_PT;
+            float y = pageHeight - (graph.y() * PX_TO_PT) - h;
+            stream.addRect(x, y, w, h);
+            stream.stroke();
+        }
+    }
+
+    private void drawVectorRectFromElement(PDPageContentStream stream, TextElement el, float pageHeight) throws IOException {
+        stream.setStrokingColor(Color.BLACK);
+        float x = el.left() * PX_TO_PT;
+        float w = el.width() * PX_TO_PT;
+        float h = el.height() * PX_TO_PT;
+        float y = pageHeight - (el.top() * PX_TO_PT) - h;
+        stream.addRect(x, y, w, h);
+        stream.stroke();
+    }
+
+    private void renderFidelityText(PDPageContentStream stream, TextElement el, float pageHeight) throws IOException {
+        if (el.text() == null || el.text().isBlank()) return;
+        PDFont font = new PDType1Font(Standard14Fonts.FontName.HELVETICA);
+        float fontSizePt = el.fontSize() * PX_TO_PT;
+
+        stream.beginText();
+        stream.setFont(font, fontSizePt);
+
+        // Ajuste de interlineado (lineHeight) si la IA lo proporcionó
+        float leading = (el.lineHeight() != null) ? Float.parseFloat(el.lineHeight()) : fontSizePt;
+        stream.setLeading(leading);
+
+        // Posicionamiento con ajuste de Baseline
+        float y = pageHeight - (el.top() * PX_TO_PT) - (fontSizePt * 0.9f);
+        stream.newLineAtOffset(el.left() * PX_TO_PT, y);
+
+        // Aquí podrías implementar el letterSpacing si es necesario con stream.setCharacterSpacing()
+        if (el.letterSpacing() != null) {
+            stream.setCharacterSpacing(Float.parseFloat(el.letterSpacing()));
+        }
+
+        stream.showText(el.text().trim());
+        stream.endText();
+    }
+
+    private void drawVectorRect(PDPageContentStream stream, TextElement el, float pageHeight) throws IOException {
+        stream.setStrokingColor(Color.BLACK);
+        float x = el.left() * PX_TO_PT;
+        float w = el.width() * PX_TO_PT;
+        float h = el.height() * PX_TO_PT;
+        float y = pageHeight - (el.top() * PX_TO_PT) - h;
+        stream.addRect(x, y, w, h);
+        stream.stroke();
+    }
+
+    private void drawSafeImage(PDDocument doc, PDPageContentStream stream, TextElement el, float pageHeight) {
+        String ref = el.resourceReference();
+        if (ref == null || !ref.contains(",")) return;
+        try {
+            byte[] imageBytes = Base64.getMimeDecoder().decode(ref.split(",")[1]);
+            BufferedImage originalImage = ImageIO.read(new ByteArrayInputStream(imageBytes));
+            if (originalImage == null) return;
+            BufferedImage rgbImage = new BufferedImage(
+                    originalImage.getWidth(),
+                    originalImage.getHeight(),
+                    BufferedImage.TYPE_INT_RGB);
+
+            Graphics2D g2d = rgbImage.createGraphics();
+            g2d.setColor(Color.WHITE);
+            g2d.fillRect(0, 0, rgbImage.getWidth(), rgbImage.getHeight());
+            g2d.drawImage(originalImage, 0, 0, null);
+            g2d.dispose();
+
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            ImageIO.write(rgbImage, "jpg", baos); // Usamos JPG para asegurar que no hay alpha
+
+            PDImageXObject pdImage = PDImageXObject.createFromByteArray(doc, baos.toByteArray(), "img_" + el.id());
+            float w = el.width() * PX_TO_PT;
+            float h = el.height() * PX_TO_PT;
+            float x = el.left() * PX_TO_PT;
+            float y = pageHeight - (el.top() * PX_TO_PT) - h;
+
+            stream.drawImage(pdImage, x, y, w, h);
+            // <<< CHANGE
+        } catch (Exception e) {
+            log.error("Fallo al exportar imagen {}: {}", el.id(), e.getMessage());
+        }
+    }
+
+    private void renderPrecisionText(PDPageContentStream stream, TextElement el, float pageHeight) throws IOException {
+        if (el.text() == null || el.text().isBlank()) return;
+        PDFont font = new PDType1Font(Standard14Fonts.FontName.HELVETICA);
+        float fontSizePt = el.fontSize() * PX_TO_PT;
+
+        stream.beginText();
+        stream.setFont(font, fontSizePt);
+        // Ajuste de Baseline para que coincida con la vista web
+        float y = pageHeight - (el.top() * PX_TO_PT) - (fontSizePt * 0.9f);
+        stream.newLineAtOffset(el.left() * PX_TO_PT, y);
+        stream.showText(el.text().trim());
+        stream.endText();
+    }
+
 
     private void renderPrecisionImageFromElement(
             PDDocument doc, PDPageContentStream stream, TextElement el, float pageHeight) {
@@ -1180,49 +1441,6 @@ public class PdfBoxAdapter implements PdfProcessingPort {
             log.error("Image rendering failed for element ID {}: {}", el.id(), e.getMessage(), e);
         }
         // <<< CHANGE
-    }
-
-
-    private void renderPrecisionText(PDPageContentStream stream, TextElement el, float pageHeight)
-            throws IOException {
-        // 
-        if (el.text() == null || el.text().isBlank()) return;
-
-        Standard14Fonts.FontName base =
-                FONT_MAP.getOrDefault(el.fontName(), Standard14Fonts.FontName.HELVETICA);
-
-        // Auto-detect style variants
-        boolean isBold = "bold".equalsIgnoreCase(el.fontWeight());
-        Standard14Fonts.FontName target;
-        if (isBold && el.isItalic()) target = Standard14Fonts.FontName.valueOf(base.name() + "_BOLD_OBLIQUE");
-        else if (isBold) target = Standard14Fonts.FontName.valueOf(base.name() + "_BOLD");
-        else if (el.isItalic()) target = Standard14Fonts.FontName.valueOf(base.name() + "_OBLIQUE");
-        else target = base;
-
-        PDFont font = new PDType1Font(target);
-        float fontSizePt = el.fontSize() * PX_TO_PT;
-
-        // SCALING & POSITIONING:
-        // PDF Y starts from bottom. Web Y starts from top.
-        // Ascent correction ensures the font baseline matches the CSS top coordinate.
-        float pdfX = el.left() * PX_TO_PT;
-        float pdfY = pageHeight - (el.top() * PX_TO_PT) - (fontSizePt * 0.85f);
-
-        stream.beginText();
-        stream.setFont(font, fontSizePt);
-        stream.newLineAtOffset(pdfX, pdfY);
-
-        // Dynamic width fitting
-        float expectedWidthPt = el.width() * PX_TO_PT;
-        float actualWidthPt = font.getStringWidth(el.text()) / 1000 * fontSizePt;
-        if (expectedWidthPt > actualWidthPt && el.text().length() > 1) {
-            stream.setCharacterSpacing((expectedWidthPt - actualWidthPt) / el.text().length());
-        }
-
-        stream.showText(el.text().trim());
-        stream.endText();
-        stream.setCharacterSpacing(0);
-
     }
 
     private void renderPrecisionImage(
@@ -1318,9 +1536,9 @@ public class PdfBoxAnalyzerAdapter implements PdfAnalyzerPort {
 
     // Constantes Determinísticas de Compilación
     private static final float FACTOR_ESCALA = 1.333333f; // 72 DPI -> 96 DPI (CSS Pixels)
-    private static final float WIDTH_RATIO = 0.55f;       // Factor de corrección de ancho de fuente
     private static final float HEIGHT_RATIO = 1.2f;       // Line-height para editabilidad
-    private static final float Y_THRESHOLD = 3.0f;        // Tolerancia de alineación vertical (puntos)
+    private static final float Y_THRESHOLD = 5.0f;
+    private static final float WIDTH_RATIO = 0.68f;       // Incrementado de 0.55f a 0.68f para prevenir truncamiento ("FACTU", "MONE")
 
     @Override
     public Mono<PdfEditableStructure> analyze(final byte[] pdfBytes) {
@@ -1387,38 +1605,56 @@ public class PdfBoxAnalyzerAdapter implements PdfAnalyzerPort {
     }
 
     private TextElement mergeElements(TextElement a, TextElement b) {
-        // >>> CHANGE
-        return new TextElement(UUID.randomUUID().toString(), a.text() + " " + b.text(), a.left(), a.top(), (b.left() + b.width()) - a.left(), Math.max(a.height(), b.height()), a.fontSize(), a.fontName(), a.fontWeight(), a.isItalic(), "text", null);
-        // <<< CHANGE
+        return new TextElement(
+                UUID.randomUUID().toString(),
+                a.text() + " " + b.text(),
+                a.left(), a.top(),
+                (b.left() + b.width()) - a.left(),
+                Math.max(a.height(), b.height()),
+                a.fontSize(), a.fontName(), a.fontWeight(), a.isItalic(),
+                "text", null,
+                null, null, null, null // 16 argumentos
+        );
     }
-
 
     private TextElement applyGeometricRepair(TextElement e) {
         float scaledLeft = e.left() * FACTOR_ESCALA;
         float scaledTop = (e.top() * FACTOR_ESCALA) - (e.fontSize() * 0.1f);
-        float repairedWidth = (e.text().length() * e.fontSize() * WIDTH_RATIO) * FACTOR_ESCALA;
-        float repairedHeight = (e.fontSize() * HEIGHT_RATIO) * FACTOR_ESCALA;
+        float repairedWidth = Math.round((e.text().length() * e.fontSize() * WIDTH_RATIO) * FACTOR_ESCALA);
+        float repairedHeight = Math.round((e.fontSize() * HEIGHT_RATIO) * FACTOR_ESCALA);
 
-        // Ajuste: Redondear las dimensiones para evitar deformaciones
-        repairedWidth = Math.round(repairedWidth);
-        repairedHeight = Math.round(repairedHeight);
-
-        // >>> CHANGE
-        return new TextElement(e.id(), e.text(), scaledLeft, scaledTop, repairedWidth, repairedHeight, e.fontSize() * FACTOR_ESCALA, normalizeFontName(e.fontName()), e.fontWeight(), e.isItalic(), "text", e.resourceReference());
-        // <<< CHANGE
+        return new TextElement(
+                e.id(), e.text(), scaledLeft, scaledTop, repairedWidth, repairedHeight,
+                e.fontSize() * FACTOR_ESCALA, normalizeFontName(e.fontName()), e.fontWeight(), e.isItalic(),
+                "text", e.resourceReference(),
+                null, null, null, null // 16 argumentos
+        );
     }
 
     private List<TextElement> extractRawElements(PDDocument doc, int pageNum) throws IOException {
         final List<TextElement> elements = new ArrayList<>();
+        PDPage pageObj = doc.getPage(pageNum - 1);
+        final PDRectangle mediaBox = pageObj.getMediaBox();
+        final float originX = mediaBox.getLowerLeftX();
+        final float originY = mediaBox.getLowerLeftY();
+
         PDFTextStripper stripper = new PDFTextStripper() {
             @Override
             protected void writeString(String string, List<TextPosition> textPositions) {
                 if (textPositions == null || textPositions.isEmpty()) return;
                 TextPosition first = textPositions.get(0);
-                float webTopY = first.getYDirAdj() - first.getHeightDir();
-                // >>> CHANGE
-                elements.add(new TextElement(UUID.randomUUID().toString(), string.trim(), first.getXDirAdj(), webTopY, calculateTotalWidth(textPositions), first.getHeightDir(), first.getFontSizeInPt(), first.getFont().getName(), detectWeight(first), isItalic(first), "text", null));
-                // <<< CHANGE
+
+                // Subtract mediaBox translation offsets to map 1:1 on actual page viewport space
+                float normalizedX = first.getXDirAdj() - originX;
+                float webTopY = (first.getYDirAdj() - originY) - first.getHeightDir();
+
+                elements.add(new TextElement(
+                        UUID.randomUUID().toString(), string.trim(), normalizedX, webTopY,
+                        calculateTotalWidth(textPositions), first.getHeightDir(), first.getFontSizeInPt(),
+                        first.getFont().getName(), detectWeight(first), isItalic(first),
+                        "text", null,
+                        null, null, null, null // 16 argumentos
+                ));
             }
         };
         stripper.setStartPage(pageNum);
@@ -1438,6 +1674,7 @@ public class PdfBoxAnalyzerAdapter implements PdfAnalyzerPort {
         });
         return elements;
     }
+
 
     private String normalizeFontName(String font) {
         if (font == null) return "Arial";
@@ -2443,319 +2680,332 @@ FILE: /d/Config/TestAzure/Back-end/pillihuaman-com-pe-pdfengine/src/main/resourc
 FILE: /d/Config/TestAzure/Front-end/src/app/@presentation/pages/tools/pdf-editor/pdf-editor.component.html
 ============================================
 <div class="studio-container">
-  <!-- Interactive Sidebar -->
+
+  <!-- Sidebar -->
   <aside class="sidebar">
+
     <nb-card class="tool-card">
+
       <nb-card-header class="d-flex justify-content-between align-items-center">
         Propiedades
+
         <button *ngIf="selectedElement" nbButton status="danger" size="tiny" (click)="deleteSelectedElement()"
           nbTooltip="Eliminar seleccionado">
+
           <nb-icon icon="trash-2-outline"></nb-icon>
+
         </button>
       </nb-card-header>
 
       <nb-card-body *ngIf="selectedElement">
+
         <ng-container *ngIf="selectedElement.type === 'text'">
-          <label class="label">Contenido Texto</label>
+
+          <label class="label">
+            CONTENIDO TEXTO
+          </label>
+
           <textarea nbInput fullWidth [(ngModel)]="selectedElement.text"
-            (ngModelChange)="selectedElement.isModified = true" rows="5"></textarea>
+            (ngModelChange)="selectedElement.isModified = true" rows="5">
+          </textarea>
 
           <div class="mt-3">
-            <label class="label">Tamaño Fuente: {{selectedElement.fontSize}}px</label>
+
+            <label class="label">
+              TAMAÑO FUENTE: {{ selectedElement.fontSize }}PX
+            </label>
+
             <input type="range" nbInput fullWidth min="6" max="50" [(ngModel)]="selectedElement.fontSize">
+
           </div>
+
         </ng-container>
 
         <ng-container *ngIf="selectedElement.type === 'image'">
-          <label class="label">Dimensiones Imagen</label>
+
+          <label class="label">
+            DIMENSIONES IMAGEN
+          </label>
+
           <div class="row">
+
             <div class="col-6">
+
               <input nbInput fullWidth type="number" [(ngModel)]="selectedElement.width" placeholder="Ancho">
+
             </div>
+
             <div class="col-6">
+
               <input nbInput fullWidth type="number" [(ngModel)]="selectedElement.height" placeholder="Alto">
+
             </div>
+
           </div>
+
         </ng-container>
+
       </nb-card-body>
 
       <nb-card-body *ngIf="!selectedElement" class="text-center">
-        <p class="text-hint">Seleccione un elemento del PDF para comenzar a editar</p>
+
+        <p class="text-hint">
+          Seleccione un elemento del PDF para comenzar a editar
+        </p>
+
       </nb-card-body>
+
     </nb-card>
+
   </aside>
 
   <!-- Workspace -->
   <main class="workspace">
+
     <div class="top-actions">
+
       <button nbButton status="primary" (click)="pdfInput.click()">
-        <nb-icon icon="file-add-outline"></nb-icon> CARGAR PDF
+
+        <nb-icon icon="file-add-outline"></nb-icon>
+
+        CARGAR PDF
+
       </button>
+      <div class="action-divider"></div>
+
+      <button nbButton [status]="isEditMode ? 'warning' : 'info'" [disabled]="!isDocLoaded" (click)="toggleEditMode()">
+        <nb-icon [icon]="isEditMode ? 'eye-outline' : 'edit-2-outline'"></nb-icon>
+        {{ isEditMode ? 'VISTA PREVIA' : 'EDITAR' }}
+      </button>
+
 
       <div class="action-divider"></div>
 
       <button nbButton status="info" outline [disabled]="!isDocLoaded" (click)="insertText()">
-        <nb-icon icon="text-outline"></nb-icon> TEXTO
+
+        <nb-icon icon="text-outline"></nb-icon>
+
+        TEXTO
+
       </button>
 
       <button nbButton status="info" outline [disabled]="!isDocLoaded" (click)="imageInput.click()">
-        <nb-icon icon="image-outline"></nb-icon> IMAGEN
+
+        <nb-icon icon="image-outline"></nb-icon>
+
+        IMAGEN
+
       </button>
 
       <div class="action-divider"></div>
 
       <button nbButton status="success" [disabled]="!isDocLoaded" (click)="saveDocument()">
-        <nb-icon icon="checkmark-circle-outline"></nb-icon> EXPORTAR FINAL
+
+        <nb-icon icon="checkmark-circle-outline"></nb-icon>
+
+        EXPORTAR FINAL
+
       </button>
+
     </div>
 
-    <!-- Hidden Inputs -->
     <input type="file" #pdfInput hidden (change)="onFileSelected($event)" accept="application/pdf">
+
     <input type="file" #imageInput hidden (change)="insertImage($event)" accept="image/*">
-
-    <!-- PDF Viewport -->
     <div class="pdf-viewport" *ngIf="isDocLoaded">
-      <div *ngFor="let page of pages; let i = index" class="page-container"
-        [class.active-page]="selectedPageIndex === i" [style.width.px]="page.width" [style.height.px]="page.height"
-        (mousedown)="setActivePage(i)">
+      <div *ngFor="let page of pages; let i = index" class="page-container" [style.width.px]="page.width"
+        [style.height.px]="page.height" (mousedown)="setActivePage(i)">
 
-        <canvas [id]="'canvas-' + i" class="pdf-canvas"></canvas>
+        <canvas [id]="'canvas-' + i" class="pdf-canvas">
+        </canvas>
+
         <div class="interaction-layer">
-          <div *ngFor="let el of page.elements" cdkDrag (cdkDragEnded)="onDragEnded($event, el)"
-            [ngClass]="getElementClass(el)" [style.left.px]="el.x" [style.top.px]="el.y" [style.width.px]="el.width"
-            [style.height.px]="el.height" (mousedown)="selectedElement = el; $event.stopPropagation()">
+          <div *ngFor="let el of page.elements" cdkDrag (cdkDragEnded)="onDragEnded($event, el)" class="editable-item"
+            [class.is-active]="selectedElement?.id === el.id" [class.modified]="el.isModified" [style.left.px]="el.x"
+            [style.top.px]="el.y" [style.width.px]="el.width" [style.height.px]="el.height"
+            (mousedown)="selectedElement = el; $event.stopPropagation()">
 
             <textarea *ngIf="el.type === 'text'" class="inner-editor" [(ngModel)]="el.text"
-              [style.font-size.px]="el.fontSize" [style.font-family]="el.fontName"
-              [style.font-weight]="el.fontWeight"></textarea>
+              (ngModelChange)="el.isModified = true" [style.font-size.px]="el.fontSize"
+              [style.font-family]="el.fontName" [style.font-weight]="el.fontWeight"
+              [style.font-style]="el.isItalic ? 'italic' : 'normal'">
+        </textarea>
 
             <div *ngIf="el.type === 'image'" class="image-wrapper">
-              <img [src]="$any(el).safeResourceReference" [style.width.px]="el.width" [style.height.px]="el.height">
+
+              <img [src]="el.resourceReference" alt="editable-image">
+
             </div>
 
-            <div *ngIf="el.type === 'rect'" class="vector-rect" [style.border-color]="$any(el).strokeColor || '#000'"
-              [style.width.px]="el.width" [style.height.px]="el.height">
-            </div>
-
-            <div class="drag-handle" cdkDragHandle>
-              <nb-icon icon="move-outline"></nb-icon>
-            </div>
           </div>
+
         </div>
+
       </div>
+
     </div>
+
   </main>
+
 </div>
 
 ============================================
 FILE: /d/Config/TestAzure/Front-end/src/app/@presentation/pages/tools/pdf-editor/pdf-editor.component.scss
 ============================================
 .studio-container {
-  display: grid;
-  grid-template-columns: 340px 1fr; // Sidebar un poco más ancho
-  height: calc(100vh - 64px);
-  background: #e9ecef;
+display: grid;
+grid-template-columns: 340px 1fr;
+height: calc(100vh - 64px);
+background: #e9ecef;
 }
-
 .sidebar {
-  padding: 1.5rem;
-  background: white;
-  border-right: 1px solid #cfd8dc;
-  z-index: 100;
-  overflow-y: auto;
-  box-shadow: 4px 0 10px rgba(0, 0, 0, 0.05);
+padding: 1.5rem;
+background: white;
+border-right: 1px solid #cfd8dc;
+z-index: 100;
+overflow-y: auto;
+box-shadow: 4px 0 10px rgba(0, 0, 0, 0.05);
 }
 
 .workspace {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  overflow-y: auto;
-  padding: 3rem;
-  width: 100%;
-
-  .top-actions {
-    background: white;
-    padding: 1rem 3rem;
-    border-radius: 60px;
-    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
-    display: flex;
-    align-items: center;
-    gap: 1.2rem;
-    margin-bottom: 3rem;
-    position: sticky;
-    top: 0;
-    z-index: 500;
-
-    .action-divider {
-      width: 2px;
-      height: 30px;
-      background: #eceff1;
-    }
-  }
+display: flex;
+flex-direction: column;
+align-items: center;
+overflow: auto; // Changed from overflow-y: auto to full auto scroll
+padding: 3rem;
+width: 100%;
+.top-actions {
+background: white;
+padding: 1rem 3rem;
+border-radius: 60px;
+box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+display: flex;
+align-items: center;
+gap: 1.2rem;
+margin-bottom: 3rem;
+position: sticky;
+top: 0;
+z-index: 500;
+code
+Code
+.action-divider {
+  width: 2px;
+  height: 30px;
+  background: #eceff1;
 }
-
-.page-container {
-  position: relative;
-  background: white;
-  margin-bottom: 4rem;
-  box-shadow: 0 30px 70px rgba(0, 0, 0, 0.25);
-  transform-origin: top center;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-.image-wrapper {
-  width: 100%;
-  height: 100%;
-  border: 1px solid rgba(0, 0, 0, 0.05);
-
-  img {
-    display: block;
-    width: 100%;
-    height: 100%;
-    object-fit: contain; // Cambio a contain para no deformar visualmente
-    background: #f8f9fa;
-  }
-}
-
-.drag-handle {
-  position: absolute;
-  top: -28px;
-  left: 50%;
-  transform: translateX(-50%);
-  background: #3366ff;
-  color: white;
-  border-radius: 6px;
-  padding: 4px 10px;
-  opacity: 0;
-  transition: all 0.2s ease;
-  cursor: grabbing;
-  box-shadow: 0 6px 12px rgba(51, 102, 255, 0.4);
-
-  nb-icon {
-    font-size: 1.2rem;
-  }
 }
 
 .label {
-  font-size: 0.75rem;
-  font-weight: 800;
-  color: #546e7a;
-  text-transform: uppercase;
-  margin-bottom: 0.8rem;
-  letter-spacing: 1px;
+font-size: 0.75rem;
+font-weight: 800;
+color: #546e7a;
+text-transform: uppercase;
+margin-bottom: 0.8rem;
+letter-spacing: 1px;
 }
-
-
-.page-wrapper {
-  margin-bottom: 4rem;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+.pdf-viewport {
+position: relative;
+display: flex;
+flex-direction: column;
+align-items: center;
+width: 100%;
 }
 
 .page-container {
-  position: relative;
-  background: white;
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15);
-  overflow: hidden;
+position: relative;
+background: white;
+margin-bottom: 4rem;
+box-shadow: 0 30px 70px rgba(0, 0, 0, 0.25);
+overflow: hidden;
+flex-shrink: 0; // Added to prevent flex containers from shrinking the canvas
 }
-
-.page-label {
-  margin-top: 1rem;
-  font-weight: 800;
-  color: #8f9bb3;
-  text-transform: uppercase;
-  font-size: 0.75rem;
-}
-
 
 .pdf-canvas {
-  position: absolute;
-  top: 0;
-  left: 0;
-  z-index: 1;
-  background-color: white !important;
-  /* Evita el bloque negro si el render es lento */
-  width: 100% !important;
-  height: 100% !important;
-  image-rendering: -webkit-optimize-contrast;
-  image-rendering: crisp-edges;
-
+position: absolute;
+top: 0;
+left: 0;
+width: 100%;
+height: 100%;
+z-index: 1;
+background-color: #FFFFFF !important;
 }
-
 .interaction-layer {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 10;
+position: absolute;
+inset: 0;
+z-index: 2;
+pointer-events: none;
 }
 
 .editable-item {
-  position: absolute;
-  border: 1px solid transparent;
-  box-sizing: border-box;
-  cursor: move;
-  display: flex;
-  align-items: center;
-
-  &:hover {
-    border: 1px dashed #3366ff;
-    background: rgba(51, 102, 255, 0.04);
-
-    .drag-handle {
-      opacity: 1;
-    }
-  }
-
-  &.is-active {
-    border: 2px solid #00d68f;
-    z-index: 1000 !important;
-    background: white;
-
-    /* Cubre el ruido del fondo */
-    .drag-handle {
-      opacity: 1;
-    }
-  }
-
-  &.modified {
-    border-left: 5px solid #ffa000;
-  }
+position: absolute;
+box-sizing: border-box;
+border: 1px solid transparent;
+display: flex;
+align-items: flex-start;
+justify-content: flex-start;
+overflow: visible; // Allows descenders/ascenders and tracking without clipping
+cursor: move;
+background: transparent; // Changed from white to transparent to prevent blocking vector grid lines!
+pointer-events: auto;
+&:hover {
+border: 1px dashed #3366ff;
+background: rgba(51, 102, 255, 0.04);
+}
+&.is-active {
+border: 2px solid #00d68f;
+z-index: 1000 !important;
+background: #ffffff; // Soft white background ONLY during active editing
+box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+}
+&.modified {
+border-left: 5px solid #ffa000;
+}
 }
 
 .inner-editor {
-  width: 100%;
-  height: 100%;
-  border: none;
-  outline: none;
-  background: transparent;
-  color: #000;
-  font-family: inherit;
-  white-space: pre-wrap;
-  overflow: hidden;
-  padding: 0 !important;
-  margin: 0 !important;
-  line-height: 1.0 !important;
-  resize: none;
-  display: block;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
+width: 100%;
+height: 100%;
+border: none;
+outline: none;
+background: transparent;
+color: #000;
+font-family: inherit;
+white-space: nowrap; // Changed from pre-wrap to nowrap to match table layout bounds unless multi-line explicitly needed
+word-wrap: normal;
+overflow: visible; // Solves word clipping ("FACTU" -> "FACTURA")
+padding: 0 !important;
+margin: 0 !important;
+line-height: inherit !important;
+resize: none;
+display: block;
+text-rendering: optimizeLegibility;
+-webkit-font-smoothing: antialiased;
+appearance: none;
+box-shadow: none;
+border-radius: 0;
 }
-.active-page { border-color: #3366ff; box-shadow: 0 0 50px rgba(51, 102, 255, 0.4); }
-.vector-rect { border: 1px solid black; box-sizing: border-box; }
+.image-wrapper {
+width: 100%;
+height: 100%;
+border: 1px solid rgba(0, 0, 0, 0.05);
+img {
+display: block;
+width: 100%;
+height: 100%;
+object-fit: contain;
+background: #f8f9fa;
+pointer-events: none;
+}
+}
+.active-page {
+border-color: #3366ff;
+box-shadow: 0 0 50px rgba(51, 102, 255, 0.4);
+}
+.vector-rect {
+border: 1px solid black;
+box-sizing: border-box;
+}
 
 ============================================
 FILE: /d/Config/TestAzure/Front-end/src/app/@presentation/pages/tools/pdf-editor/pdf-editor.component.ts
@@ -2771,7 +3021,7 @@ import {
 } from '@nebular/theme';
 import { BaseImplementation } from '../../../../utils/baseImplementation';
 import { PdfEngineService } from '../../../../@data/services/pdf-engine.service';
-import { PdfPageContent, VisualElement } from '../../../../@data/model/pdf/pdf-editor.model';
+import { PdfEditableStructure, PdfPageContent, VisualElement } from '../../../../@data/model/pdf/pdf-editor.model';
 import { ModalRepository } from '../../../../@domain/repository/repository/modal.repository';
 import { SpinnerService } from '../../../../@data/services/spinner.service';
 import { ErrorHandlingService } from '../../../../@data/services/error-handling.service';
@@ -2791,19 +3041,19 @@ export class PdfEditorComponent extends BaseImplementation<any> implements OnIni
   private pdfService = inject(PdfEngineService);
   private platformId = inject(PLATFORM_ID);
   private cd = inject(ChangeDetectorRef);
-
   pages: PdfPageContent[] = [];
-  documentId: string = '';
   isDocLoaded = false;
   selectedElement: VisualElement | null = null;
   selectedPageIndex: number = 0;
-  loadingProgress = false;
   private pdfjsLib: any;
   private pdfArrayBuffer: ArrayBuffer | null = null;
+  public readonly RENDER_SCALE = 2.0;
+  isEditMode = false;
+
+  documentId: string = '';
+  loadingProgress = false;
   base64OriginalPdf: string = '';
   private sanitizer = inject(DomSanitizer);
-  private readonly RENDER_SCALE = 2.0;
-
   constructor(
     modalRepository: ModalRepository,
     spinnerService: SpinnerService,
@@ -2813,7 +3063,21 @@ export class PdfEditorComponent extends BaseImplementation<any> implements OnIni
     super(modalRepository, spinnerService, dialogService, errorHandlingService);
   }
 
-
+  toggleEditMode(): void {
+    this.isEditMode = !this.isEditMode;
+    if (!this.isEditMode) {
+      this.selectedElement = null;
+    }
+    // Re-render pages either natively or with patch overlays to hide text underneath editor
+    for (let i = 0; i < this.pages.length; i++) {
+      if (this.isEditMode) {
+        this.refreshCanvasWithPatches(i);
+      } else {
+        this.renderPageBackground(i);
+      }
+    }
+    this.cd.detectChanges();
+  }
 
   async ngOnInit(): Promise<void> {
     if (isPlatformBrowser(this.platformId)) {
@@ -2828,62 +3092,61 @@ export class PdfEditorComponent extends BaseImplementation<any> implements OnIni
     }
   }
 
-onFileSelected(event: Event): void {
-const input = event.target as HTMLInputElement;
-const file = input.files?.[0];
-if (!file) return;
-const reader = new FileReader();
-reader.onload = (e) => this.base64OriginalPdf = (e.target?.result as string) || '';
-reader.readAsDataURL(file);
-this.loadingProgress = true;
-this.spinnerService.show();
-this.executeServiceCall(this.pdfService.analyzeForEdit(file), (payload) => {
-  this.pages = payload.pages.map((page: any, pIdx: number) => ({
-    ...page,
-    elements: [
-      ...(page.elements || []).map((el: any, index: number) => ({
-        ...el,
-        id: el.id || `txt-${pIdx}-${index}`,
-        x: Number(el.left) || 0,
-        y: Number(el.top) || 0,
-        width: Number(el.width) || 10,
-        height: Number(el.height) || 15,
-        fontSize: Number(el.fontSize) || 12,
-        fontName: el.fontName || 'Helvetica',
-        fontWeight: el.fontWeight || 'normal',
-        isModified: false,
-        type: 'text'
-      })),
-      ...(page.graphics || []).map((g: any, index: number) => ({
-        id: `graph-${pIdx}-${index}`,
-        type: g.type.toLowerCase(), 
-        x: Number(g.x),
-        y: Number(g.y),
-        width: Number(g.width),
-        height: Number(g.height),
-        strokeColor: g.strokeColor || '#000000',
-        resourceReference: g.resourceReference || null,
-        safeResourceReference: g.resourceReference ? this.sanitizer.bypassSecurityTrustUrl(g.resourceReference) : null,
-        isModified: false,
-        text: '', fontSize: 0, fontName: 'Arial', fontWeight: 'normal', isItalic: false
-      }))
-    ]
-  }));
+  private async performAIVisualSync(pageIndex: number): Promise<void> {
+    if (!this.pdfArrayBuffer || !isPlatformBrowser(this.platformId)) return;
+    try {
+      const pdf = await this.pdfjsLib.getDocument({ data: this.pdfArrayBuffer }).promise;
+      const page = await pdf.getPage(pageIndex + 1);
+      const viewport = page.getViewport({ scale: this.FACTOR_ESCALA * this.RENDER_SCALE });
+      const canvas = document.createElement('canvas');
+      const ctx = canvas.getContext('2d')!;
+      canvas.width = viewport.width;
+      canvas.height = viewport.height;
+      await page.render({ canvasContext: ctx, viewport }).promise;
+      const screenshot = canvas.toDataURL('image/jpeg', 0.8);
 
-  this.isDocLoaded = true;
-  this.selectedPageIndex = 0;
-  this.cd.detectChanges();
+      const structureWrapper: PdfEditableStructure = {
+        documentId: this.documentId,
+        pages: [this.pages[pageIndex]]
+      };
 
-  setTimeout(async () => {
-    this.pdfArrayBuffer = await file.arrayBuffer();
-    for (let i = 0; i < this.pages.length; i++) {
-      await this.refreshCanvasWithPatches(i);
+      this.pdfService.refineFidelity(structureWrapper, screenshot).subscribe({
+        next: (res: any) => {
+          if (res && res.payload && res.payload.pages && res.payload.pages.length > 0) {
+            const refinedPage = res.payload.pages[0];
+            const originalPage = this.pages[pageIndex];
+
+            // NeuroIA only processes text naturally, mapping its returned "left/top" to "x/y"
+            const refinedTextElements = (refinedPage.elements || [])
+              .filter((el: any) => el.type === 'text' || el.type === 'table_cell')
+              .map((el: any) => ({
+                ...el,
+                x: el.left !== undefined ? el.left : el.x,
+                y: el.top !== undefined ? el.top : el.y,
+                isModified: false
+              }));
+
+            // Protect all user-added images or native interactive graphics from disappearing
+            const nonTextElements = originalPage.elements.filter((el: any) => el.type !== 'text' && el.type !== 'table_cell');
+
+            // Intelligently merge AI geometry back into master UI
+            this.pages[pageIndex] = {
+              ...originalPage,
+              ...refinedPage,
+              graphics: originalPage.graphics, // Always preserve native structure array
+              elements: [...refinedTextElements, ...nonTextElements]
+            };
+
+            this.refreshCanvasWithPatches(pageIndex);
+            this.cd.detectChanges();
+          }
+        }
+      });
+    } catch (err) {
+      console.error('Error in AI Visual Sync:', err);
     }
-    this.loadingProgress = false;
-    this.spinnerService.hide();
-  }, 300);
-});
-}
+  }
+
 
   setActivePage(index: number): void {
     this.selectedPageIndex = index;
@@ -2945,29 +3208,14 @@ this.executeServiceCall(this.pdfService.analyzeForEdit(file), (payload) => {
         pageNumber: page.pageNumber,
         width: Number(page.width),
         height: Number(page.height),
-        units: (page as any).units || 'px',
-        rotation: (page as any).rotation || 0,
-
-        graphics: (page.graphics || []).map(g => ({
-          id: g.id,
-          type: (g as any).type || 'IMAGE',
-          x: Number(g.x),
-          y: Number(g.y),
-          width: Number(g.width),
-          height: Number(g.height),
-          strokeColor: (g as any).strokeColor || '#000000',
-          fillColor: (g as any).fillColor || '',
-          lineWidth: Number((g as any).lineWidth) || 1.5,
-          resourceReference: g.resourceReference || ''
-        })),
-
         elements: (page.elements || []).map(el => ({
           ...el,
           left: Number(el.x),
           top: Number(el.y),
           width: Number(el.width),
           height: Number(el.height),
-          resourceReference: el.resourceReference || ''
+          type: el.type, // RECT, IMAGE o TEXT
+          resourceReference: el.resourceReference || null
         }))
       }))
     };
@@ -2980,65 +3228,17 @@ this.executeServiceCall(this.pdfService.analyzeForEdit(file), (payload) => {
           const url = window.URL.createObjectURL(blob);
           const a = document.createElement('a');
           a.href = url;
-          a.download = `documento_final_${Date.now()}.pdf`;
+          a.download = `pdf_final_${Date.now()}.pdf`;
           a.click();
           window.URL.revokeObjectURL(url);
-          this.showSuccessMessage('Documento generado con éxito.', 'Completado');
+          this.showSuccessMessage('Exportación completada.', 'Éxito');
         },
-        error: (err: any) => this.handleErrorResponseSaveOrUpdate(err)
+        error: (err) => this.handleErrorResponseSaveOrUpdate(err)
       });
   }
 
 
-  onDragEnded(event: CdkDragEnd, el: VisualElement): void {
-    const translation = event.source.getFreeDragPosition();
-    el.x += translation.x;
-    el.y += translation.y;
-    el.isModified = true;
-    event.source.reset();
 
-    if (!this.pdfArrayBuffer) return;
-
-    // Synchronize canvas position and size with the moved element
-    const canvas = document.getElementById('canvas-' + this.selectedPageIndex) as HTMLCanvasElement;
-    if (canvas) {
-      const context = canvas.getContext('2d', { alpha: false });
-      if (context) {
-        // Redraw the original PDF page from the stored buffer
-        const loadingTask = this.pdfjsLib.getDocument({ data: this.pdfArrayBuffer });
-        loadingTask.promise.then(async (pdf: any) => {
-          const page = await pdf.getPage(this.selectedPageIndex + 1);
-          const pageData = this.pages[this.selectedPageIndex];
-
-          // Ensure canvas size is correct
-          canvas.width = pageData.width;
-          canvas.height = pageData.height;
-
-          const viewport = page.getViewport({ scale: 1.0 });
-          const scaleX = canvas.width / viewport.width;
-          const scaleY = canvas.height / viewport.height;
-          const scale = Math.min(scaleX, scaleY);
-          const adjustedViewport = page.getViewport({ scale });
-
-          await page.render({ canvasContext: context, viewport: adjustedViewport }).promise;
-
-          // Apply white patches to mask original text
-          context.fillStyle = '#FFFFFF';
-          pageData.elements.forEach(element => {
-            if (element.x !== undefined && element.y !== undefined && element.width !== undefined && element.height !== undefined) {
-              // Use same logic as renderMasterCanvas
-              context.fillRect(element.x, element.y, element.width, element.height);
-            }
-          });
-          this.cd.detectChanges();
-        }).catch((err: any) => {
-          console.error('Error re-rendering page:', err);
-        });
-      }
-    }
-
-    this.cd.detectChanges();
-  }
   getElementClass(el: VisualElement) {
     return {
       'editable-item': true,
@@ -3112,41 +3312,96 @@ this.executeServiceCall(this.pdfService.analyzeForEdit(file), (payload) => {
   }
   private async refreshCanvasWithPatches(pageIndex: number) {
     if (!this.pdfArrayBuffer || !this.pdfjsLib || !isPlatformBrowser(this.platformId)) return;
-
     const canvas = document.getElementById('canvas-' + pageIndex) as HTMLCanvasElement;
     if (!canvas) return;
 
-    const context = canvas.getContext('2d', { alpha: true })!; // Permitimos alpha o gestionamos fondo manual
+    const context = canvas.getContext('2d', { alpha: false })!;
     const pdf = await this.pdfjsLib.getDocument({ data: this.pdfArrayBuffer }).promise;
     const page = await pdf.getPage(pageIndex + 1);
     const pageData = this.pages[pageIndex];
 
-    const viewport = page.getViewport({ scale: 1.0 });
-    const baseScale = Math.min(pageData.width / viewport.width, pageData.height / viewport.height);
-    const upscale = baseScale * this.RENDER_SCALE;
-    const adjustedViewport = page.getViewport({ scale: upscale });
-
+    // Logical dimensions scaled physically for High-DPI sharpness
     canvas.width = pageData.width * this.RENDER_SCALE;
     canvas.height = pageData.height * this.RENDER_SCALE;
 
-    // LIMPIEZA PREVENTIVA: Forzamos fondo blanco antes de pintar el PDF
-    context.fillStyle = 'white';
+    // Solid white background clear
+    context.fillStyle = '#FFFFFF';
     context.fillRect(0, 0, canvas.width, canvas.height);
 
-    await page.render({ canvasContext: context, viewport: adjustedViewport }).promise;
+    // Viewport must scale relative to the PDF base units scaled via FACTOR_ESCALA
+    const viewport = page.getViewport({ scale: this.FACTOR_ESCALA * this.RENDER_SCALE });
+    await page.render({ canvasContext: context, viewport }).promise;
 
-    // Aplicamos los parches blancos para limpiar el ruido
+    // Hides underlying text with white boxes only in edit mode
     context.fillStyle = '#FFFFFF';
     pageData.elements.forEach(el => {
-      if (el.type === 'text') {
+      if (el.type === 'text' || el.type === 'table_cell') {
         context.fillRect(
-          (el.x * this.RENDER_SCALE) - 1,
-          (el.y * this.RENDER_SCALE) - 1,
-          (el.width * this.RENDER_SCALE) + 2,
-          (el.height * this.RENDER_SCALE) + 2
+          (el.x * this.RENDER_SCALE),
+          (el.y * this.RENDER_SCALE),
+          (el.width * this.RENDER_SCALE),
+          (el.height * this.RENDER_SCALE)
         );
       }
     });
     this.cd.detectChanges();
+  }
+
+  onDragEnded(event: CdkDragEnd, el: VisualElement): void {
+    const translation = event.source.getFreeDragPosition();
+    el.x += translation.x;
+    el.y += translation.y;
+    el.isModified = true;
+    event.source.reset();
+    this.cd.detectChanges();
+  }
+
+  onFileSelected(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    const file = input.files?.[0];
+    if (!file) return;
+    this.spinnerService.show();
+    if (isPlatformBrowser(this.platformId)) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const rawBase64 = e.target?.result as string;
+        this.base64OriginalPdf = rawBase64.includes(',')
+          ? rawBase64.split(',')[1]
+          : rawBase64;
+      };
+      reader.readAsDataURL(file);
+    }
+
+    this.executeServiceCall(this.pdfService.analyzeForEdit(file), async (payload) => {
+      this.pages = payload.pages.map((p: any) => ({
+        ...p,
+        elements: (p.elements || []).map((el: any) => ({ ...el, x: el.left, y: el.top }))
+      }));
+      this.pdfArrayBuffer = await file.arrayBuffer();
+      this.isDocLoaded = true;
+      this.isEditMode = false; // Start in clean View mode by default
+      this.cd.detectChanges();
+      for (let i = 0; i < this.pages.length; i++) {
+        await this.renderPageBackground(i);
+      }
+      this.spinnerService.hide();
+    });
+  }
+  async renderPageBackground(pageIndex: number): Promise<void> {
+    if (!isPlatformBrowser(this.platformId)) return;
+    const canvas = document.getElementById('canvas-' + pageIndex) as HTMLCanvasElement;
+    if (!canvas || !this.pdfArrayBuffer) return;
+
+    const pdf = await this.pdfjsLib.getDocument({ data: this.pdfArrayBuffer }).promise;
+    const page = await pdf.getPage(pageIndex + 1);
+    const viewport = page.getViewport({ scale: this.FACTOR_ESCALA * this.RENDER_SCALE });
+
+    canvas.width = viewport.width;
+    canvas.height = viewport.height;
+
+    const ctx = canvas.getContext('2d', { alpha: false })!;
+    ctx.fillStyle = '#FFFFFF';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    await page.render({ canvasContext: ctx, viewport }).promise;
   }
 }

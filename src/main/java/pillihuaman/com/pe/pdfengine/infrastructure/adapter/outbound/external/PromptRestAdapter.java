@@ -31,14 +31,14 @@ public class PromptRestAdapter implements PromptExternalPort {
         this.supportServiceUrl = supportServiceUrl;
     }
 
+
     @Override
     public Mono<PromptAndVersionDTO> getPromptByCharacteristics(ReqPrompt payload, String bearerToken) {
-        // REGION: Request Construction
         ReqBase<ReqPrompt> request = new ReqBase<>();
         request.setPayload(payload);
 
         return webClient.post()
-                .uri(supportServiceUrl + "/private/v1/support/prompt/characteristics")
+                .uri(supportServiceUrl + "/private/v1/prompt/characteristics")
                 .header(HttpHeaders.AUTHORIZATION, bearerToken)
                 .contentType(MediaType.APPLICATION_JSON)
                 .bodyValue(request)

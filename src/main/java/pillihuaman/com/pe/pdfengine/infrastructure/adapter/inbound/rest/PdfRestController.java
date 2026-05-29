@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.http.codec.multipart.FilePart;
 import org.springframework.web.bind.annotation.*;
 import pillihuaman.com.pe.pdfengine.application.dto.PdfEditableRequest;
+import pillihuaman.com.pe.pdfengine.application.dto.PdfFidelityRequest;
 import pillihuaman.com.pe.pdfengine.application.port.inbound.PdfUseCase;
 import pillihuaman.com.pe.pdfengine.application.port.outbound.PdfAnalyzerPort;
 import pillihuaman.com.pe.pdfengine.domain.model.PdfDocument;
@@ -93,5 +94,14 @@ public class PdfRestController {
                             Collections.emptyList()
                     );
                 });
+    }
+
+    @PostMapping("/refine-fidelity")
+    public Mono<RespBase<PdfEditableStructure>> refineFidelity(
+            @RequestBody PdfFidelityRequest request,
+            @RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
+
+        return pdfUseCase.refineFidelity(request.layout(), request.screenshot(), token)
+                .map(result -> new RespBase<PdfEditableStructure>().ok(result));
     }
 }

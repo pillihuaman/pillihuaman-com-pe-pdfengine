@@ -15,4 +15,8 @@ public interface PdfUseCase {
     Mono<PdfEditableStructure> analyzeAndOptimize(byte[] pdfBytes, String bearerToken);
 
     Mono<byte[]> updateDocumentContent(PdfEditableRequest request);
+
+
+    Mono<PdfEditableStructure> refineFidelity(PdfEditableStructure currentStructure, String base64Image, String bearerToken);
+
 }

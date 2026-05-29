@@ -19,10 +19,7 @@ import pillihuaman.com.pe.pdfengine.infrastructure.adapter.outbound.external.AiL
 import pillihuaman.com.pe.pdfengine.infrastructure.security.TenantWebFilter;
 import reactor.core.publisher.Mono;
 
-import java.util.Base64;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -77,32 +74,81 @@ public class PdfService implements PdfUseCase {
                 .doOnError(e -> log.error("Overlay error: {}", e.getMessage()));
     }
 
+    @Override
+    public Mono<PdfEditableStructure> refineFidelity(PdfEditableStructure currentStructure, String base64Image, String bearerToken) {
+        log.info("Starting Extreme Mathematical Alignment pass (Logical Snapping)...");
+
+        return aiLayoutClientAdapter.callNeuroIaToRefineVisuals(
+                currentStructure,
+                null, // Screenshot es null para alineación lógica matemática
+                "PDF_VIS_AL_FIDELITY_V1",
+                bearerToken
+        ).map(refinedStructure -> {
+            List<PdfPageContent> mergedPages = new ArrayList<>();
+            for (PdfPageContent refinedPage : refinedStructure.pages()) {
+                PdfPageContent originalPage = currentStructure.pages().stream()
+                        .filter(p -> p.pageNumber() == refinedPage.pageNumber())
+                        .findFirst()
+                        .orElse(null);
+
+                if (originalPage != null) {
+                    mergedPages.add(new PdfPageContent(
+                            refinedPage.pageNumber(),
+                            refinedPage.width(),
+                            refinedPage.height(),
+                            refinedPage.units(),
+                            refinedPage.rotation(),
+                            refinedPage.elements(),
+                            originalPage.graphics(), // Safely Preserve Native Graphic Elements
+                            originalPage.rawText(),  // Preserve RawText
+                            originalPage.hasImages(),
+                            originalPage.fontCount()
+                    ));
+                } else {
+                    mergedPages.add(refinedPage);
+                }
+            }
+            return new PdfEditableStructure(refinedStructure.documentId(), mergedPages, refinedStructure.info());
+        }).doOnSuccess(res -> log.info("Logical Snapping completed successfully"));
+    }
 
     @Override
     public Mono<PdfEditableStructure> analyzeAndOptimize(byte[] pdfBytes, String bearerToken) {
-        log.info("Starting structural analysis for provided PDF bytes");
         return pdfAnalyzerPort.analyze(pdfBytes)
-                .doOnSuccess(structure -> log.info("PDF Analysis completed: {} pages", structure.pages().size()));
+                .flatMap(rawStructure -> {
+                    // Extraer data mínima (ID y Texto) para la IA
+                    List<Map<String, String>> minimalData = rawStructure.pages().stream()
+                            .flatMap(p -> p.elements().stream())
+                            .map(e -> Map.of("id", e.id(), "text", e.text()))
+                            .collect(Collectors.toList());
+
+                    // Llamamos a la IA y unimos los resultados
+                    return aiLayoutClientAdapter.callNeuroIaToClassify(minimalData, "PDF_LAYOUT_AI_GEOMETRY_COMPILER_V2", bearerToken)
+                            .map(classifications -> performSemanticJoin(rawStructure, classifications))
+                            .onErrorReturn(rawStructure); // Fallback seguro
+                });
     }
 
     private PdfEditableStructure performSemanticJoin(PdfEditableStructure geometry, List<AiClassificationResponse.ClassificationItem> classifications) {
-
-        // Mapa ID -> TYPE
-        Map<String, String> typeMap = classifications.stream().collect(Collectors.toMap(AiClassificationResponse.ClassificationItem::id, AiClassificationResponse.ClassificationItem::type, (existing, replacement) -> existing));
+        Map<String, String> typeMap = classifications.stream()
+                .collect(Collectors.toMap(AiClassificationResponse.ClassificationItem::id, AiClassificationResponse.ClassificationItem::type, (a, b) -> a));
 
         List<PdfPageContent> enrichedPages = geometry.pages().stream().map(page -> {
-            // >>> CHANGE
             List<TextElement> enrichedElements = page.elements().stream().map(e -> new TextElement(
                     e.id(), e.text(), e.left(), e.top(), e.width(), e.height(),
                     e.fontSize(), e.fontName(), e.fontWeight(), e.isItalic(),
-                    typeMap.getOrDefault(e.id(), "text"), e.resourceReference()
+                    typeMap.getOrDefault(e.id(), "text"), // <--- AQUÍ SE ASIGNA EL TIPO DE LA IA
+                    e.resourceReference(), null, // letterSpacing
+                    null, // lineHeight
+                    null, // textAlign
+                    null
             )).collect(Collectors.toList());
-            // <<< CHANGE
 
             return new PdfPageContent(page.pageNumber(), page.width(), page.height(), page.units(), page.rotation(), enrichedElements, page.graphics(), page.rawText(), page.hasImages(), page.fontCount());
         }).collect(Collectors.toList());
 
         return new PdfEditableStructure(geometry.documentId(), enrichedPages, geometry.info());
     }
+
 
 }
