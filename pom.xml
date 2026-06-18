@@ -11,7 +11,7 @@
     </parent>
 
     <groupId>pillihuaman.com.pe</groupId>
-    <artifactId>pe.com.pillihuaman.pdfengine</artifactId>
+    <artifactId>pe.com.pillihuaman.engine</artifactId>
     <version>1.0.0-SNAPSHOT</version>
 
     <!-- BEGIN: properties -->

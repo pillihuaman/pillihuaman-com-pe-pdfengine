@@ -1,77 +1,132 @@
 #!/bin/bash
 
-# Rutas (formato Git Bash)
-BACKEND="/d/Config/TestAzure/Back-end/pillihuaman-com-pe-pdfengine/src"
-FRONTEND="/d/Config/TestAzure/Front-end/src/app/@presentation/pages/tools/pdf-editor"
-
+PROJECT_ROOT="/d/Config/TestAzure/Back-end/pillihuaman-com-pe-engine"
 OUTPUT="java_project_report.txt"
 
-# Validación de rutas
-if [ ! -d "$BACKEND" ]; then
-    echo "Backend directory not found: $BACKEND"
+if [ ! -d "$PROJECT_ROOT" ]; then
+    echo "Project directory not found: $PROJECT_ROOT"
     exit 1
 fi
 
-if [ ! -d "$FRONTEND" ]; then
-    echo "Frontend directory not found: $FRONTEND"
-    exit 1
-fi
+echo "Generating report..."
 
-echo "============================================" > "$OUTPUT"
-echo "FULL PROJECT STRUCTURE REPORT" >> "$OUTPUT"
-echo "Generated on: $(date)" >> "$OUTPUT"
-echo "Backend Root: $BACKEND" >> "$OUTPUT"
-echo "Frontend Root: $FRONTEND" >> "$OUTPUT"
-echo "============================================" >> "$OUTPUT"
+cat > "$OUTPUT" << EOF
+====================================================
+SPRING BOOT PROJECT REPORT
+Generated: $(date)
+Project: $PROJECT_ROOT
+====================================================
+
+EOF
+
+#####################################################
+# ESTRUCTURA DEL PROYECTO
+#####################################################
+
+echo "================ PROJECT STRUCTURE ================" >> "$OUTPUT"
+
+find "$PROJECT_ROOT" \
+    -path "*/target/*" -prune -o \
+    -path "*/logs/*" -prune -o \
+    -path "*/.git/*" -prune -o \
+    -type f \
+    -print >> "$OUTPUT"
+
 echo "" >> "$OUTPUT"
 
-# ============================================
-# 1️⃣ BACKEND STRUCTURE
-# ============================================
-echo "---- BACKEND DIRECTORY STRUCTURE ----" >> "$OUTPUT"
-find "$BACKEND" -type f >> "$OUTPUT"
-echo "" >> "$OUTPUT"
+#####################################################
+# ARCHIVOS DE CONFIGURACION
+#####################################################
 
-echo "---- BACKEND JAVA FILE CONTENT ----" >> "$OUTPUT"
+echo "================ CONFIGURATION FILES ================" >> "$OUTPUT"
 
-find "$BACKEND" -type f -name "*.java" | while read file; do
+find "$PROJECT_ROOT" \
+    -path "*/target/*" -prune -o \
+    -path "*/logs/*" -prune -o \
+    -path "*/.git/*" -prune -o \
+    -type f \
+    \( \
+        -name "pom.xml" \
+        -o -name "*.properties" \
+        -o -name "*.yml" \
+        -o -name "*.yaml" \
+        -o -name "*.xml" \
+    \) \
+    -print | while read file
+do
     echo "" >> "$OUTPUT"
-    echo "============================================" >> "$OUTPUT"
+    echo "====================================================" >> "$OUTPUT"
     echo "FILE: $file" >> "$OUTPUT"
-    echo "============================================" >> "$OUTPUT"
+    echo "====================================================" >> "$OUTPUT"
     cat "$file" >> "$OUTPUT"
     echo "" >> "$OUTPUT"
 done
 
-echo "" >> "$OUTPUT"
-echo "---- BACKEND CONFIG FILE CONTENT (.properties/.xml) ----" >> "$OUTPUT"
+#####################################################
+# CODIGO JAVA PRODUCTIVO
+#####################################################
 
-find "$BACKEND" -type f \( -name "*.properties" -o -name "*.xml" \) | while read file; do
+echo "" >> "$OUTPUT"
+echo "================ JAVA SOURCE =======================" >> "$OUTPUT"
+
+find "$PROJECT_ROOT/src/main/java" \
+    -type f \
+    -name "*.java" | sort | while read file
+do
     echo "" >> "$OUTPUT"
-    echo "============================================" >> "$OUTPUT"
+    echo "====================================================" >> "$OUTPUT"
     echo "FILE: $file" >> "$OUTPUT"
-    echo "============================================" >> "$OUTPUT"
+    echo "====================================================" >> "$OUTPUT"
     cat "$file" >> "$OUTPUT"
     echo "" >> "$OUTPUT"
 done
 
-# ============================================
-# 2️⃣ FRONTEND STRUCTURE
-# ============================================
-echo "" >> "$OUTPUT"
-echo "---- FRONTEND DIRECTORY STRUCTURE ----" >> "$OUTPUT"
-find "$FRONTEND" -type f >> "$OUTPUT"
-echo "" >> "$OUTPUT"
+#####################################################
+# RECURSOS PRODUCTIVOS
+#####################################################
 
-echo "---- FRONTEND FILE CONTENT (.ts/.html/.css/.scss) ----" >> "$OUTPUT"
+echo "" >> "$OUTPUT"
+echo "================ MAIN RESOURCES ====================" >> "$OUTPUT"
 
-find "$FRONTEND" -type f \( -name "*.ts" -o -name "*.html" -o -name "*.css" -o -name "*.scss" \) | while read file; do
+find "$PROJECT_ROOT/src/main/resources" \
+    -type f \
+    \( \
+        -name "*.properties" \
+        -o -name "*.yml" \
+        -o -name "*.yaml" \
+        -o -name "*.xml" \
+        -o -name "*.sql" \
+    \) | while read file
+do
     echo "" >> "$OUTPUT"
-    echo "============================================" >> "$OUTPUT"
+    echo "====================================================" >> "$OUTPUT"
     echo "FILE: $file" >> "$OUTPUT"
-    echo "============================================" >> "$OUTPUT"
+    echo "====================================================" >> "$OUTPUT"
     cat "$file" >> "$OUTPUT"
     echo "" >> "$OUTPUT"
 done
 
-echo "✅ Report generated: $OUTPUT"
+#####################################################
+# RESUMEN
+#####################################################
+
+echo "" >> "$OUTPUT"
+echo "================ SUMMARY ===========================" >> "$OUTPUT"
+
+echo "Java files:" >> "$OUTPUT"
+find "$PROJECT_ROOT/src/main/java" -name "*.java" | wc -l >> "$OUTPUT"
+
+echo "" >> "$OUTPUT"
+
+echo "Configuration files:" >> "$OUTPUT"
+find "$PROJECT_ROOT" \
+    \( \
+        -name "*.properties" \
+        -o -name "*.yaml" \
+        -o -name "*.yml" \
+        -o -name "*.xml" \
+        -o -name "pom.xml" \
+    \) | wc -l >> "$OUTPUT"
+
+echo ""
+echo "Report generated: $OUTPUT"
