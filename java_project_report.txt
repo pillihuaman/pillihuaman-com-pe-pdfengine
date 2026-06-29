@@ -1,6 +1,6 @@
 ====================================================
 SPRING BOOT PROJECT REPORT
-Generated: Thu Jun 18 16:15:59 SAPST 2026
+Generated: Mon Jun 29 07:31:21 SAPST 2026
 Project: /d/Config/TestAzure/Back-end/pillihuaman-com-pe-engine
 ====================================================
 
@@ -33,8 +33,10 @@ Project: /d/Config/TestAzure/Back-end/pillihuaman-com-pe-engine
 /d/Config/TestAzure/Back-end/pillihuaman-com-pe-engine/.settings/org.eclipse.wst.validation.prefs
 /d/Config/TestAzure/Back-end/pillihuaman-com-pe-engine/.settings/org.springframework.ide.eclipse.prefs
 /d/Config/TestAzure/Back-end/pillihuaman-com-pe-engine/.springBeans
+/d/Config/TestAzure/Back-end/pillihuaman-com-pe-engine/audit.sh
 /d/Config/TestAzure/Back-end/pillihuaman-com-pe-engine/BD/bdconfig.txt
 /d/Config/TestAzure/Back-end/pillihuaman-com-pe-engine/ci/settings-template.xml
+/d/Config/TestAzure/Back-end/pillihuaman-com-pe-engine/diagnose_whatsapp_v2.sh:wq
 /d/Config/TestAzure/Back-end/pillihuaman-com-pe-engine/docker-compose.yml
 /d/Config/TestAzure/Back-end/pillihuaman-com-pe-engine/Dockerfile
 /d/Config/TestAzure/Back-end/pillihuaman-com-pe-engine/env-support.yaml
@@ -42,6 +44,7 @@ Project: /d/Config/TestAzure/Back-end/pillihuaman-com-pe-engine
 /d/Config/TestAzure/Back-end/pillihuaman-com-pe-engine/hs_err_pid2868.log
 /d/Config/TestAzure/Back-end/pillihuaman-com-pe-engine/java_project_report.txt
 /d/Config/TestAzure/Back-end/pillihuaman-com-pe-engine/list_all.sh
+/d/Config/TestAzure/Back-end/pillihuaman-com-pe-engine/mintty.2026-06-19_19-35-02.png
 /d/Config/TestAzure/Back-end/pillihuaman-com-pe-engine/pe.com.pillihuaman.pdfengine.iml
 /d/Config/TestAzure/Back-end/pillihuaman-com-pe-engine/pom.xml
 /d/Config/TestAzure/Back-end/pillihuaman-com-pe-engine/README.md
@@ -62,6 +65,7 @@ Project: /d/Config/TestAzure/Back-end/pillihuaman-com-pe-engine
 /d/Config/TestAzure/Back-end/pillihuaman-com-pe-engine/src/main/java/pillihuaman/com/pe/engine/Application.java
 /d/Config/TestAzure/Back-end/pillihuaman-com-pe-engine/src/main/java/pillihuaman/com/pe/engine/domain/exception/BusinessLogicException.java
 /d/Config/TestAzure/Back-end/pillihuaman-com-pe-engine/src/main/java/pillihuaman/com/pe/engine/domain/exception/ResourceNotFoundException.java
+/d/Config/TestAzure/Back-end/pillihuaman-com-pe-engine/src/main/java/pillihuaman/com/pe/engine/domain/model/ChannelStateDTO.java
 /d/Config/TestAzure/Back-end/pillihuaman-com-pe-engine/src/main/java/pillihuaman/com/pe/engine/domain/model/external/AiClassificationResponse.java
 /d/Config/TestAzure/Back-end/pillihuaman-com-pe-engine/src/main/java/pillihuaman/com/pe/engine/domain/model/external/AiLayoutRequest.java
 /d/Config/TestAzure/Back-end/pillihuaman-com-pe-engine/src/main/java/pillihuaman/com/pe/engine/domain/model/external/PromptAndVersionDTO.java
@@ -75,6 +79,7 @@ Project: /d/Config/TestAzure/Back-end/pillihuaman-com-pe-engine
 /d/Config/TestAzure/Back-end/pillihuaman-com-pe-engine/src/main/java/pillihuaman/com/pe/engine/domain/model/PdfPageContent.java
 /d/Config/TestAzure/Back-end/pillihuaman-com-pe-engine/src/main/java/pillihuaman/com/pe/engine/domain/model/TextElement.java
 /d/Config/TestAzure/Back-end/pillihuaman-com-pe-engine/src/main/java/pillihuaman/com/pe/engine/domain/model/WhatsAppContact.java
+/d/Config/TestAzure/Back-end/pillihuaman-com-pe-engine/src/main/java/pillihuaman/com/pe/engine/domain/model/WhatsAppEvent.java
 /d/Config/TestAzure/Back-end/pillihuaman-com-pe-engine/src/main/java/pillihuaman/com/pe/engine/domain/model/WhatsAppMessage.java
 /d/Config/TestAzure/Back-end/pillihuaman-com-pe-engine/src/main/java/pillihuaman/com/pe/engine/infrastructure/adapter/inbound/rest/PdfRestController.java
 /d/Config/TestAzure/Back-end/pillihuaman-com-pe-engine/src/main/java/pillihuaman/com/pe/engine/infrastructure/adapter/inbound/rest/WhatsAppRestController.java
@@ -90,9 +95,11 @@ Project: /d/Config/TestAzure/Back-end/pillihuaman-com-pe-engine
 /d/Config/TestAzure/Back-end/pillihuaman-com-pe-engine/src/main/java/pillihuaman/com/pe/engine/infrastructure/adapter/outbound/persistence/PdfMongoAdapter.java
 /d/Config/TestAzure/Back-end/pillihuaman-com-pe-engine/src/main/java/pillihuaman/com/pe/engine/infrastructure/adapter/outbound/persistence/whatsapp/WhatsAppContactEntity.java
 /d/Config/TestAzure/Back-end/pillihuaman-com-pe-engine/src/main/java/pillihuaman/com/pe/engine/infrastructure/adapter/outbound/persistence/whatsapp/WhatsAppContactRepository.java
+/d/Config/TestAzure/Back-end/pillihuaman-com-pe-engine/src/main/java/pillihuaman/com/pe/engine/infrastructure/adapter/outbound/persistence/whatsapp/WhatsAppEventEntity.java
 /d/Config/TestAzure/Back-end/pillihuaman-com-pe-engine/src/main/java/pillihuaman/com/pe/engine/infrastructure/adapter/outbound/persistence/whatsapp/WhatsAppMessageEntity.java
 /d/Config/TestAzure/Back-end/pillihuaman-com-pe-engine/src/main/java/pillihuaman/com/pe/engine/infrastructure/adapter/outbound/persistence/whatsapp/WhatsAppMessageRepository.java
 /d/Config/TestAzure/Back-end/pillihuaman-com-pe-engine/src/main/java/pillihuaman/com/pe/engine/infrastructure/adapter/outbound/persistence/whatsapp/WhatsAppMongoAdapter.java
+/d/Config/TestAzure/Back-end/pillihuaman-com-pe-engine/src/main/java/pillihuaman/com/pe/engine/infrastructure/adapter/outbound/persistence/WhatsAppEventRepository.java
 /d/Config/TestAzure/Back-end/pillihuaman-com-pe-engine/src/main/java/pillihuaman/com/pe/engine/infrastructure/adapter/outbound/websocket/WhatsAppWebSocketHandler.java
 /d/Config/TestAzure/Back-end/pillihuaman-com-pe-engine/src/main/java/pillihuaman/com/pe/engine/infrastructure/adapter/outbound/websocket/WhatsAppWebSocketSessionManager.java
 /d/Config/TestAzure/Back-end/pillihuaman-com-pe-engine/src/main/java/pillihuaman/com/pe/engine/infrastructure/common/ReqBase.java
@@ -411,73 +418,33 @@ FILE: /d/Config/TestAzure/Back-end/pillihuaman-com-pe-engine/.idea/workspace.xml
   </component>
   <component name="ChangeListManager">
     <list default="true" id="f37a3a24-de3e-41a1-a3fd-c11046e1a8a4" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/docker-compose.yml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/pillihuaman/com/pe/engine/application/port/inbound/WhatsAppUseCase.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/pillihuaman/com/pe/engine/application/port/outbound/WhatsAppIntegrationPort.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/pillihuaman/com/pe/engine/application/port/outbound/WhatsAppPersistencePort.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/pillihuaman/com/pe/engine/application/port/outbound/WhatsAppTranslationPort.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/pillihuaman/com/pe/engine/application/service/WhatsAppService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/pillihuaman/com/pe/engine/domain/model/WhatsAppContact.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/pillihuaman/com/pe/engine/domain/model/WhatsAppMessage.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/pillihuaman/com/pe/engine/infrastructure/adapter/inbound/rest/WhatsAppRestController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/pillihuaman/com/pe/engine/infrastructure/adapter/outbound/external/WhatsAppIntegrationAdapter.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/pillihuaman/com/pe/engine/infrastructure/adapter/outbound/external/WhatsAppTranslationAdapter.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/pillihuaman/com/pe/engine/infrastructure/adapter/outbound/persistence/whatsapp/WhatsAppContactEntity.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/pillihuaman/com/pe/engine/infrastructure/adapter/outbound/persistence/whatsapp/WhatsAppContactRepository.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/pillihuaman/com/pe/engine/infrastructure/adapter/outbound/persistence/whatsapp/WhatsAppMessageEntity.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/pillihuaman/com/pe/engine/infrastructure/adapter/outbound/persistence/whatsapp/WhatsAppMessageRepository.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/pillihuaman/com/pe/engine/infrastructure/adapter/outbound/persistence/whatsapp/WhatsAppMongoAdapter.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/pillihuaman/com/pe/engine/infrastructure/adapter/outbound/websocket/WhatsAppWebSocketHandler.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/pillihuaman/com/pe/engine/infrastructure/adapter/outbound/websocket/WhatsAppWebSocketSessionManager.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/pillihuaman/com/pe/engine/infrastructure/config/EvolutionApiFlowAndCredentialsDiagnostic.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/pillihuaman/com/pe/engine/infrastructure/config/WebSocketConfig.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/audit.sh" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/diagnose_whatsapp_v2.shwq" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/mintty.2026-06-19_19-35-02.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/pillihuaman/com/pe/engine/domain/model/ChannelStateDTO.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/pillihuaman/com/pe/engine/domain/model/WhatsAppEvent.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/pillihuaman/com/pe/engine/infrastructure/adapter/outbound/persistence/WhatsAppEventRepository.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/pillihuaman/com/pe/engine/infrastructure/adapter/outbound/persistence/whatsapp/WhatsAppEventEntity.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/target/maven-archiver/pom.properties" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/target/pe.com.pillihuaman.engine-1.0.0-SNAPSHOT.jar" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/target/pe.com.pillihuaman.engine-1.0.0-SNAPSHOT.jar.original" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/Dockerfile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docker-compose.yml" beforeDir="false" afterPath="$PROJECT_DIR$/docker-compose.yml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/java_project_report.txt" beforeDir="false" afterPath="$PROJECT_DIR$/java_project_report.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/list_all.sh" beforeDir="false" afterPath="$PROJECT_DIR$/list_all.sh" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/pillihuaman/com/pe/pdfengine/Application.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pillihuaman/com/pe/engine/Application.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/pillihuaman/com/pe/pdfengine/application/dto/PdfEditableRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pillihuaman/com/pe/engine/application/dto/PdfEditableRequest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/pillihuaman/com/pe/pdfengine/application/dto/PdfFidelityRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pillihuaman/com/pe/engine/application/dto/PdfFidelityRequest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/pillihuaman/com/pe/pdfengine/application/port/inbound/PdfUseCase.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pillihuaman/com/pe/engine/application/port/inbound/PdfUseCase.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/pillihuaman/com/pe/pdfengine/application/port/outbound/PdfAnalyzerPort.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pillihuaman/com/pe/engine/application/port/outbound/PdfAnalyzerPort.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/pillihuaman/com/pe/pdfengine/application/port/outbound/PdfPersistencePort.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pillihuaman/com/pe/engine/application/port/outbound/PdfPersistencePort.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/pillihuaman/com/pe/pdfengine/application/port/outbound/PdfProcessingPort.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pillihuaman/com/pe/engine/application/port/outbound/PdfProcessingPort.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/pillihuaman/com/pe/pdfengine/application/port/outbound/PdfStoragePort.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pillihuaman/com/pe/engine/application/port/outbound/PdfStoragePort.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/pillihuaman/com/pe/pdfengine/application/port/outbound/PromptExternalPort.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pillihuaman/com/pe/engine/application/port/outbound/PromptExternalPort.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/pillihuaman/com/pe/pdfengine/application/service/PdfService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pillihuaman/com/pe/engine/application/service/PdfService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/pillihuaman/com/pe/pdfengine/domain/exception/BusinessLogicException.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pillihuaman/com/pe/engine/domain/exception/BusinessLogicException.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/pillihuaman/com/pe/pdfengine/domain/exception/ResourceNotFoundException.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pillihuaman/com/pe/engine/domain/exception/ResourceNotFoundException.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/pillihuaman/com/pe/pdfengine/domain/model/GraphicElement.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pillihuaman/com/pe/engine/domain/model/GraphicElement.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/pillihuaman/com/pe/pdfengine/domain/model/PdfDocument.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pillihuaman/com/pe/engine/domain/model/PdfDocument.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/pillihuaman/com/pe/pdfengine/domain/model/PdfEditableStructure.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pillihuaman/com/pe/engine/domain/model/PdfEditableStructure.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/pillihuaman/com/pe/pdfengine/domain/model/PdfMetadata.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pillihuaman/com/pe/engine/domain/model/PdfMetadata.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/pillihuaman/com/pe/pdfengine/domain/model/PdfPageContent.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pillihuaman/com/pe/engine/domain/model/PdfPageContent.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/pillihuaman/com/pe/pdfengine/domain/model/TextElement.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pillihuaman/com/pe/engine/domain/model/TextElement.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/pillihuaman/com/pe/pdfengine/domain/model/external/AiClassificationResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pillihuaman/com/pe/engine/domain/model/external/AiClassificationResponse.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/pillihuaman/com/pe/pdfengine/domain/model/external/AiLayoutRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pillihuaman/com/pe/engine/domain/model/external/AiLayoutRequest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/pillihuaman/com/pe/pdfengine/domain/model/external/PromptAndVersionDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pillihuaman/com/pe/engine/domain/model/external/PromptAndVersionDTO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/pillihuaman/com/pe/pdfengine/domain/model/external/PromptVersion.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pillihuaman/com/pe/engine/domain/model/external/PromptVersion.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/pillihuaman/com/pe/pdfengine/domain/model/external/ReqPrompt.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pillihuaman/com/pe/engine/domain/model/external/ReqPrompt.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/pillihuaman/com/pe/pdfengine/domain/model/external/RespPrompt.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pillihuaman/com/pe/engine/domain/model/external/RespPrompt.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/pillihuaman/com/pe/pdfengine/infrastructure/adapter/inbound/rest/PdfRestController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pillihuaman/com/pe/engine/infrastructure/adapter/inbound/rest/PdfRestController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/pillihuaman/com/pe/pdfengine/infrastructure/adapter/outbound/PdfBoxAdapter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pillihuaman/com/pe/engine/infrastructure/adapter/outbound/PdfBoxAdapter.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/pillihuaman/com/pe/pdfengine/infrastructure/adapter/outbound/PdfBoxAnalyzerAdapter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pillihuaman/com/pe/engine/infrastructure/adapter/outbound/PdfBoxAnalyzerAdapter.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/pillihuaman/com/pe/pdfengine/infrastructure/adapter/outbound/external/AiLayoutClientAdapter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pillihuaman/com/pe/engine/infrastructure/adapter/outbound/external/AiLayoutClientAdapter.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/pillihuaman/com/pe/pdfengine/infrastructure/adapter/outbound/external/PdfNeuroiaStorageAdapter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pillihuaman/com/pe/engine/infrastructure/adapter/outbound/external/PdfNeuroiaStorageAdapter.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/pillihuaman/com/pe/pdfengine/infrastructure/adapter/outbound/external/PromptRestAdapter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pillihuaman/com/pe/engine/infrastructure/adapter/outbound/external/PromptRestAdapter.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/pillihuaman/com/pe/pdfengine/infrastructure/adapter/outbound/persistence/PdfMetadataEntity.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pillihuaman/com/pe/engine/infrastructure/adapter/outbound/persistence/PdfMetadataEntity.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/pillihuaman/com/pe/pdfengine/infrastructure/adapter/outbound/persistence/PdfMetadataRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pillihuaman/com/pe/engine/infrastructure/adapter/outbound/persistence/PdfMetadataRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/pillihuaman/com/pe/pdfengine/infrastructure/adapter/outbound/persistence/PdfMongoAdapter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pillihuaman/com/pe/engine/infrastructure/adapter/outbound/persistence/PdfMongoAdapter.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/pillihuaman/com/pe/pdfengine/infrastructure/common/ReqBase.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pillihuaman/com/pe/engine/infrastructure/common/ReqBase.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/pillihuaman/com/pe/pdfengine/infrastructure/common/RespBase.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pillihuaman/com/pe/engine/infrastructure/common/RespBase.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/pillihuaman/com/pe/pdfengine/infrastructure/config/MongoConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pillihuaman/com/pe/engine/infrastructure/config/MongoConfig.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/pillihuaman/com/pe/pdfengine/infrastructure/config/ReactiveGlobalExceptionHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pillihuaman/com/pe/engine/infrastructure/config/ReactiveGlobalExceptionHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/pillihuaman/com/pe/pdfengine/infrastructure/config/WebClientConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pillihuaman/com/pe/engine/infrastructure/config/WebClientConfig.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/pillihuaman/com/pe/pdfengine/infrastructure/security/JwtReactiveFilter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pillihuaman/com/pe/engine/infrastructure/security/JwtReactiveFilter.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/pillihuaman/com/pe/pdfengine/infrastructure/security/JwtTokenProvider.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pillihuaman/com/pe/engine/infrastructure/security/JwtTokenProvider.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/pillihuaman/com/pe/pdfengine/infrastructure/security/SecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pillihuaman/com/pe/engine/infrastructure/security/SecurityConfig.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/pillihuaman/com/pe/pdfengine/infrastructure/security/TenantWebFilter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pillihuaman/com/pe/engine/infrastructure/security/TenantWebFilter.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/pillihuaman/com/pe/pdfengine/infrastructure/security/model/MyJsonWebToken.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pillihuaman/com/pe/engine/infrastructure/security/model/MyJsonWebToken.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/pillihuaman/com/pe/pdfengine/infrastructure/security/model/ResponseUser.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pillihuaman/com/pe/engine/infrastructure/security/model/ResponseUser.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/pillihuaman/com/pe/engine/application/port/inbound/WhatsAppUseCase.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pillihuaman/com/pe/engine/application/port/inbound/WhatsAppUseCase.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/pillihuaman/com/pe/engine/application/port/outbound/WhatsAppIntegrationPort.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pillihuaman/com/pe/engine/application/port/outbound/WhatsAppIntegrationPort.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/pillihuaman/com/pe/engine/application/port/outbound/WhatsAppPersistencePort.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pillihuaman/com/pe/engine/application/port/outbound/WhatsAppPersistencePort.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/pillihuaman/com/pe/engine/application/service/WhatsAppService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pillihuaman/com/pe/engine/application/service/WhatsAppService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/pillihuaman/com/pe/engine/domain/model/WhatsAppMessage.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pillihuaman/com/pe/engine/domain/model/WhatsAppMessage.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/pillihuaman/com/pe/engine/infrastructure/adapter/inbound/rest/WhatsAppRestController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pillihuaman/com/pe/engine/infrastructure/adapter/inbound/rest/WhatsAppRestController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/pillihuaman/com/pe/engine/infrastructure/adapter/outbound/external/WhatsAppIntegrationAdapter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pillihuaman/com/pe/engine/infrastructure/adapter/outbound/external/WhatsAppIntegrationAdapter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/pillihuaman/com/pe/engine/infrastructure/adapter/outbound/external/WhatsAppTranslationAdapter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pillihuaman/com/pe/engine/infrastructure/adapter/outbound/external/WhatsAppTranslationAdapter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/pillihuaman/com/pe/engine/infrastructure/adapter/outbound/persistence/whatsapp/WhatsAppMessageEntity.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pillihuaman/com/pe/engine/infrastructure/adapter/outbound/persistence/whatsapp/WhatsAppMessageEntity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/pillihuaman/com/pe/engine/infrastructure/adapter/outbound/persistence/whatsapp/WhatsAppMessageRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pillihuaman/com/pe/engine/infrastructure/adapter/outbound/persistence/whatsapp/WhatsAppMessageRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/pillihuaman/com/pe/engine/infrastructure/adapter/outbound/persistence/whatsapp/WhatsAppMongoAdapter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pillihuaman/com/pe/engine/infrastructure/adapter/outbound/persistence/whatsapp/WhatsAppMongoAdapter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/pillihuaman/com/pe/engine/infrastructure/adapter/outbound/websocket/WhatsAppWebSocketSessionManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pillihuaman/com/pe/engine/infrastructure/adapter/outbound/websocket/WhatsAppWebSocketSessionManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/pillihuaman/com/pe/engine/infrastructure/security/SecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pillihuaman/com/pe/engine/infrastructure/security/SecurityConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/pillihuaman/com/pe/engine/infrastructure/security/TenantWebFilter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pillihuaman/com/pe/engine/infrastructure/security/TenantWebFilter.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.properties" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" afterDir="false" />
@@ -597,8 +564,8 @@ FILE: /d/Config/TestAzure/Back-end/pillihuaman-com-pe-engine/.idea/workspace.xml
       <breakpoints>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/pillihuaman/com/pe/engine/infrastructure/adapter/outbound/external/WhatsAppIntegrationAdapter.java</url>
-          <line>89</line>
-          <option name="timeStamp" value="223" />
+          <line>132</line>
+          <option name="timeStamp" value="1" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
@@ -701,10 +668,7 @@ services:
     restart: always
     ports:
       - "6379:6379"
-    command:
-      - redis-server
-      - --appendonly
-      - "yes"
+    command: redis-server --requirepass "root1234" --appendonly yes
 
   evolution_api:
     image: evoapicloud/evolution-api:v2.3.7
@@ -723,17 +687,23 @@ services:
       DATABASE_CONNECTION_URI: postgresql://postgres:postgres@postgres:5432/evolution_db
 
       REDIS_ENABLED: "true"
-      REDIS_URI: redis://redis:6379
+      REDIS_URI: "redis://:root1234@redis:6379/0"
 
       CACHE_LOCAL_ENABLED: "false"
       CACHE_REDIS_ENABLED: "true"
-      CACHE_REDIS_URI: redis://redis:6379
+      CACHE_REDIS_URI: "redis://:root1234@redis:6379/1"
 
       AUTHENTICATION_TYPE: apikey
       AUTHENTICATION_API_KEY: evolution-apikey-default
 
       WEBHOOK_GLOBAL_ENABLED: "true"
+      BACK_WEBHOOK_GLOBAL_URL_: https://engine-service-1068521170727.us-central1.run.app/public/v1/whatsapp/webhook
       WEBHOOK_GLOBAL_URL: http://host.docker.internal:8078/public/v1/whatsapp/webhook
+      WEBHOOK_BASE64: "true"
+
+      WEBHOOK_EVENTS: "QRCODE_UPDATED,CONNECTION_UPDATE,MESSAGES_UPSERT,MESSAGES_UPDATE,CHATS_UPSERT,CONTACTS_UPSERT,PRESENCE_UPDATE"
+
+      SYNC_FULL_HISTORY: "false"
 
     extra_hosts:
       - "host.docker.internal:host-gateway"
@@ -1128,50 +1098,21 @@ FILE: /d/Config/TestAzure/Back-end/pillihuaman-com-pe-engine/src/main/resources/
 ====================================================
 server.port=8078
 server.address=0.0.0.0
-spring.data.mongodb.uri=mongodb+srv://fibertechandia:fo82yPNOXU5GMQam@cluster0.13xuhrg.mongodb.net/fibertechia?retryWrites=true&w=majority&appName=Cluster0
-spring.data.mongodb.database=fibertechia
-application.security.jwt.secret-key=404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970
-application.security.jwt.expiration=3600000
-application.security.jwt.refresh-token.expiration=86400000
-external-api.support-ms.url=http://localhost:8091
-neuro-ia.api.url=http://localhost:8099
-cors.allowed-origins=http://localhost:8078,http://localhost:8099,https://alamodaperu.online,https://security.alamodaperu.online,https://support.alamodaperu.online,https://neuroia.alamodaperu.online,https://alamoda-frontend-1068521170727.us-central1.run.app
-cors.allowed-methods=GET,POST,PUT,DELETE,OPTIONS
-cors.allowed-headers=*
-cors.allow-credentials=true
-logging.level.root=ERROR
-logging.level.org.springframework=ERROR
-logging.level.org.springframework.web=ERROR
-logging.level.org.springframework.data.mongodb.core=ERROR
-logging.level.pillihuaman.com.pe=DEBUG
-logging.level.p.c.p.s=DEBUG
-spring.servlet.multipart.enabled=true
+spring.main.web-application-type=reactive
+spring.data.mongodb.uri=${MONGO_URI:mongodb+srv://fibertechandia:fo82yPNOXU5GMQam@cluster0.13xuhrg.mongodb.net/fibertechia?retryWrites=true&w=majority&appName=Cluster0}
+spring.data.mongodb.database=${MONGO_DB_NAME:fibertechia}
+application.security.jwt.secret-key=${JWT_SECRET:404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970}
+external-api.support-ms.url=${SUPPORT_MS_URL:https://support.alamodaperu.online}
+neuro-ia.api.url=${NEUROIA_MS_URL:https://neuroia.alamodaperu.online}
+//external-api.evolution.url=${EVOLUTION_API_URL:https://evolution.alamodaperu.online}
+external-api.evolution.apikey=${EVOLUTION_API_KEY:evolution-apikey-default}
+external-api.evolution.url=${EVOLUTION_API_URL:http://localhost:8080}
+cors.allowed-origins=${CORS_ORIGINS:http://localhost:4200,http://localhost:8078,http://spicontrol.local:4200,https://alamodaperu.online,https://spicontrol.online,https://alamoda-frontend-1068521170727.us-central1.run.app}
 spring.servlet.multipart.max-file-size=50MB
 spring.servlet.multipart.max-request-size=50MB
 spring.codec.max-in-memory-size=100MB
-spring.cache.type=caffeine
-spring.mvc.pathmatch.matching-strategy=ant_path_matcher
-external-api.aliexpress.url=https://api-sg.aliexpress.com
-external-api.aliexpress.app-key=${ALI_APP_KEY:523194}
-external-api.aliexpress.secret=${ALI_SECRET:zwCKbC9UYZ37po7POTUzCN4BIcFTL4w4}
-external-api.aliexpress.tracking-id=${ALI_TRACKING_ID:default}
-external-api.amazon.access-key=${AMAZON_ACCESS_KEY:}
-external-api.amazon.secret-key=${AMAZON_SECRET_KEY:}
-external-api.amazon.tag=${AMAZON_TAG:alamodaperu-20}
-external-api.shein.account-sid=${SHEIN_SID:IRD6oqsRvpYc6767451nktqwY6euEpEZW1}
-external-api.shein.auth-token=${SHEIN_TOKEN:oLPs2EB9fefKfSAZPAQ-CAnwgKrij_JM}
-external-api.linio.api-key=${LINIO_API_KEY:}
-external-api.temu.app-id=${TEMU_APP_ID:}
-spring.main.web-application-type=reactive
-spring.webflux.static-path-pattern=none
-spring.mvc.view.prefix=
-spring.mvc.view.suffix=
 application.pdf.ai-prompt-code=PDF_LAYOUT_AI_GEOMETRY_COMPILER_V2
-logging.level.org.mongodb.driver.cluster=OFF
-logging.level.org.mongodb.driver.connection=OFF
-logging.level.org.mongodb.driver.protocol=OFF
-external-api.evolution.url=http://127.0.0.1:8080
-external-api.evolution.apikey=evolution-apikey-default
+
 
 ====================================================
 FILE: /d/Config/TestAzure/Back-end/pillihuaman-com-pe-engine/src/main/resources/config.properties
@@ -1376,23 +1317,32 @@ FILE: /d/Config/TestAzure/Back-end/pillihuaman-com-pe-engine/src/main/java/pilli
 ====================================================
 package pillihuaman.com.pe.engine.application.port.inbound;
 
+import pillihuaman.com.pe.engine.domain.model.ChannelStateDTO;
 import pillihuaman.com.pe.engine.domain.model.WhatsAppContact;
 import pillihuaman.com.pe.engine.domain.model.WhatsAppMessage;
 import reactor.core.publisher.Mono;
 
+import java.util.List;
 import java.util.Map;
 
 public interface WhatsAppUseCase {
-    Mono<String> generateLinkQr(String tenantId, String bearerToken);
-
-    Mono<String> getLinkState(String tenantId, String bearerToken);
+    Mono<Map<String, Object>> generateLinkQr(String tenantId, String bearerToken);
 
     Mono<WhatsAppMessage> handleIncomingWebhook(Map<String, Object> webhookData);
 
     Mono<WhatsAppMessage> sendOutgoingMessage(String tenantId, String recipientPhone, String text, String bearerToken);
 
     Mono<WhatsAppContact> registerOrUpdateContact(String tenantId, WhatsAppContact contact);
-    
+
+    Mono<List<WhatsAppContact>> getContacts(String tenantId);
+
+    Mono<List<WhatsAppMessage>> getChatHistory(String tenantId, String phoneNumber);
+
+    Mono<ChannelStateDTO> getLinkState(String tenantId, String bearerToken);
+
+    Mono<WhatsAppMessage> sendOutgoingMessage(
+            String tenantId, String recipientPhone, String text,
+            String mediaBase64, String mimeType, String fileName, String bearerToken);
 }
 
 ====================================================
@@ -1479,14 +1429,26 @@ FILE: /d/Config/TestAzure/Back-end/pillihuaman-com-pe-engine/src/main/java/pilli
 ====================================================
 package pillihuaman.com.pe.engine.application.port.outbound;
 
+import pillihuaman.com.pe.engine.domain.model.ChannelStateDTO;
 import reactor.core.publisher.Mono;
 
+import java.util.Map;
+
 public interface WhatsAppIntegrationPort {
-    Mono<String> getQrCode(String tenantId, String bearerToken);
+    Mono<Map<String, Object>> getQrCode(String tenantId, String bearerToken);
 
-    Mono<String> checkState(String tenantId, String bearerToken);
+    Mono<ChannelStateDTO> getLinkState(String tenantId, String bearerToken);
 
-    Mono<Void> sendTranslatedMessage(String tenantId, String recipient, String messageText, String bearerToken);
+    Mono<ChannelStateDTO> checkState(String tenantId, String bearerToken);
+
+    Mono<String> sendTranslatedMessage(
+            String tenantId, String recipient, String messageText, String bearerToken);
+
+    Mono<String> getBase64Media(String tenantId, Map<String, Object> messageNode);
+
+    Mono<String> sendMediaMessage(
+            String tenantId, String recipient, String mediaBase64, String mimeType,
+            String fileName, String caption, String bearerToken);
 }
 
 ====================================================
@@ -1495,6 +1457,7 @@ FILE: /d/Config/TestAzure/Back-end/pillihuaman-com-pe-engine/src/main/java/pilli
 package pillihuaman.com.pe.engine.application.port.outbound;
 
 import pillihuaman.com.pe.engine.domain.model.WhatsAppContact;
+import pillihuaman.com.pe.engine.domain.model.WhatsAppEvent;
 import pillihuaman.com.pe.engine.domain.model.WhatsAppMessage;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -1507,6 +1470,16 @@ public interface WhatsAppPersistencePort {
     Mono<WhatsAppContact> findContactByPhoneAndTenant(String phoneNumber, String tenantId);
 
     Flux<WhatsAppMessage> findMessagesByTenant(String tenantId);
+
+    Flux<WhatsAppContact> findContactsByTenant(String tenantId);
+
+    Flux<WhatsAppMessage> findChatHistory(String tenantId, String phoneNumber);
+
+    Mono<WhatsAppEvent> saveEvent(WhatsAppEvent event);
+
+    Mono<WhatsAppMessage> findByExternalId(String tenantId, String externalId);
+
+    Mono<Void> updateEventStatus(String eventId, String status, String error);
 }
 
 ====================================================
@@ -1691,12 +1664,17 @@ import pillihuaman.com.pe.engine.application.port.inbound.WhatsAppUseCase;
 import pillihuaman.com.pe.engine.application.port.outbound.WhatsAppIntegrationPort;
 import pillihuaman.com.pe.engine.application.port.outbound.WhatsAppPersistencePort;
 import pillihuaman.com.pe.engine.application.port.outbound.WhatsAppTranslationPort;
+import pillihuaman.com.pe.engine.domain.model.ChannelStateDTO;
 import pillihuaman.com.pe.engine.domain.model.WhatsAppContact;
+import pillihuaman.com.pe.engine.domain.model.WhatsAppEvent;
 import pillihuaman.com.pe.engine.domain.model.WhatsAppMessage;
 import pillihuaman.com.pe.engine.infrastructure.adapter.outbound.websocket.WhatsAppWebSocketSessionManager;
 import reactor.core.publisher.Mono;
+import reactor.util.retry.Retry;
 
+import java.time.Duration;
 import java.time.Instant;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -1710,152 +1688,405 @@ public class WhatsAppService implements WhatsAppUseCase {
     private final WhatsAppWebSocketSessionManager sessionManager;
 
     @Override
-    public Mono<String> generateLinkQr(String tenantId, String bearerToken) {
+    public Mono<Map<String, Object>> generateLinkQr(String tenantId, String bearerToken) {
+        // >>> CHANGE
         log.info("WHATSAPP_QR_GENERATE", "Requesting QR link for tenant: " + tenantId, "USER");
         return integrationPort.getQrCode(tenantId, bearerToken);
+        // <<< CHANGE
     }
 
+
     @Override
-    public Mono<String> getLinkState(String tenantId, String bearerToken) {
+    public Mono<ChannelStateDTO> getLinkState(String tenantId, String bearerToken) {
+
         return integrationPort.checkState(tenantId, bearerToken);
+
+    }
+
+    private String extractText(Map<String, Object> data) {
+        Map<String, Object> message = (Map<String, Object>) data.get("message");
+        if (message == null) return "";
+        if (message.containsKey("conversation")) return (String) message.get("conversation");
+        if (message.containsKey("extendedTextMessage")) {
+            return (String) ((Map<String, Object>) message.get("extendedTextMessage")).get("text");
+        }
+        return "";
     }
 
     @Override
-    public Mono<WhatsAppMessage> handleIncomingWebhook(Map<String, Object> webhookData) {
-        String event = (String) webhookData.get("event");
+    public Mono<WhatsAppMessage> sendOutgoingMessage(String tenantId, String recipientPhone, String text, String bearerToken) {
+        log.info("[OUTBOUND-INIT] Target: {} | Tenant: {}", recipientPhone, tenantId);
 
-        if (!"messages.upsert".equals(event)) {
-            log.debug("[WhatsAppService] Ignored non-message webhook event: {}", event);
-            return Mono.empty();
+        WhatsAppMessage initialMsg = new WhatsAppMessage(
+                UUID.randomUUID().toString(), "ME", recipientPhone, text,
+                "", "es", "es", Instant.now(), tenantId, true, false,
+                "QUEUED", null, null, 0,
+                "TEXT", null, null, null, false
+        );
+
+        return persistencePort.saveMessage(initialMsg)
+                .flatMap(queuedMsg -> persistencePort.findContactByPhoneAndTenant(recipientPhone, tenantId)
+                        .defaultIfEmpty(new WhatsAppContact(
+                                UUID.randomUUID().toString(), recipientPhone, "Default", "es", tenantId))
+                        .flatMap(contact -> {
+                            String targetLang = contact.preferredLanguage();
+                            return translationPort.translateText(text, "es", targetLang, bearerToken)
+                                    .flatMap(translated -> {
+                                        WhatsAppMessage sendingMsg = updateMessageState(
+                                                queuedMsg, "SENDING", translated, targetLang, null, null, 0);
+                                        return persistencePort.saveMessage(sendingMsg)
+                                                .flatMap(msg -> integrationPort.sendTranslatedMessage(
+                                                                tenantId, recipientPhone, translated, bearerToken)
+                                                        .retryWhen(Retry.backoff(3, Duration.ofSeconds(2))
+                                                                .filter(this::isTransientError))
+                                                        .flatMap(extId -> {
+                                                            WhatsAppMessage sentMsg = updateMessageState(
+                                                                    msg, "SENT", translated, targetLang, extId, null, 0);
+                                                            return persistencePort.saveMessage(sentMsg);
+                                                        })
+                                                        .onErrorResume(e -> {
+                                                            log.error("[OUTBOUND-FAILED] Flow interrupted: {}", e.getMessage());
+                                                            WhatsAppMessage failMsg = updateMessageState(
+                                                                    msg, "FAILED", translated, targetLang, null, e.getMessage(), 3);
+                                                            return persistencePort.saveMessage(failMsg);
+                                                        })
+                                                );
+                                    });
+                        }))
+                .doOnSuccess(saved -> sessionManager.pushMessageToTenant(tenantId, saved));
+    }
+
+    private WhatsAppMessage updateMessageState(
+            WhatsAppMessage msg, String status, String translated, String targetLang,
+            String extId, String failReason, int retries) {
+        return new WhatsAppMessage(
+                msg.id(), msg.sender(), msg.recipient(), msg.originalText(),
+                translated, msg.sourceLanguage(), targetLang, msg.timestamp(),
+                msg.tenantId(), msg.outgoing(), true, status, extId, failReason, retries,
+                msg.messageKind(), msg.mediaUrl(), msg.mimeType(), msg.caption(), msg.hasMedia()
+        );
+    }
+
+    private boolean isTransientError(Throwable e) {
+        if (e instanceof org.springframework.web.reactive.function.client.WebClientResponseException wce) {
+            return wce.getStatusCode().is5xxServerError() || wce.getStatusCode().value() == 408;
         }
+        return e instanceof java.util.concurrent.TimeoutException || e instanceof java.io.IOException;
+    }
 
-        String tenantId = (String) webhookData.getOrDefault("instance", "DEFAULT");
-
-        @SuppressWarnings("unchecked")
-        Map<String, Object> data = (Map<String, Object>) webhookData.get("data");
-        if (data == null) return Mono.empty();
-
-        @SuppressWarnings("unchecked")
-        Map<String, Object> key = (Map<String, Object>) data.get("key");
-        if (key == null) return Mono.empty();
-
-        Boolean fromMe = (Boolean) key.get("fromMe");
-        if (Boolean.TRUE.equals(fromMe)) {
-            return Mono.empty();
-        }
-
-        String senderRaw = (String) key.get("remoteJid");
-        final String sender =
-                (senderRaw != null && senderRaw.contains("@"))
-                        ? senderRaw.split("@")[0]
-                        : (senderRaw != null ? senderRaw : "UNKNOWN");
-
-        String extractedText = "";
-        @SuppressWarnings("unchecked")
-        Map<String, Object> messageMap = (Map<String, Object>) data.get("message");
-        if (messageMap != null) {
-            if (messageMap.containsKey("conversation")) {
-                extractedText = (String) messageMap.get("conversation");
-            } else if (messageMap.containsKey("extendedTextMessage")) {
-                @SuppressWarnings("unchecked")
-                Map<String, Object> extText = (Map<String, Object>) messageMap.get("extendedTextMessage");
-                extractedText = (String) extText.get("text");
-            }
-        }
-
-        final String text = extractedText;
-
-        if (text == null || text.isBlank()) {
-            return Mono.empty();
-        }
-
-        // >>> CHANGE
-        return persistencePort
-                .findContactByPhoneAndTenant(sender, tenantId)
-                .defaultIfEmpty(
-                        new WhatsAppContact(UUID.randomUUID().toString(), sender, "New Contact", "en", tenantId))
-                .flatMap(
-                        contact ->
-                                translationPort
-                                        .translateText(text, contact.preferredLanguage(), "es", "SYSTEM_TOKEN")
-                                        .flatMap(
-                                                translatedText -> {
-                                                    WhatsAppMessage message =
-                                                            new WhatsAppMessage(
-                                                                    UUID.randomUUID().toString(),
-                                                                    sender,
-                                                                    "ME",
-                                                                    text,
-                                                                    translatedText,
-                                                                    contact.preferredLanguage(),
-                                                                    "es",
-                                                                    Instant.now(),
-                                                                    tenantId,
-                                                                    false,
-                                                                    !text.equals(translatedText));
-
-                                                    return persistencePort
-                                                            .saveMessage(message)
-                                                            .doOnSuccess(saved -> {
-                                                                log.info("[AUDIT] WHATSAPP_INBOUND | Tenant: {} | Saved message ID: {}",
-                                                                        tenantId, saved.id());
-                                                                sessionManager.pushMessageToTenant(tenantId, saved);
-                                                            });
-                                                }));
-
+    private String determineKindFromMimeType(String mimeType) {
+        if (mimeType == null) return "DOCUMENT";
+        if (mimeType.startsWith("image/")) return "IMAGE";
+        if (mimeType.startsWith("video/")) return "VIDEO";
+        if (mimeType.startsWith("audio/")) return "AUDIO";
+        return "DOCUMENT";
     }
 
     @Override
     public Mono<WhatsAppMessage> sendOutgoingMessage(
-            String tenantId, String recipientPhone, String text, String bearerToken) {
-        return persistencePort
-                .findContactByPhoneAndTenant(recipientPhone, tenantId)
-                .defaultIfEmpty(
-                        new WhatsAppContact(
-                                UUID.randomUUID().toString(), recipientPhone, "Default Contact", "zh", tenantId))
-                .flatMap(
-                        contact -> {
-                            String sourceLang = "es";
-                            String targetLang = contact.preferredLanguage();
-                            return translationPort
-                                    .translateText(text, sourceLang, targetLang, bearerToken)
-                                    .flatMap(
-                                            translatedText -> {
-                                                return integrationPort
-                                                        .sendTranslatedMessage(tenantId, recipientPhone, translatedText, bearerToken)
-                                                        .then(
-                                                                Mono.defer(
-                                                                        () -> {
-                                                                            WhatsAppMessage message =
-                                                                                    new WhatsAppMessage(
-                                                                                            UUID.randomUUID().toString(),
-                                                                                            "ME",
-                                                                                            recipientPhone,
-                                                                                            text,
-                                                                                            translatedText,
-                                                                                            sourceLang,
-                                                                                            targetLang,
-                                                                                            Instant.now(),
-                                                                                            tenantId,
-                                                                                            true,
-                                                                                            true);
-                                                                 
-                                                                            return persistencePort
-                                                                                    .saveMessage(message)
-                                                                                    .doOnSuccess(saved -> {
-                                                                                        log.info("[AUDIT] WHATSAPP_OUTBOUND | Tenant: {} | Sent message ID: {}",
-                                                                                                tenantId, saved.id());
-                                                                                        sessionManager.pushMessageToTenant(tenantId, saved);
-                                                                                    });
+            String tenantId, String recipientPhone, String text,
+            String mediaBase64, String mimeType, String fileName, String bearerToken) {
 
-                                                                        }));
-                                            });
-                        });
+        log.info("[OUTBOUND-INIT] Target: {} | Tenant: {} | HasMedia: {}", recipientPhone, tenantId, mediaBase64 != null);
+
+        final boolean isMedia = mediaBase64 != null && !mediaBase64.isBlank();
+        final String messageKind = isMedia ? determineKindFromMimeType(mimeType) : "TEXT";
+        final String safeText = text != null ? text : "";
+
+        WhatsAppMessage initialMsg = new WhatsAppMessage(
+                UUID.randomUUID().toString(), "ME", recipientPhone, safeText,
+                "", "es", "es", Instant.now(), tenantId, true, false,
+                "QUEUED", null, null, 0,
+                messageKind, isMedia ? mediaBase64 : null, mimeType, isMedia ? safeText : null, isMedia
+        );
+
+        return persistencePort.saveMessage(initialMsg)
+                .flatMap(queuedMsg -> persistencePort.findContactByPhoneAndTenant(recipientPhone, tenantId)
+                        .defaultIfEmpty(new WhatsAppContact(
+                                UUID.randomUUID().toString(), recipientPhone, "Default", "es", tenantId))
+                        .flatMap(contact -> {
+                            String targetLang = contact.preferredLanguage();
+
+                            // Traducimos el texto (o el caption si es media)
+                            Mono<String> translationMono = safeText.isBlank()
+                                    ? Mono.just("")
+                                    : translationPort.translateText(safeText, "es", targetLang, bearerToken);
+
+                            return translationMono.flatMap(translated -> {
+                                WhatsAppMessage sendingMsg = updateMessageState(
+                                        queuedMsg, "SENDING", translated, targetLang, null, null, 0);
+
+                                return persistencePort.saveMessage(sendingMsg)
+                                        .flatMap(msg -> {
+                                            // Enrutamiento inteligente a Evolution API
+                                            Mono<String> apiCall = isMedia
+                                                    ? integrationPort.sendMediaMessage(tenantId, recipientPhone, mediaBase64, mimeType, fileName, translated, bearerToken)
+                                                    : integrationPort.sendTranslatedMessage(tenantId, recipientPhone, translated, bearerToken);
+
+                                            return apiCall
+                                                    .retryWhen(Retry.backoff(3, Duration.ofSeconds(2))
+                                                            .filter(this::isTransientError))
+                                                    .flatMap(extId -> {
+                                                        WhatsAppMessage sentMsg = updateMessageState(
+                                                                msg, "SENT", translated, targetLang, extId, null, 0);
+                                                        return persistencePort.saveMessage(sentMsg);
+                                                    })
+                                                    .onErrorResume(e -> {
+                                                        log.error("[OUTBOUND-FAILED] Flow interrupted: {}", e.getMessage());
+                                                        WhatsAppMessage failMsg = updateMessageState(
+                                                                msg, "FAILED", translated, targetLang, null, e.getMessage(), 3);
+                                                        return persistencePort.saveMessage(failMsg);
+                                                    });
+                                        });
+                            });
+                        }))
+                .doOnSuccess(saved -> sessionManager.pushMessageToTenant(tenantId, saved));
     }
 
     @Override
+    @SuppressWarnings("unchecked")
+    public Mono<WhatsAppMessage> handleIncomingWebhook(final Map<String, Object> webhookData) {
+        final String eventType = (String) webhookData.getOrDefault("event", "UNKNOWN");
+        String rawTenant = String.valueOf(webhookData.get("instance"));
+
+        if (rawTenant == null || "null".equals(rawTenant) || rawTenant.isBlank()) {
+            rawTenant = "DEFAULT";
+            log.warn("[WEBHOOK] Tenant not found in payload. Falling back to DEFAULT.");
+        }
+        final String tenantId = rawTenant;
+
+        String rawPayload;
+        try {
+            rawPayload = new com.fasterxml.jackson.databind.ObjectMapper().writeValueAsString(webhookData);
+        } catch (Exception e) {
+            rawPayload = webhookData.toString();
+        }
+
+        WhatsAppEvent rawEvent = new WhatsAppEvent(
+                UUID.randomUUID().toString(), tenantId, eventType, rawPayload,
+                Instant.now(), "PENDING", null
+        );
+
+        return persistencePort.saveEvent(rawEvent)
+                .flatMap(savedEvent -> {
+                    if ("messages.update".equals(eventType)) {
+                        return processMessageUpdate(webhookData, savedEvent, tenantId);
+                    }
+                    if ("messages.upsert".equals(eventType)) {
+                        return processWebhookPayload(webhookData, savedEvent, tenantId);
+                    }
+                    // Acknowledge other events but do not process as messages
+                    return persistencePort.updateEventStatus(savedEvent.id(), "ACKNOWLEDGED", "Non-message event")
+                            .then(Mono.empty());
+                })
+                .onErrorResume(error -> {
+                    log.error("[WEBHOOK-ERROR] Extreme processing failure: {}", error.getMessage());
+                    return persistencePort.updateEventStatus(rawEvent.id(), "FAILED", error.getMessage())
+                            .then(Mono.empty());
+                });
+    }
+
+    @SuppressWarnings("unchecked")
+    private Mono<WhatsAppMessage> processMessageUpdate(
+            Map<String, Object> webhookData, WhatsAppEvent event, String tenantId) {
+
+        final Object dataObj = webhookData.get("data");
+        if (!(dataObj instanceof List<?> dataList) || dataList.isEmpty()) {
+            return persistencePort.updateEventStatus(event.id(), "IGNORED", "No data list").then(Mono.empty());
+        }
+
+        Map<String, Object> updateItem = (Map<String, Object>) dataList.get(0);
+        Map<String, Object> key = (Map<String, Object>) updateItem.get("key");
+        Map<String, Object> update = (Map<String, Object>) updateItem.get("update");
+
+        if (key == null || update == null) {
+            return persistencePort.updateEventStatus(event.id(), "IGNORED", "Missing key or update node").then(Mono.empty());
+        }
+
+        String externalId = (String) key.get("id");
+        String newStatus = (String) update.get("status");
+
+        if (externalId == null || newStatus == null) {
+            return persistencePort.updateEventStatus(event.id(), "IGNORED", "Missing ID or Status").then(Mono.empty());
+        }
+
+        return persistencePort.findByExternalId(tenantId, externalId)
+                .flatMap(existingMsg -> {
+                    WhatsAppMessage updatedMsg = new WhatsAppMessage(
+                            existingMsg.id(), existingMsg.sender(), existingMsg.recipient(),
+                            existingMsg.originalText(), existingMsg.translatedText(), existingMsg.sourceLanguage(),
+                            existingMsg.targetLanguage(), existingMsg.timestamp(), existingMsg.tenantId(),
+                            existingMsg.outgoing(), existingMsg.translated(), newStatus.toUpperCase(),
+                            existingMsg.externalMessageId(), existingMsg.failureReason(), existingMsg.retryCount(),
+                            existingMsg.messageKind(), existingMsg.mediaUrl(), existingMsg.mimeType(),
+                            existingMsg.caption(), existingMsg.hasMedia()
+                    );
+                    return persistencePort.saveMessage(updatedMsg)
+                            .flatMap(saved -> persistencePort.updateEventStatus(event.id(), "PROCESSED", null)
+                                    .thenReturn(saved))
+                            .doOnSuccess(saved -> sessionManager.pushMessageToTenant(tenantId, saved));
+                })
+                .switchIfEmpty(persistencePort.updateEventStatus(event.id(), "IGNORED", "Message not found locally").then(Mono.empty()));
+    }
+
+    @SuppressWarnings("unchecked")
+    private Map<String, Object> unwrapMessage(Map<String, Object> message) {
+        if (message == null) return java.util.Collections.emptyMap();
+        String[] wrappers = {"ephemeralMessage", "viewOnceMessage", "viewOnceMessageV2", "viewOnceMessageV2Extension", "documentWithCaptionMessage"};
+        for (String wrapper : wrappers) {
+            if (message.containsKey(wrapper)) {
+                Map<String, Object> wrapped = (Map<String, Object>) message.get(wrapper);
+                if (wrapped != null && wrapped.containsKey("message")) {
+                    return unwrapMessage((Map<String, Object>) wrapped.get("message"));
+                }
+            }
+        }
+        return message;
+    }
+
+    @SuppressWarnings("unchecked")
+    private Mono<WhatsAppMessage> processWebhookPayload(
+            Map<String, Object> webhookData, WhatsAppEvent event, String tenantId) {
+
+        final Object dataObj = webhookData.get("data");
+        if (!(dataObj instanceof Map<?, ?> data)) return Mono.empty();
+
+        final Object keyObj = data.get("key");
+        if (!(keyObj instanceof Map<?, ?> key)) return Mono.empty();
+
+        final boolean fromMe = Boolean.TRUE.equals(key.get("fromMe"));
+        final String remoteJidRaw = (String) key.get("remoteJid");
+        final String externalId = (String) key.get("id");
+
+        if (remoteJidRaw == null || remoteJidRaw.isBlank() || remoteJidRaw.contains("@g.us")) {
+            return persistencePort.updateEventStatus(event.id(), "IGNORED", "Group or invalid")
+                    .then(Mono.empty());
+        }
+
+        final String contactPhone = remoteJidRaw.split("@")[0];
+        final String sender = fromMe ? "ME" : contactPhone;
+        final String recipient = fromMe ? contactPhone : "ME";
+        final boolean isOutgoing = fromMe;
+
+        return persistencePort.findByExternalId(tenantId, externalId)
+                .flatMap(existingMsg -> {
+                    log.info("[WEBHOOK-DEDUPLICATION] Message {} already exists. Updating status.", externalId);
+                    WhatsAppMessage updatedMsg = new WhatsAppMessage(
+                            existingMsg.id(), existingMsg.sender(), existingMsg.recipient(), existingMsg.originalText(),
+                            existingMsg.translatedText(), existingMsg.sourceLanguage(), existingMsg.targetLanguage(),
+                            existingMsg.timestamp(), existingMsg.tenantId(), existingMsg.outgoing(), existingMsg.translated(),
+                            isOutgoing ? "SENT" : "DELIVERED", existingMsg.externalMessageId(), existingMsg.failureReason(), existingMsg.retryCount(),
+                            existingMsg.messageKind(), existingMsg.mediaUrl(), existingMsg.mimeType(), existingMsg.caption(),
+                            existingMsg.hasMedia()
+                    );
+                    return persistencePort.saveMessage(updatedMsg)
+                            .flatMap(saved -> persistencePort.updateEventStatus(event.id(), "PROCESSED_DEDUPLICATED", null).thenReturn(saved))
+                            .doOnSuccess(saved -> sessionManager.pushMessageToTenant(tenantId, saved));
+                })
+                .switchIfEmpty(Mono.defer(() -> {
+                    Map<String, Object> rawMessageNode = (Map<String, Object>) data.get("message");
+                    MessageExtractionResult extracted = extractMessageContent(rawMessageNode);
+
+                    if (extracted.text().isBlank() && !extracted.hasMedia()) {
+                        return persistencePort.updateEventStatus(event.id(), "IGNORED", "Empty text and no media")
+                                .then(Mono.empty());
+                    }
+
+                    // >>> CHANGE: FIX REACTOR STREAM (Previene que Mono.empty silencie los textos)
+                    Mono<String> mediaUrlMono = Mono.just(extracted.mediaUrl() != null ? extracted.mediaUrl() : "NO_MEDIA");
+
+                    if (extracted.hasMedia() && extracted.mediaUrl() != null && extracted.mediaUrl().contains(".whatsapp.net")) {
+                        log.info("[MEDIA] Link .enc detectado. Solicitando descifrado Base64 a Evolution API...");
+
+                        mediaUrlMono = integrationPort.getBase64Media(tenantId, (Map<String, Object>) data)
+                                .defaultIfEmpty(extracted.mediaUrl()); // Fallback
+                    }
+
+                    return mediaUrlMono.flatMap(finalMediaUrl -> {
+                        // Limpiamos el flag temporal para que Mongo guarde null en textos limpios
+                        String cleanMediaUrl = "NO_MEDIA".equals(finalMediaUrl) ? null : finalMediaUrl;
+
+                        return persistencePort.findContactByPhoneAndTenant(contactPhone, tenantId)
+                                .switchIfEmpty(Mono.defer(() -> {
+                                    log.warn("[WEBHOOK-RECONCILIATION] Contact {} missing. Generating profile.", contactPhone);
+                                    WhatsAppContact newContact = new WhatsAppContact(
+                                            UUID.randomUUID().toString(), contactPhone, "Unknown", "es", tenantId);
+                                    return persistencePort.saveContact(newContact);
+                                }))
+                                .flatMap(contact -> {
+                                    Mono<String> translationMono = Mono.just(extracted.text());
+
+                                    if (!isOutgoing && extracted.text() != null && !extracted.text().isBlank()) {
+                                        translationMono = translationPort.translateText(
+                                                extracted.text(), contact.preferredLanguage(), "es", "SYSTEM"
+                                        );
+                                    }
+
+                                    return translationMono.flatMap(translated -> {
+                                        final WhatsAppMessage message = new WhatsAppMessage(
+                                                UUID.randomUUID().toString(), sender, recipient, extracted.text(), translated,
+                                                contact.preferredLanguage(), "es", Instant.now(), tenantId, isOutgoing,
+                                                !extracted.text().equals(translated), isOutgoing ? "SENT" : "DELIVERED",
+                                                externalId, null, 0,
+                                                extracted.kind(),
+                                                cleanMediaUrl,
+                                                extracted.mimeType(),
+                                                extracted.caption(), extracted.hasMedia()
+                                        );
+
+                                        return persistencePort.saveMessage(message)
+                                                .flatMap(saved -> persistencePort.updateEventStatus(event.id(), "PROCESSED", null)
+                                                        .thenReturn(saved))
+                                                .doOnSuccess(saved -> {
+                                                    log.info("[WEBHOOK-SUCCESS] Msg saved. Kind: {}, Outgoing: {}",
+                                                            saved.messageKind(), isOutgoing);
+                                                    sessionManager.pushMessageToTenant(tenantId, saved);
+                                                });
+                                    });
+                                });
+                    });
+                }));
+    }
+
+    private MessageExtractionResult extractMessageContent(Map<String, Object> rawMessage) {
+        if (rawMessage == null) return new MessageExtractionResult("", "TEXT", null, null, null, false);
+
+        Map<String, Object> message = unwrapMessage(rawMessage);
+
+        if (message.containsKey("conversation")) {
+            return new MessageExtractionResult((String) message.get("conversation"), "TEXT", null, null, null, false);
+        }
+
+        if (message.containsKey("extendedTextMessage")) {
+            Map<String, Object> extended = (Map<String, Object>) message.get("extendedTextMessage");
+            return new MessageExtractionResult((String) extended.get("text"), "TEXT", null, null, null, false);
+        }
+
+        String[] mediaTypes = {"imageMessage", "videoMessage", "documentMessage", "audioMessage", "stickerMessage"};
+        for (String type : mediaTypes) {
+            if (message.containsKey(type)) {
+                Map<String, Object> mediaData = (Map<String, Object>) message.get(type);
+                String kind = type.replace("Message", "").toUpperCase();
+
+                String mediaUrl = (String) mediaData.getOrDefault("url", mediaData.get("base64"));
+                String mimeType = (String) mediaData.get("mimetype");
+                String caption = (String) mediaData.getOrDefault("caption", "");
+
+                String text = caption;
+                if (text.isBlank() && mediaData.containsKey("fileName")) {
+                    text = (String) mediaData.get("fileName");
+                }
+                if (text.isBlank()) text = "[" + kind + "]";
+
+                return new MessageExtractionResult(text, kind, mediaUrl, mimeType, caption, true);
+            }
+        }
+        return new MessageExtractionResult("", "UNKNOWN", null, null, null, false);
+    }
+
+
+    @Override
     public Mono<WhatsAppContact> registerOrUpdateContact(String tenantId, WhatsAppContact contact) {
-        // >>> CHANGE
         return persistencePort.findContactByPhoneAndTenant(contact.phoneNumber(), tenantId)
                 .flatMap(existingContact -> {
                     WhatsAppContact updatedContact = new WhatsAppContact(
@@ -1877,10 +2108,27 @@ public class WhatsAppService implements WhatsAppUseCase {
                     );
                     return persistencePort.saveContact(newContact);
                 }));
-        // <<< CHANGE
     }
 
+    @Override
+    public Mono<List<WhatsAppContact>> getContacts(final String tenantId) {
+        return persistencePort.findContactsByTenant(tenantId).collectList();
+    }
 
+    @Override
+    public Mono<List<WhatsAppMessage>> getChatHistory(final String tenantId, final String phoneNumber) {
+        return persistencePort.findChatHistory(tenantId, phoneNumber).collectList();
+    }
+
+    private record MessageExtractionResult(
+            String text,
+            String kind,
+            String mediaUrl,
+            String mimeType,
+            String caption,
+            boolean hasMedia
+    ) {
+    }
 }
 
 ====================================================
@@ -1915,6 +2163,24 @@ public class ResourceNotFoundException extends BusinessLogicException {
 }
 
 
+
+====================================================
+FILE: /d/Config/TestAzure/Back-end/pillihuaman-com-pe-engine/src/main/java/pillihuaman/com/pe/engine/domain/model/ChannelStateDTO.java
+====================================================
+package pillihuaman.com.pe.engine.domain.model;
+
+import java.io.Serializable;
+import java.time.Instant;
+
+public record ChannelStateDTO(
+        String channel,
+        String status,
+        String instanceName,
+        Instant lastCheckedAt,
+        String details,
+        boolean retryable
+) implements Serializable {
+}
 
 ====================================================
 FILE: /d/Config/TestAzure/Back-end/pillihuaman-com-pe-engine/src/main/java/pillihuaman/com/pe/engine/domain/model/GraphicElement.java
@@ -2128,6 +2394,26 @@ public record WhatsAppContact(
 }
 
 ====================================================
+FILE: /d/Config/TestAzure/Back-end/pillihuaman-com-pe-engine/src/main/java/pillihuaman/com/pe/engine/domain/model/WhatsAppEvent.java
+====================================================
+package pillihuaman.com.pe.engine.domain.model;
+
+import java.io.Serializable;
+import java.time.Instant;
+
+public record WhatsAppEvent(
+        String id,
+        String tenantId,
+        String eventType,
+        String rawPayload,
+        Instant receivedAt,
+        String status,
+        String processingError
+) implements Serializable {
+}
+
+
+====================================================
 FILE: /d/Config/TestAzure/Back-end/pillihuaman-com-pe-engine/src/main/java/pillihuaman/com/pe/engine/domain/model/WhatsAppMessage.java
 ====================================================
 package pillihuaman.com.pe.engine.domain.model;
@@ -2146,7 +2432,16 @@ public record WhatsAppMessage(
         Instant timestamp,
         String tenantId,
         boolean outgoing,
-        boolean translated
+        boolean translated,
+        String status,
+        String externalMessageId,
+        String failureReason,
+        int retryCount,
+        String messageKind,
+        String mediaUrl,
+        String mimeType,
+        String caption,
+        boolean hasMedia
 ) implements Serializable {
 }
 
@@ -2406,13 +2701,16 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ServerWebExchange;
 import pillihuaman.com.pe.engine.application.port.inbound.WhatsAppUseCase;
+import pillihuaman.com.pe.engine.domain.model.ChannelStateDTO;
 import pillihuaman.com.pe.engine.domain.model.WhatsAppContact;
 import pillihuaman.com.pe.engine.domain.model.WhatsAppMessage;
 import pillihuaman.com.pe.engine.infrastructure.common.RespBase;
 import pillihuaman.com.pe.engine.infrastructure.security.TenantWebFilter;
 import reactor.core.publisher.Mono;
 
+import java.util.List;
 import java.util.Map;
 
 import static org.reflections.Reflections.log;
@@ -2423,46 +2721,38 @@ public class WhatsAppRestController {
     private final WhatsAppUseCase whatsAppUseCase;
 
     @GetMapping("/private/v1/whatsapp/qr")
-    public Mono<RespBase<String>> getQrCode(
+    public Mono<RespBase<Map<String, Object>>> getQrCode(
             @RequestHeader(HttpHeaders.AUTHORIZATION) String bearerToken) {
         return Mono.deferContextual(ctx -> {
             String tenantId = ctx.getOrDefault(TenantWebFilter.TENANT_KEY, "DEFAULT");
             return whatsAppUseCase.generateLinkQr(tenantId, bearerToken)
-                    .map(qr -> new RespBase<String>().ok(qr));
+                    .map(qr -> new RespBase<Map<String, Object>>().ok(qr));
         });
     }
 
+    @PostMapping(value = {
+            "/public/v1/whatsapp/webhook",
+            "/public/v1/whatsapp/webhook/**"
+    }, consumes = MediaType.APPLICATION_JSON_VALUE)
+    public Mono<RespBase<WhatsAppMessage>> incomingWebhook(
+            @RequestBody final Map<String, Object> payload,
+            final ServerWebExchange exchange) {
+
+        final String path = exchange.getRequest().getPath().value();
+        log.info("[WH-RECEIVE] Path: {} | Event: {}", path, payload.get("event"));
+
+        return whatsAppUseCase.handleIncomingWebhook(payload)
+                .map(msg -> new RespBase<WhatsAppMessage>().ok(msg))
+                .defaultIfEmpty(new RespBase<WhatsAppMessage>().ok(null));
+    }
+
     @GetMapping("/private/v1/whatsapp/status")
-    public Mono<RespBase<String>> getConnectionStatus(
+    public Mono<RespBase<ChannelStateDTO>> getConnectionStatus(
             @RequestHeader(HttpHeaders.AUTHORIZATION) String bearerToken) {
         return Mono.deferContextual(ctx -> {
             String tenantId = ctx.getOrDefault(TenantWebFilter.TENANT_KEY, "DEFAULT");
             return whatsAppUseCase.getLinkState(tenantId, bearerToken)
-                    .map(state -> new RespBase<String>().ok(state));
-        });
-    }
-
-    @PostMapping("/private/v1/whatsapp/send")
-    public Mono<RespBase<WhatsAppMessage>> sendTranslated(
-            @RequestBody Map<String, String> request,
-            @RequestHeader(HttpHeaders.AUTHORIZATION) String bearerToken) {
-        return Mono.deferContextual(ctx -> {
-            String tenantId = ctx.getOrDefault(TenantWebFilter.TENANT_KEY, "DEFAULT");
-            String recipient = request.get("recipient");
-            String text = request.get("text");
-
-            // >>> CHANGE
-            log.info("[WhatsAppRestController] Outgoing request initiated. Tenant: {}, Recipient: {}, Text length: {}",
-                    tenantId, recipient, text != null ? text.length() : 0);
-
-            return whatsAppUseCase.sendOutgoingMessage(tenantId, recipient, text, bearerToken)
-                    .map(msg -> {
-                        log.info("[WhatsAppRestController] Outgoing message translated & dispatched successfully. ID: {}", msg.id());
-                        return new RespBase<WhatsAppMessage>().ok(msg);
-                    })
-                    .doOnError(err -> log.error("[WhatsAppRestController] Critical failure during sendTranslated stream: {}",
-                            err.getMessage(), err));
-            // <<< CHANGE
+                    .map(state -> new RespBase<ChannelStateDTO>().ok(state));
         });
     }
 
@@ -2480,6 +2770,49 @@ public class WhatsAppRestController {
     public Mono<RespBase<WhatsAppMessage>> incomingWebhook(@RequestBody Map<String, Object> payload) {
         return whatsAppUseCase.handleIncomingWebhook(payload)
                 .map(msg -> new RespBase<WhatsAppMessage>().ok(msg));
+    }
+
+    @GetMapping("/private/v1/whatsapp/contacts")
+    public Mono<RespBase<List<WhatsAppContact>>> getContacts() {
+        return Mono.deferContextual(ctx -> {
+            final String tenantId = ctx.getOrDefault(TenantWebFilter.TENANT_KEY, "DEFAULT");
+            return whatsAppUseCase.getContacts(tenantId)
+                    .map(contacts -> new RespBase<List<WhatsAppContact>>().ok(contacts));
+        });
+    }
+
+    @GetMapping("/private/v1/whatsapp/chat/{phoneNumber}")
+    public Mono<RespBase<List<WhatsAppMessage>>> getChatHistory(@PathVariable final String phoneNumber) {
+        return Mono.deferContextual(ctx -> {
+            final String tenantId = ctx.getOrDefault(TenantWebFilter.TENANT_KEY, "DEFAULT");
+            return whatsAppUseCase.getChatHistory(tenantId, phoneNumber)
+                    .map(messages -> new RespBase<List<WhatsAppMessage>>().ok(messages));
+        });
+    }
+
+    @PostMapping("/private/v1/whatsapp/send")
+    public Mono<RespBase<WhatsAppMessage>> sendTranslated(
+            @RequestBody Map<String, String> request,
+            @RequestHeader(HttpHeaders.AUTHORIZATION) String bearerToken) {
+        return Mono.deferContextual(ctx -> {
+            String tenantId = ctx.getOrDefault(TenantWebFilter.TENANT_KEY, "DEFAULT");
+            String recipient = request.get("recipient");
+            String text = request.get("text");
+            String mediaBase64 = request.get("mediaBase64");
+            String mimeType = request.get("mimeType");
+            String fileName = request.get("fileName");
+
+            log.info("[WhatsAppRestController] Outgoing request. Tenant: {}, Recipient: {}, isMedia: {}",
+                    tenantId, recipient, mediaBase64 != null && !mediaBase64.isBlank());
+
+            return whatsAppUseCase.sendOutgoingMessage(
+                            tenantId, recipient, text, mediaBase64, mimeType, fileName, bearerToken)
+                    .map(msg -> {
+                        log.info("[WhatsAppRestController] Dispatched successfully. ID: {}", msg.id());
+                        return new RespBase<WhatsAppMessage>().ok(msg);
+                    })
+                    .doOnError(err -> log.error("[WhatsAppRestController] Send failure: {}", err.getMessage()));
+        });
     }
 }
 
@@ -3457,14 +3790,21 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
 import pillihuaman.com.pe.engine.application.port.outbound.WhatsAppIntegrationPort;
+import pillihuaman.com.pe.engine.domain.model.ChannelStateDTO;
 import reactor.core.publisher.Mono;
 
+import java.time.Duration;
+import java.time.Instant;
+import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 @Slf4j
 @Component
@@ -3482,13 +3822,14 @@ public class WhatsAppIntegrationAdapter implements WhatsAppIntegrationPort {
     }
 
     @Override
-    public Mono<String> getQrCode(String tenantId, String bearerToken) {
+    public Mono<Map<String, Object>> getQrCode(String tenantId, String bearerToken) {
         return getClient().get()
                 .uri("/instance/connect/" + tenantId)
                 .header("apikey", apiKey)
                 .retrieve()
-                .bodyToMono(String.class)
-                // >>> CHANGE
+                .bodyToMono(new ParameterizedTypeReference<Map<String, Object>>() {
+                })
+                .timeout(Duration.ofSeconds(30))
                 .onErrorResume(WebClientResponseException.NotFound.class, notFoundEx -> {
                     log.warn("Instance {} not found on Evolution API. Initiating dynamic auto-creation flow...", tenantId);
 
@@ -3505,50 +3846,84 @@ public class WhatsAppIntegrationAdapter implements WhatsAppIntegrationPort {
                             .contentType(MediaType.APPLICATION_JSON)
                             .bodyValue(createBody)
                             .retrieve()
-                            .bodyToMono(String.class)
+                            .bodyToMono(new ParameterizedTypeReference<Map<String, Object>>() {
+                            })
                             .flatMap(createRes -> {
                                 log.info("Successfully auto-created instance: {}. Retrying connect sequence.", tenantId);
                                 return getClient().get()
                                         .uri("/instance/connect/" + tenantId)
                                         .header("apikey", apiKey)
                                         .retrieve()
-                                        .bodyToMono(String.class);
+                                        .bodyToMono(new ParameterizedTypeReference<Map<String, Object>>() {
+                                        });
                             });
                 })
-                // <<< CHANGE
                 .doOnError(e -> log.error("Error fetching QR for tenant {}: {}", tenantId, e.getMessage()));
     }
 
     @Override
-    public Mono<String> checkState(String tenantId, String bearerToken) {
+    public Mono<ChannelStateDTO> getLinkState(final String tenantId, final String bearerToken) {
+        return checkState(tenantId, bearerToken);
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public Mono<ChannelStateDTO> checkState(String tenantId, String bearerToken) {
         return getClient().get()
                 .uri("/instance/connectionState/" + tenantId)
                 .header("apikey", apiKey)
                 .retrieve()
-                .bodyToMono(String.class)
-                .onErrorReturn("{\"state\": \"DISCONNECTED\"}");
+                .bodyToMono(new ParameterizedTypeReference<Map<String, Object>>() {
+                })
+                .map(res -> {
+                    Map<String, Object> instance = (Map<String, Object>) res.get("instance");
+
+                    String rawState = instance != null
+                            ? String.valueOf(instance.getOrDefault("state", "DISCONNECTED"))
+                            : String.valueOf(res.getOrDefault("state", "DISCONNECTED"));
+
+                    String normalized = normalizeState(rawState);
+
+                    return new ChannelStateDTO(
+                            "WHATSAPP",
+                            normalized,
+                            tenantId,
+                            Instant.now(),
+                            rawState,
+                            !"CONNECTED".equals(normalized)
+                    );
+                })
+                .onErrorResume(e -> Mono.just(
+                        new ChannelStateDTO(
+                                "WHATSAPP", "ERROR", tenantId, Instant.now(), e.getMessage(), true
+                        )
+                ));
+    }
+
+    private String normalizeState(String rawState) {
+        if (rawState == null) {
+            return "DISCONNECTED";
+        }
+
+        return switch (rawState.toLowerCase()) {
+            case "open", "connected" -> "CONNECTED";
+            case "connecting", "pairing", "qr", "loading" -> "CONNECTING";
+            case "disconnected", "close", "closed" -> "DISCONNECTED";
+            default -> "ERROR";
+        };
     }
 
     @Override
-    public Mono<Void> sendTranslatedMessage(String tenantId, String recipient, String messageText, String bearerToken) {
+    @SuppressWarnings("unchecked")
+    public Mono<String> sendTranslatedMessage(
+            String tenantId, String recipient, String messageText, String bearerToken) {
         // >>> CHANGE
-        String uri = "/message/sendText/" + tenantId;
-
-        Map<String, Object> body = Map.of(
-                "number", recipient != null ? recipient : "",
+        final String uri = "/message/sendText/" + tenantId;
+        final Map<String, Object> body = Map.of(
+                "number", recipient,
                 "options", Map.of("delay", 1200, "presence", "composing"),
-                "text", messageText != null ? messageText : ""
+                "text", messageText
         );
-
-        try {
-            String serializedBody = objectMapper.writeValueAsString(body);
-            log.info("[WhatsAppIntegrationAdapter] OUTBOUND REQUEST TRACE:");
-            log.info("  - Target URI: {}{}", evolutionUrl, uri);
-            log.info("  - apikey Header: {}", apiKey != null ? "PRESENT (length=" + apiKey.length() + ")" : "NULL");
-            log.info("  - Payload JSON: {}", serializedBody);
-        } catch (Exception e) {
-            log.error("[WhatsAppIntegrationAdapter] Failed to serialize payload trace: {}", e.getMessage());
-        }
 
         return getClient().post()
                 .uri(uri)
@@ -3556,12 +3931,114 @@ public class WhatsAppIntegrationAdapter implements WhatsAppIntegrationPort {
                 .contentType(MediaType.APPLICATION_JSON)
                 .bodyValue(body)
                 .retrieve()
-                .bodyToMono(String.class)
-                // >>> AÑADIMOS UN TIMEOUT DE 10 SEGUNDOS <<<
-                .timeout(java.time.Duration.ofSeconds(10))
-                .doOnNext(res -> log.info("[WhatsAppIntegrationAdapter] INBOUND RESPONSE TRACE: Received body: {}", res))
-                .then()
-                .doOnError(e -> log.error("[WhatsAppIntegrationAdapter] INBOUND ERROR TRACE: Failed to send text to {}: {}", recipient, e.getMessage(), e));
+                .onStatus(HttpStatusCode::isError, response ->
+                        response.bodyToMono(String.class)
+                                .flatMap(err -> {
+                                    log.error("[EVOLUTION-ERROR] Status: {} | Body: {}", response.statusCode(), err);
+                                    return Mono.error(new RuntimeException("API Failure: " + err));
+                                })
+                )
+                .bodyToMono(new ParameterizedTypeReference<Map<String, Object>>() {
+                })
+                .map(res -> {
+                    final Map<String, Object> key = (Map<String, Object>) res.get("key");
+                    return (key != null && key.containsKey("id"))
+                            ? (String) key.get("id")
+                            : UUID.randomUUID().toString();
+                })
+                .timeout(Duration.ofSeconds(20))
+                .doOnError(e -> log.error("[EVOLUTION-FAILED] Send failed to {}: {}", recipient, e.getMessage()));
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public Mono<String> sendMediaMessage(
+            String tenantId, String recipient, String mediaBase64, String mimeType,
+            String fileName, String caption, String bearerToken) {
+
+        final String uri = "/message/sendMedia/" + tenantId;
+
+        String mediaType = "document";
+        if (mimeType != null) {
+            if (mimeType.startsWith("image/")) mediaType = "image";
+            else if (mimeType.startsWith("video/")) mediaType = "video";
+            else if (mimeType.startsWith("audio/")) mediaType = "audio";
+        }
+
+        final Map<String, Object> mediaMessage = new HashMap<>();
+        mediaMessage.put("mediatype", mediaType);
+        mediaMessage.put("media", mediaBase64);
+
+        if (caption != null && !caption.isBlank()) mediaMessage.put("caption", caption);
+        if (fileName != null && !fileName.isBlank()) mediaMessage.put("fileName", fileName);
+        if (mimeType != null && !mimeType.isBlank()) mediaMessage.put("mimetype", mimeType);
+
+        final Map<String, Object> body = Map.of(
+                "number", recipient,
+                "options", Map.of("delay", 1200, "presence", "composing"),
+                "mediaMessage", mediaMessage
+        );
+
+        return getClient().post()
+                .uri(uri)
+                .header("apikey", apiKey)
+                .contentType(MediaType.APPLICATION_JSON)
+                .bodyValue(body)
+                .retrieve()
+                .onStatus(HttpStatusCode::isError, response ->
+                        response.bodyToMono(String.class)
+                                .flatMap(err -> {
+                                    log.error("[EVOLUTION-ERROR] Media Status: {} | Body: {}", response.statusCode(), err);
+                                    return Mono.error(new RuntimeException("API Media Failure: " + err));
+                                })
+                )
+                .bodyToMono(new ParameterizedTypeReference<Map<String, Object>>() {
+                })
+                .map(res -> {
+                    final Map<String, Object> key = (Map<String, Object>) res.get("key");
+                    return (key != null && key.containsKey("id"))
+                            ? (String) key.get("id")
+                            : UUID.randomUUID().toString();
+                })
+                .timeout(Duration.ofSeconds(45)) // Mayor timeout para archivos grandes
+                .doOnError(e -> log.error("[EVOLUTION-FAILED] Media send failed to {}: {}", recipient, e.getMessage()));
+    }
+
+    @Override
+    public Mono<String> getBase64Media(String tenantId, Map<String, Object> fullMessageData) {
+        final String uri = "/chat/getBase64FromMediaMessage/" + tenantId;
+
+        // Evolution API v2 requiere { "message": { "key": {...}, "message": {...} } }
+        // El parámetro fullMessageData YA contiene "key" y "message" extraído del webhook("data")
+        final Map<String, Object> body = Map.of("message", fullMessageData);
+
+        return getClient().post()
+                .uri(uri)
+                .header("apikey", apiKey)
+                .contentType(MediaType.APPLICATION_JSON)
+                .bodyValue(body)
+                .retrieve()
+                .onStatus(HttpStatusCode::isError, response ->
+                        response.bodyToMono(String.class)
+                                .flatMap(err -> {
+                                    log.error("[EVOLUTION-MEDIA-ERROR] 400 Bad Request. Body de Evolution: {}", err);
+                                    return Mono.error(new RuntimeException("API Failure: " + err));
+                                })
+                )
+                .bodyToMono(new ParameterizedTypeReference<Map<String, Object>>() {
+                })
+                .map(res -> {
+                    String base64 = (String) res.get("base64");
+                    if (base64 != null && base64.contains(",")) {
+                        return base64.split(",")[1];
+                    }
+                    return base64 != null ? base64 : "";
+                })
+                .timeout(Duration.ofSeconds(15))
+                .onErrorResume(e -> {
+                    log.error("[EVOLUTION-MEDIA] Falló el descifrado para tenant {}: {}", tenantId, e.getMessage());
+                    return Mono.empty();
+                });
     }
 }
 
@@ -3633,6 +4110,8 @@ public class WhatsAppTranslationAdapter implements WhatsAppTranslationPort {
                     return Mono.just(text);
                 });
     }
+
+    
 }
 
 ====================================================
@@ -3708,6 +4187,19 @@ public class PdfMongoAdapter implements PdfPersistencePort {
 
 
 ====================================================
+FILE: /d/Config/TestAzure/Back-end/pillihuaman-com-pe-engine/src/main/java/pillihuaman/com/pe/engine/infrastructure/adapter/outbound/persistence/WhatsAppEventRepository.java
+====================================================
+package pillihuaman.com.pe.engine.infrastructure.adapter.outbound.persistence;
+
+import org.springframework.data.mongodb.repository.ReactiveMongoRepository;
+import org.springframework.stereotype.Repository;
+import pillihuaman.com.pe.engine.infrastructure.adapter.outbound.persistence.whatsapp.WhatsAppEventEntity;
+
+@Repository
+public interface WhatsAppEventRepository extends ReactiveMongoRepository<WhatsAppEventEntity, String> {
+}
+
+====================================================
 FILE: /d/Config/TestAzure/Back-end/pillihuaman-com-pe-engine/src/main/java/pillihuaman/com/pe/engine/infrastructure/adapter/outbound/persistence/whatsapp/WhatsAppContactEntity.java
 ====================================================
 package pillihuaman.com.pe.engine.infrastructure.adapter.outbound.persistence.whatsapp;
@@ -3732,12 +4224,39 @@ package pillihuaman.com.pe.engine.infrastructure.adapter.outbound.persistence.wh
 
 import org.springframework.data.mongodb.repository.ReactiveMongoRepository;
 import org.springframework.stereotype.Repository;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @Repository
 public interface WhatsAppContactRepository extends ReactiveMongoRepository<WhatsAppContactEntity, String> {
     Mono<WhatsAppContactEntity> findByPhoneNumberAndTenantId(String phoneNumber, String tenantId);
+
+    Flux<WhatsAppContactEntity> findByTenantId(String tenantId);
+
 }
+
+====================================================
+FILE: /d/Config/TestAzure/Back-end/pillihuaman-com-pe-engine/src/main/java/pillihuaman/com/pe/engine/infrastructure/adapter/outbound/persistence/whatsapp/WhatsAppEventEntity.java
+====================================================
+package pillihuaman.com.pe.engine.infrastructure.adapter.outbound.persistence.whatsapp;
+
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+
+import java.time.Instant;
+
+@Document(collection = "whatsapp_events")
+public record WhatsAppEventEntity(
+        @Id String id,
+        String tenantId,
+        String eventType,
+        String rawPayload,
+        Instant receivedAt,
+        String status,
+        String processingError
+) {
+}
+
 
 ====================================================
 FILE: /d/Config/TestAzure/Back-end/pillihuaman-com-pe-engine/src/main/java/pillihuaman/com/pe/engine/infrastructure/adapter/outbound/persistence/whatsapp/WhatsAppMessageEntity.java
@@ -3761,7 +4280,16 @@ public record WhatsAppMessageEntity(
         Instant timestamp,
         String tenantId,
         boolean outgoing,
-        boolean translated
+        boolean translated,
+        String status,
+        String externalMessageId,
+        String failureReason,
+        int retryCount,
+        String messageKind,
+        String mediaUrl,
+        String mimeType,
+        String caption,
+        Boolean hasMedia
 ) {
 }
 
@@ -3770,13 +4298,22 @@ FILE: /d/Config/TestAzure/Back-end/pillihuaman-com-pe-engine/src/main/java/pilli
 ====================================================
 package pillihuaman.com.pe.engine.infrastructure.adapter.outbound.persistence.whatsapp;
 
+import org.springframework.data.mongodb.repository.Query;
 import org.springframework.data.mongodb.repository.ReactiveMongoRepository;
 import org.springframework.stereotype.Repository;
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 @Repository
 public interface WhatsAppMessageRepository extends ReactiveMongoRepository<WhatsAppMessageEntity, String> {
     Flux<WhatsAppMessageEntity> findByTenantIdOrderByTimestampDesc(String tenantId);
+
+    @Query(value = "{ 'tenantId': ?0, '$or': [ { 'sender': ?1 }, { 'recipient': ?1 } ] }", sort = "{ 'timestamp': 1 }")
+    Flux<WhatsAppMessageEntity> findConversationByTenantAndContact(String tenantId, String phoneNumber);
+
+    Mono<WhatsAppMessageEntity> findByTenantIdAndExternalMessageId(String tenantId, String externalMessageId);
+
+
 }
 
 ====================================================
@@ -3788,7 +4325,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import pillihuaman.com.pe.engine.application.port.outbound.WhatsAppPersistencePort;
 import pillihuaman.com.pe.engine.domain.model.WhatsAppContact;
+import pillihuaman.com.pe.engine.domain.model.WhatsAppEvent;
 import pillihuaman.com.pe.engine.domain.model.WhatsAppMessage;
+import pillihuaman.com.pe.engine.infrastructure.adapter.outbound.persistence.WhatsAppEventRepository;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
@@ -3797,41 +4336,38 @@ import reactor.core.publisher.Mono;
 public class WhatsAppMongoAdapter implements WhatsAppPersistencePort {
     private final WhatsAppMessageRepository messageRepository;
     private final WhatsAppContactRepository contactRepository;
+    private final WhatsAppEventRepository eventRepository;
 
-    @Override
-    public Mono<WhatsAppMessage> saveMessage(WhatsAppMessage message) {
-        WhatsAppMessageEntity entity = new WhatsAppMessageEntity(
-                message.id(),
-                message.sender(),
-                message.recipient(),
-                message.originalText(),
-                message.translatedText(),
-                message.sourceLanguage(),
-                message.targetLanguage(),
-                message.timestamp(),
-                message.tenantId(),
-                message.outgoing(),
-                message.translated()
-        );
-        return messageRepository.save(entity)
-                .map(e -> new WhatsAppMessage(
-                        e.id(), e.sender(), e.recipient(), e.originalText(), e.translatedText(),
-                        e.sourceLanguage(), e.targetLanguage(), e.timestamp(), e.tenantId(), e.outgoing(), e.translated()
-                ));
-    }
 
     @Override
     public Mono<WhatsAppContact> saveContact(WhatsAppContact contact) {
         WhatsAppContactEntity entity = new WhatsAppContactEntity(
-                contact.id(),
-                contact.phoneNumber(),
-                contact.name(),
-                contact.preferredLanguage(),
-                contact.tenantId()
+                contact.id(), contact.phoneNumber(), contact.name(),
+                contact.preferredLanguage(), contact.tenantId()
         );
-        return contactRepository.save(entity)
-                .map(e -> new WhatsAppContact(
-                        e.id(), e.phoneNumber(), e.name(), e.preferredLanguage(), e.tenantId()
+        return contactRepository.save(entity).map(e -> new WhatsAppContact(
+                e.id(), e.phoneNumber(), e.name(), e.preferredLanguage(), e.tenantId()
+        ));
+    }
+
+    @Override
+    public Mono<WhatsAppMessage> saveMessage(WhatsAppMessage message) {
+        WhatsAppMessageEntity entity = new WhatsAppMessageEntity(
+                message.id(), message.sender(), message.recipient(), message.originalText(),
+                message.translatedText(), message.sourceLanguage(), message.targetLanguage(),
+                message.timestamp(), message.tenantId(), message.outgoing(), message.translated(),
+                message.status(), message.externalMessageId(), message.failureReason(), message.retryCount(),
+                message.messageKind(), message.mediaUrl(), message.mimeType(), message.caption(), message.hasMedia()
+        );
+        return messageRepository.save(entity)
+                .map(e -> new WhatsAppMessage(
+                        e.id(), e.sender(), e.recipient(), e.originalText(), e.translatedText(),
+                        e.sourceLanguage(), e.targetLanguage(), e.timestamp(), e.tenantId(),
+                        e.outgoing(), e.translated(), e.status(), e.externalMessageId(),
+                        e.failureReason(), e.retryCount(),
+                        e.messageKind() != null ? e.messageKind() : "TEXT",
+                        e.mediaUrl(), e.mimeType(), e.caption(),
+                        Boolean.TRUE.equals(e.hasMedia())
                 ));
     }
 
@@ -3848,8 +4384,77 @@ public class WhatsAppMongoAdapter implements WhatsAppPersistencePort {
         return messageRepository.findByTenantIdOrderByTimestampDesc(tenantId)
                 .map(e -> new WhatsAppMessage(
                         e.id(), e.sender(), e.recipient(), e.originalText(), e.translatedText(),
-                        e.sourceLanguage(), e.targetLanguage(), e.timestamp(), e.tenantId(), e.outgoing(), e.translated()
+                        e.sourceLanguage(), e.targetLanguage(), e.timestamp(), e.tenantId(),
+                        e.outgoing(), e.translated(), e.status(), e.externalMessageId(), e.failureReason(), e.retryCount(),
+                        e.messageKind() != null ? e.messageKind() : "TEXT",
+                        e.mediaUrl(), e.mimeType(), e.caption(),
+                        Boolean.TRUE.equals(e.hasMedia())
                 ));
+    }
+
+    @Override
+    public Flux<WhatsAppContact> findContactsByTenant(final String tenantId) {
+        return contactRepository.findByTenantId(tenantId)
+                .map(e -> new WhatsAppContact(
+                        e.id(), e.phoneNumber(), e.name(), e.preferredLanguage(), e.tenantId()
+                ));
+    }
+
+    @Override
+    public Flux<WhatsAppMessage> findChatHistory(final String tenantId, final String phoneNumber) {
+        return messageRepository.findConversationByTenantAndContact(tenantId, phoneNumber)
+                .map(e -> new WhatsAppMessage(
+                        e.id(), e.sender(), e.recipient(), e.originalText(), e.translatedText(),
+                        e.sourceLanguage(), e.targetLanguage(), e.timestamp(), e.tenantId(),
+                        e.outgoing(), e.translated(), e.status(), e.externalMessageId(), e.failureReason(), e.retryCount(),
+                        e.messageKind() != null ? e.messageKind() : "TEXT",
+                        e.mediaUrl(), e.mimeType(), e.caption(),
+                        Boolean.TRUE.equals(e.hasMedia())
+                ));
+    }
+
+    @Override
+    public Mono<WhatsAppEvent> saveEvent(WhatsAppEvent event) {
+        WhatsAppEventEntity entity = new WhatsAppEventEntity(
+                event.id(), event.tenantId(), event.eventType(), event.rawPayload(),
+                event.receivedAt(), event.status(), event.processingError()
+        );
+        return eventRepository.save(entity)
+                .map(e -> new WhatsAppEvent(
+                        e.id(), e.tenantId(), e.eventType(), e.rawPayload(),
+                        e.receivedAt(), e.status(), e.processingError()
+                ));
+    }
+
+    @Override
+    public Mono<Void> updateEventStatus(String eventId, String status, String error) {
+        return eventRepository.findById(eventId)
+                .flatMap(entity -> {
+                    WhatsAppEventEntity updated = new WhatsAppEventEntity(
+                            entity.id(), entity.tenantId(), entity.eventType(),
+                            entity.rawPayload(), entity.receivedAt(), status, error
+                    );
+                    return eventRepository.save(updated);
+                })
+                .then();
+    }
+
+    @Override
+    public Mono<WhatsAppMessage> findByExternalId(String tenantId, String externalId) {
+        return messageRepository.findByTenantIdAndExternalMessageId(tenantId, externalId)
+                .map(this::mapToDomain);
+    }
+
+    private WhatsAppMessage mapToDomain(WhatsAppMessageEntity e) {
+        return new WhatsAppMessage(
+                e.id(), e.sender(), e.recipient(), e.originalText(), e.translatedText(),
+                e.sourceLanguage(), e.targetLanguage(), e.timestamp(), e.tenantId(),
+                e.outgoing(), e.translated(), e.status(), e.externalMessageId(),
+                e.failureReason(), e.retryCount(),
+                e.messageKind() != null ? e.messageKind() : "TEXT",
+                e.mediaUrl(), e.mimeType(), e.caption(),
+                Boolean.TRUE.equals(e.hasMedia())
+        );
     }
 }
 
@@ -4006,13 +4611,13 @@ public class WhatsAppWebSocketSessionManager {
                 key -> {
 
                     log.info(
-                            "CREATING SINK FOR TENANT = {}",
+                            "CREATING REPLAY SINK FOR TENANT = {}",
                             key
                     );
 
                     return Sinks.many()
-                            .multicast()
-                            .directBestEffort();
+                            .replay()
+                            .limit(50);
                 }
         );
     }
@@ -4674,6 +5279,7 @@ FILE: /d/Config/TestAzure/Back-end/pillihuaman-com-pe-engine/src/main/java/pilli
 package pillihuaman.com.pe.engine.infrastructure.security;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -4698,7 +5304,12 @@ import java.util.List;
 @EnableReactiveMethodSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
+
     private final JwtReactiveFilter jwtFilter;
+
+    // Se inyecta la lista dinámica desde application.properties
+    @Value("${cors.allowed-origins:*}")
+    private List<String> allowedOrigins;
 
     @Bean
     public SecurityWebFilterChain springSecurityFilterChain(ServerHttpSecurity http) {
@@ -4709,9 +5320,11 @@ public class SecurityConfig {
                 .httpBasic(ServerHttpSecurity.HttpBasicSpec::disable)
                 .logout(ServerHttpSecurity.LogoutSpec::disable)
                 .authorizeExchange(exchanges -> exchanges
-                        .pathMatchers(HttpMethod.OPTIONS).permitAll()
+                        // FIX CRÍTICO: Permitir OPTIONS en cualquier ruta de la aplicación
+                        .pathMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                         .pathMatchers("/public/**").permitAll()
                         .pathMatchers("/private/v1/pdf/**").authenticated()
+                        .pathMatchers("/private/v1/whatsapp/**").authenticated()
                         .pathMatchers("/ws/**").permitAll()
                         .anyExchange().authenticated()
                 )
@@ -4722,24 +5335,29 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Arrays.asList(
-                "http://localhost:8078",
-                "http://localhost:4200",
-                "http://localhost:8099",
-                "http://spicontrol.local:4200",
-                "https://neuroia.alamodaperu.online",
-                "https://alamodaperu.online",
-                "https://security.alamodaperu.online",
-                "https://support.alamodaperu.online",
-                "https://alamoda-frontend-1068521170727.us-central1.run.app"
-        ));
 
-        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+        if (allowedOrigins.contains("*")) {
+            configuration.setAllowedOriginPatterns(List.of("*"));
+        } else {
+            configuration.setAllowedOrigins(allowedOrigins);
+            // Soporte dinámico para subdominios multi-tenant sin usar comodines inseguros
+            configuration.addAllowedOriginPattern("https://*.alamodaperu.online");
+            configuration.addAllowedOriginPattern("https://*.spicontrol.online");
+            configuration.addAllowedOriginPattern("https://*.spicontrol.local");
+            configuration.addAllowedOriginPattern("http://localhost:*");
+            configuration.addAllowedOriginPattern("http://*.spicontrol.local:*");
+            configuration.addAllowedOriginPattern("http://spicontrol.local:*");
+            configuration.addAllowedOriginPattern("http://localhost:*");
+        }
 
+        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"));
+
+        // FIX CRÍTICO: "apikey" debe estar explícitamente autorizado para evitar 403 en preflight
         configuration.setAllowedHeaders(Arrays.asList(
                 "Authorization",
                 "Content-Type",
                 "X-Tenant-ID",
+                "apikey",
                 "Accept",
                 "Origin",
                 "X-Requested-With"
@@ -4747,7 +5365,7 @@ public class SecurityConfig {
 
         configuration.setExposedHeaders(List.of("Authorization"));
         configuration.setAllowCredentials(true);
-        configuration.setMaxAge(3600L);
+        configuration.setMaxAge(3600L); // Caché del preflight por 1 hora
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
@@ -4774,6 +5392,13 @@ public class TenantWebFilter implements WebFilter {
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, WebFilterChain chain) {
         String tenantId = exchange.getRequest().getHeaders().getFirst("X-Tenant-ID");
+        String path = exchange.getRequest().getPath().value();
+
+        if (path.startsWith("/private/") && (tenantId == null || tenantId.isBlank())) {
+            exchange.getResponse().setStatusCode(org.springframework.http.HttpStatus.BAD_REQUEST);
+            return exchange.getResponse().setComplete();
+        }
+
         return chain
                 .filter(exchange)
                 .contextWrite(Context.of(TENANT_KEY, tenantId != null ? tenantId : "DEFAULT"));
@@ -4862,50 +5487,21 @@ FILE: /d/Config/TestAzure/Back-end/pillihuaman-com-pe-engine/src/main/resources/
 ====================================================
 server.port=8078
 server.address=0.0.0.0
-spring.data.mongodb.uri=mongodb+srv://fibertechandia:fo82yPNOXU5GMQam@cluster0.13xuhrg.mongodb.net/fibertechia?retryWrites=true&w=majority&appName=Cluster0
-spring.data.mongodb.database=fibertechia
-application.security.jwt.secret-key=404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970
-application.security.jwt.expiration=3600000
-application.security.jwt.refresh-token.expiration=86400000
-external-api.support-ms.url=http://localhost:8091
-neuro-ia.api.url=http://localhost:8099
-cors.allowed-origins=http://localhost:8078,http://localhost:8099,https://alamodaperu.online,https://security.alamodaperu.online,https://support.alamodaperu.online,https://neuroia.alamodaperu.online,https://alamoda-frontend-1068521170727.us-central1.run.app
-cors.allowed-methods=GET,POST,PUT,DELETE,OPTIONS
-cors.allowed-headers=*
-cors.allow-credentials=true
-logging.level.root=ERROR
-logging.level.org.springframework=ERROR
-logging.level.org.springframework.web=ERROR
-logging.level.org.springframework.data.mongodb.core=ERROR
-logging.level.pillihuaman.com.pe=DEBUG
-logging.level.p.c.p.s=DEBUG
-spring.servlet.multipart.enabled=true
+spring.main.web-application-type=reactive
+spring.data.mongodb.uri=${MONGO_URI:mongodb+srv://fibertechandia:fo82yPNOXU5GMQam@cluster0.13xuhrg.mongodb.net/fibertechia?retryWrites=true&w=majority&appName=Cluster0}
+spring.data.mongodb.database=${MONGO_DB_NAME:fibertechia}
+application.security.jwt.secret-key=${JWT_SECRET:404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970}
+external-api.support-ms.url=${SUPPORT_MS_URL:https://support.alamodaperu.online}
+neuro-ia.api.url=${NEUROIA_MS_URL:https://neuroia.alamodaperu.online}
+//external-api.evolution.url=${EVOLUTION_API_URL:https://evolution.alamodaperu.online}
+external-api.evolution.apikey=${EVOLUTION_API_KEY:evolution-apikey-default}
+external-api.evolution.url=${EVOLUTION_API_URL:http://localhost:8080}
+cors.allowed-origins=${CORS_ORIGINS:http://localhost:4200,http://localhost:8078,http://spicontrol.local:4200,https://alamodaperu.online,https://spicontrol.online,https://alamoda-frontend-1068521170727.us-central1.run.app}
 spring.servlet.multipart.max-file-size=50MB
 spring.servlet.multipart.max-request-size=50MB
 spring.codec.max-in-memory-size=100MB
-spring.cache.type=caffeine
-spring.mvc.pathmatch.matching-strategy=ant_path_matcher
-external-api.aliexpress.url=https://api-sg.aliexpress.com
-external-api.aliexpress.app-key=${ALI_APP_KEY:523194}
-external-api.aliexpress.secret=${ALI_SECRET:zwCKbC9UYZ37po7POTUzCN4BIcFTL4w4}
-external-api.aliexpress.tracking-id=${ALI_TRACKING_ID:default}
-external-api.amazon.access-key=${AMAZON_ACCESS_KEY:}
-external-api.amazon.secret-key=${AMAZON_SECRET_KEY:}
-external-api.amazon.tag=${AMAZON_TAG:alamodaperu-20}
-external-api.shein.account-sid=${SHEIN_SID:IRD6oqsRvpYc6767451nktqwY6euEpEZW1}
-external-api.shein.auth-token=${SHEIN_TOKEN:oLPs2EB9fefKfSAZPAQ-CAnwgKrij_JM}
-external-api.linio.api-key=${LINIO_API_KEY:}
-external-api.temu.app-id=${TEMU_APP_ID:}
-spring.main.web-application-type=reactive
-spring.webflux.static-path-pattern=none
-spring.mvc.view.prefix=
-spring.mvc.view.suffix=
 application.pdf.ai-prompt-code=PDF_LAYOUT_AI_GEOMETRY_COMPILER_V2
-logging.level.org.mongodb.driver.cluster=OFF
-logging.level.org.mongodb.driver.connection=OFF
-logging.level.org.mongodb.driver.protocol=OFF
-external-api.evolution.url=http://127.0.0.1:8080
-external-api.evolution.apikey=evolution-apikey-default
+
 
 ====================================================
 FILE: /d/Config/TestAzure/Back-end/pillihuaman-com-pe-engine/src/main/resources/config.properties
@@ -5011,7 +5607,7 @@ FILE: /d/Config/TestAzure/Back-end/pillihuaman-com-pe-engine/src/main/resources/
 
 ================ SUMMARY ===========================
 Java files:
-63
+67
 
 Configuration files:
-27
+28

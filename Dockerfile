@@ -1,27 +1,17 @@
-# syntax=docker/dockerfile:1
-#############################################################
-# 🚀 ETAPA ÚNICA: Runtime (minimal, seguro, para Google Cloud)
-#############################################################
+# 1. Imagen Base (Soporte para Java 25 según tu pom.xml)
+FROM eclipse-temurin:25-jre-jammy
 
-# PASO 1: Usar una imagen base de Java 17 estándar y segura
-FROM eclipse-temurin:17-jre-jammy
-
-# PASO 2: Establecer el directorio de trabajo
+# 2. Directorio de trabajo
 WORKDIR /app
 
-# PASO 3: Copiar el archivo .jar que YA compilaste en tu máquina local.
+# 3. Copia del Artefacto (Asegúrate de haber ejecutado mvn clean package)
 COPY target/*.jar app.jar
 
-# PASO 4: Correr como un usuario no-root por seguridad.
+# 4. Seguridad: Usuario no-root (Zero Trust)
 RUN addgroup --system appgroup && adduser --system --group appuser
 USER appuser
 
-# PASO 5: Opciones de memoria (ajusta si es necesario).
-ENV JAVA_OPTS="-Xms256m -Xmx512m"
+# 5. Optimización de Memoria (Crítico para procesamiento PDF en Cloud Run)
+ENV JAVA_OPTS="-Xms256m -Xmx512m -XX:+UseG1GC"
+ENTRYPOINT ["sh","-c","java --enable-preview $JAVA_OPTS -Dserver.port=${PORT:-8080} -jar app.jar"]
 
-# PASO 6: Expone el puerto que tu aplicación necesita. ¡Verifica esto!
-# Si tu support-app corre en el 8081, cambia el número aquí.
-EXPOSE 8081
-
-# PASO 7: El comando para iniciar la aplicación.
-ENTRYPOINT ["sh", "-c", "java $JAVA_OPTS -jar app.jar"]

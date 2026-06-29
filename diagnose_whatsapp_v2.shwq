@@ -1,0 +1,2 @@
+DATABASE_URL="postgresql://postgres:%241988DEza....@db.yqiwrvrameuskwtvlctd.supabase.co:6543/postgres?sslmode=require&pgbouncer=true&connection_limit=10" \
+./diagnose_whatsapp_v2.sh

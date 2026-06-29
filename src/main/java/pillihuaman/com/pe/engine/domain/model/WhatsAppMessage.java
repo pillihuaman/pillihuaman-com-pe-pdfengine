@@ -14,6 +14,15 @@ public record WhatsAppMessage(
         Instant timestamp,
         String tenantId,
         boolean outgoing,
-        boolean translated
+        boolean translated,
+        String status,
+        String externalMessageId,
+        String failureReason,
+        int retryCount,
+        String messageKind,
+        String mediaUrl,
+        String mimeType,
+        String caption,
+        boolean hasMedia
 ) implements Serializable {
 }

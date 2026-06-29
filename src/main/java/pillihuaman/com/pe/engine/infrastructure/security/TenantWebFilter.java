@@ -14,6 +14,13 @@ public class TenantWebFilter implements WebFilter {
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, WebFilterChain chain) {
         String tenantId = exchange.getRequest().getHeaders().getFirst("X-Tenant-ID");
+        String path = exchange.getRequest().getPath().value();
+
+        if (path.startsWith("/private/") && (tenantId == null || tenantId.isBlank())) {
+            exchange.getResponse().setStatusCode(org.springframework.http.HttpStatus.BAD_REQUEST);
+            return exchange.getResponse().setComplete();
+        }
+
         return chain
                 .filter(exchange)
                 .contextWrite(Context.of(TENANT_KEY, tenantId != null ? tenantId : "DEFAULT"));

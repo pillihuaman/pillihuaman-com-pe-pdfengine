@@ -15,6 +15,7 @@ D:\Config\TestAzure\Back-end\pillihuaman-com-pe-engine\src\main\java\pillihuaman
 D:\Config\TestAzure\Back-end\pillihuaman-com-pe-engine\src\main\java\pillihuaman\com\pe\engine\application\service\WhatsAppService.java
 D:\Config\TestAzure\Back-end\pillihuaman-com-pe-engine\src\main\java\pillihuaman\com\pe\engine\domain\exception\BusinessLogicException.java
 D:\Config\TestAzure\Back-end\pillihuaman-com-pe-engine\src\main\java\pillihuaman\com\pe\engine\domain\exception\ResourceNotFoundException.java
+D:\Config\TestAzure\Back-end\pillihuaman-com-pe-engine\src\main\java\pillihuaman\com\pe\engine\domain\model\ChannelStateDTO.java
 D:\Config\TestAzure\Back-end\pillihuaman-com-pe-engine\src\main\java\pillihuaman\com\pe\engine\domain\model\external\AiClassificationResponse.java
 D:\Config\TestAzure\Back-end\pillihuaman-com-pe-engine\src\main\java\pillihuaman\com\pe\engine\domain\model\external\AiLayoutRequest.java
 D:\Config\TestAzure\Back-end\pillihuaman-com-pe-engine\src\main\java\pillihuaman\com\pe\engine\domain\model\external\PromptAndVersionDTO.java
@@ -28,6 +29,7 @@ D:\Config\TestAzure\Back-end\pillihuaman-com-pe-engine\src\main\java\pillihuaman
 D:\Config\TestAzure\Back-end\pillihuaman-com-pe-engine\src\main\java\pillihuaman\com\pe\engine\domain\model\PdfPageContent.java
 D:\Config\TestAzure\Back-end\pillihuaman-com-pe-engine\src\main\java\pillihuaman\com\pe\engine\domain\model\TextElement.java
 D:\Config\TestAzure\Back-end\pillihuaman-com-pe-engine\src\main\java\pillihuaman\com\pe\engine\domain\model\WhatsAppContact.java
+D:\Config\TestAzure\Back-end\pillihuaman-com-pe-engine\src\main\java\pillihuaman\com\pe\engine\domain\model\WhatsAppEvent.java
 D:\Config\TestAzure\Back-end\pillihuaman-com-pe-engine\src\main\java\pillihuaman\com\pe\engine\domain\model\WhatsAppMessage.java
 D:\Config\TestAzure\Back-end\pillihuaman-com-pe-engine\src\main\java\pillihuaman\com\pe\engine\infrastructure\adapter\inbound\rest\PdfRestController.java
 D:\Config\TestAzure\Back-end\pillihuaman-com-pe-engine\src\main\java\pillihuaman\com\pe\engine\infrastructure\adapter\inbound\rest\WhatsAppRestController.java
@@ -43,9 +45,11 @@ D:\Config\TestAzure\Back-end\pillihuaman-com-pe-engine\src\main\java\pillihuaman
 D:\Config\TestAzure\Back-end\pillihuaman-com-pe-engine\src\main\java\pillihuaman\com\pe\engine\infrastructure\adapter\outbound\persistence\PdfMongoAdapter.java
 D:\Config\TestAzure\Back-end\pillihuaman-com-pe-engine\src\main\java\pillihuaman\com\pe\engine\infrastructure\adapter\outbound\persistence\whatsapp\WhatsAppContactEntity.java
 D:\Config\TestAzure\Back-end\pillihuaman-com-pe-engine\src\main\java\pillihuaman\com\pe\engine\infrastructure\adapter\outbound\persistence\whatsapp\WhatsAppContactRepository.java
+D:\Config\TestAzure\Back-end\pillihuaman-com-pe-engine\src\main\java\pillihuaman\com\pe\engine\infrastructure\adapter\outbound\persistence\whatsapp\WhatsAppEventEntity.java
 D:\Config\TestAzure\Back-end\pillihuaman-com-pe-engine\src\main\java\pillihuaman\com\pe\engine\infrastructure\adapter\outbound\persistence\whatsapp\WhatsAppMessageEntity.java
 D:\Config\TestAzure\Back-end\pillihuaman-com-pe-engine\src\main\java\pillihuaman\com\pe\engine\infrastructure\adapter\outbound\persistence\whatsapp\WhatsAppMessageRepository.java
 D:\Config\TestAzure\Back-end\pillihuaman-com-pe-engine\src\main\java\pillihuaman\com\pe\engine\infrastructure\adapter\outbound\persistence\whatsapp\WhatsAppMongoAdapter.java
+D:\Config\TestAzure\Back-end\pillihuaman-com-pe-engine\src\main\java\pillihuaman\com\pe\engine\infrastructure\adapter\outbound\persistence\WhatsAppEventRepository.java
 D:\Config\TestAzure\Back-end\pillihuaman-com-pe-engine\src\main\java\pillihuaman\com\pe\engine\infrastructure\adapter\outbound\websocket\WhatsAppWebSocketHandler.java
 D:\Config\TestAzure\Back-end\pillihuaman-com-pe-engine\src\main\java\pillihuaman\com\pe\engine\infrastructure\adapter\outbound\websocket\WhatsAppWebSocketSessionManager.java
 D:\Config\TestAzure\Back-end\pillihuaman-com-pe-engine\src\main\java\pillihuaman\com\pe\engine\infrastructure\common\ReqBase.java

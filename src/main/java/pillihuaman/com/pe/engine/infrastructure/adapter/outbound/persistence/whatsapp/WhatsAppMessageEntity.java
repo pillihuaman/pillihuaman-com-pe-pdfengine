@@ -17,6 +17,15 @@ public record WhatsAppMessageEntity(
         Instant timestamp,
         String tenantId,
         boolean outgoing,
-        boolean translated
+        boolean translated,
+        String status,
+        String externalMessageId,
+        String failureReason,
+        int retryCount,
+        String messageKind,
+        String mediaUrl,
+        String mimeType,
+        String caption,
+        Boolean hasMedia
 ) {
 }

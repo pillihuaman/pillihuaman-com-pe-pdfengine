@@ -1,6 +1,7 @@
 package pillihuaman.com.pe.engine.infrastructure.security;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -25,7 +26,12 @@ import java.util.List;
 @EnableReactiveMethodSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
+
     private final JwtReactiveFilter jwtFilter;
+
+    // Se inyecta la lista dinámica desde application.properties
+    @Value("${cors.allowed-origins:*}")
+    private List<String> allowedOrigins;
 
     @Bean
     public SecurityWebFilterChain springSecurityFilterChain(ServerHttpSecurity http) {
@@ -36,9 +42,11 @@ public class SecurityConfig {
                 .httpBasic(ServerHttpSecurity.HttpBasicSpec::disable)
                 .logout(ServerHttpSecurity.LogoutSpec::disable)
                 .authorizeExchange(exchanges -> exchanges
-                        .pathMatchers(HttpMethod.OPTIONS).permitAll()
+                        // FIX CRÍTICO: Permitir OPTIONS en cualquier ruta de la aplicación
+                        .pathMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                         .pathMatchers("/public/**").permitAll()
                         .pathMatchers("/private/v1/pdf/**").authenticated()
+                        .pathMatchers("/private/v1/whatsapp/**").authenticated()
                         .pathMatchers("/ws/**").permitAll()
                         .anyExchange().authenticated()
                 )
@@ -49,24 +57,29 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Arrays.asList(
-                "http://localhost:8078",
-                "http://localhost:4200",
-                "http://localhost:8099",
-                "http://spicontrol.local:4200",
-                "https://neuroia.alamodaperu.online",
-                "https://alamodaperu.online",
-                "https://security.alamodaperu.online",
-                "https://support.alamodaperu.online",
-                "https://alamoda-frontend-1068521170727.us-central1.run.app"
-        ));
 
-        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+        if (allowedOrigins.contains("*")) {
+            configuration.setAllowedOriginPatterns(List.of("*"));
+        } else {
+            configuration.setAllowedOrigins(allowedOrigins);
+            // Soporte dinámico para subdominios multi-tenant sin usar comodines inseguros
+            configuration.addAllowedOriginPattern("https://*.alamodaperu.online");
+            configuration.addAllowedOriginPattern("https://*.spicontrol.online");
+            configuration.addAllowedOriginPattern("https://*.spicontrol.local");
+            configuration.addAllowedOriginPattern("http://localhost:*");
+            configuration.addAllowedOriginPattern("http://*.spicontrol.local:*");
+            configuration.addAllowedOriginPattern("http://spicontrol.local:*");
+            configuration.addAllowedOriginPattern("http://localhost:*");
+        }
 
+        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"));
+
+        // FIX CRÍTICO: "apikey" debe estar explícitamente autorizado para evitar 403 en preflight
         configuration.setAllowedHeaders(Arrays.asList(
                 "Authorization",
                 "Content-Type",
                 "X-Tenant-ID",
+                "apikey",
                 "Accept",
                 "Origin",
                 "X-Requested-With"
@@ -74,7 +87,7 @@ public class SecurityConfig {
 
         configuration.setExposedHeaders(List.of("Authorization"));
         configuration.setAllowCredentials(true);
-        configuration.setMaxAge(3600L);
+        configuration.setMaxAge(3600L); // Caché del preflight por 1 hora
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);

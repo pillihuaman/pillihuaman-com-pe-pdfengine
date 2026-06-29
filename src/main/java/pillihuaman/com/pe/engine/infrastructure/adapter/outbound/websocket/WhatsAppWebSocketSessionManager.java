@@ -28,13 +28,13 @@ public class WhatsAppWebSocketSessionManager {
                 key -> {
 
                     log.info(
-                            "CREATING SINK FOR TENANT = {}",
+                            "CREATING REPLAY SINK FOR TENANT = {}",
                             key
                     );
 
                     return Sinks.many()
-                            .multicast()
-                            .directBestEffort();
+                            .replay()
+                            .limit(50);
                 }
         );
     }

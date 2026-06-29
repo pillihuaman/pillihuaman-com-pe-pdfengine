@@ -4,7 +4,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ServerWebExchange;
 import pillihuaman.com.pe.engine.application.port.inbound.WhatsAppUseCase;
+import pillihuaman.com.pe.engine.domain.model.ChannelStateDTO;
 import pillihuaman.com.pe.engine.domain.model.WhatsAppContact;
 import pillihuaman.com.pe.engine.domain.model.WhatsAppMessage;
 import pillihuaman.com.pe.engine.infrastructure.common.RespBase;
@@ -22,46 +24,38 @@ public class WhatsAppRestController {
     private final WhatsAppUseCase whatsAppUseCase;
 
     @GetMapping("/private/v1/whatsapp/qr")
-    public Mono<RespBase<String>> getQrCode(
+    public Mono<RespBase<Map<String, Object>>> getQrCode(
             @RequestHeader(HttpHeaders.AUTHORIZATION) String bearerToken) {
         return Mono.deferContextual(ctx -> {
             String tenantId = ctx.getOrDefault(TenantWebFilter.TENANT_KEY, "DEFAULT");
             return whatsAppUseCase.generateLinkQr(tenantId, bearerToken)
-                    .map(qr -> new RespBase<String>().ok(qr));
+                    .map(qr -> new RespBase<Map<String, Object>>().ok(qr));
         });
     }
 
+    @PostMapping(value = {
+            "/public/v1/whatsapp/webhook",
+            "/public/v1/whatsapp/webhook/**"
+    }, consumes = MediaType.APPLICATION_JSON_VALUE)
+    public Mono<RespBase<WhatsAppMessage>> incomingWebhook(
+            @RequestBody final Map<String, Object> payload,
+            final ServerWebExchange exchange) {
+
+        final String path = exchange.getRequest().getPath().value();
+        log.info("[WH-RECEIVE] Path: {} | Event: {}", path, payload.get("event"));
+
+        return whatsAppUseCase.handleIncomingWebhook(payload)
+                .map(msg -> new RespBase<WhatsAppMessage>().ok(msg))
+                .defaultIfEmpty(new RespBase<WhatsAppMessage>().ok(null));
+    }
+
     @GetMapping("/private/v1/whatsapp/status")
-    public Mono<RespBase<String>> getConnectionStatus(
+    public Mono<RespBase<ChannelStateDTO>> getConnectionStatus(
             @RequestHeader(HttpHeaders.AUTHORIZATION) String bearerToken) {
         return Mono.deferContextual(ctx -> {
             String tenantId = ctx.getOrDefault(TenantWebFilter.TENANT_KEY, "DEFAULT");
             return whatsAppUseCase.getLinkState(tenantId, bearerToken)
-                    .map(state -> new RespBase<String>().ok(state));
-        });
-    }
-
-    @PostMapping("/private/v1/whatsapp/send")
-    public Mono<RespBase<WhatsAppMessage>> sendTranslated(
-            @RequestBody Map<String, String> request,
-            @RequestHeader(HttpHeaders.AUTHORIZATION) String bearerToken) {
-        return Mono.deferContextual(ctx -> {
-            String tenantId = ctx.getOrDefault(TenantWebFilter.TENANT_KEY, "DEFAULT");
-            String recipient = request.get("recipient");
-            String text = request.get("text");
-
-            // >>> CHANGE
-            log.info("[WhatsAppRestController] Outgoing request initiated. Tenant: {}, Recipient: {}, Text length: {}",
-                    tenantId, recipient, text != null ? text.length() : 0);
-
-            return whatsAppUseCase.sendOutgoingMessage(tenantId, recipient, text, bearerToken)
-                    .map(msg -> {
-                        log.info("[WhatsAppRestController] Outgoing message translated & dispatched successfully. ID: {}", msg.id());
-                        return new RespBase<WhatsAppMessage>().ok(msg);
-                    })
-                    .doOnError(err -> log.error("[WhatsAppRestController] Critical failure during sendTranslated stream: {}",
-                            err.getMessage(), err));
-            // <<< CHANGE
+                    .map(state -> new RespBase<ChannelStateDTO>().ok(state));
         });
     }
 
@@ -96,6 +90,31 @@ public class WhatsAppRestController {
             final String tenantId = ctx.getOrDefault(TenantWebFilter.TENANT_KEY, "DEFAULT");
             return whatsAppUseCase.getChatHistory(tenantId, phoneNumber)
                     .map(messages -> new RespBase<List<WhatsAppMessage>>().ok(messages));
+        });
+    }
+
+    @PostMapping("/private/v1/whatsapp/send")
+    public Mono<RespBase<WhatsAppMessage>> sendTranslated(
+            @RequestBody Map<String, String> request,
+            @RequestHeader(HttpHeaders.AUTHORIZATION) String bearerToken) {
+        return Mono.deferContextual(ctx -> {
+            String tenantId = ctx.getOrDefault(TenantWebFilter.TENANT_KEY, "DEFAULT");
+            String recipient = request.get("recipient");
+            String text = request.get("text");
+            String mediaBase64 = request.get("mediaBase64");
+            String mimeType = request.get("mimeType");
+            String fileName = request.get("fileName");
+
+            log.info("[WhatsAppRestController] Outgoing request. Tenant: {}, Recipient: {}, isMedia: {}",
+                    tenantId, recipient, mediaBase64 != null && !mediaBase64.isBlank());
+
+            return whatsAppUseCase.sendOutgoingMessage(
+                            tenantId, recipient, text, mediaBase64, mimeType, fileName, bearerToken)
+                    .map(msg -> {
+                        log.info("[WhatsAppRestController] Dispatched successfully. ID: {}", msg.id());
+                        return new RespBase<WhatsAppMessage>().ok(msg);
+                    })
+                    .doOnError(err -> log.error("[WhatsAppRestController] Send failure: {}", err.getMessage()));
         });
     }
 }

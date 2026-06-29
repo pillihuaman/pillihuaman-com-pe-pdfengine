@@ -63,4 +63,6 @@ public class WhatsAppTranslationAdapter implements WhatsAppTranslationPort {
                     return Mono.just(text);
                 });
     }
+
+    
 }
