@@ -1,0 +1,490 @@
+openapi: 3.0.0
+info:
+  title: API pillihuaman-com-pe-engine
+  version: 1.0.0
+  description: Contrato generado por KSE v2.0 (Schema Enabled)
+paths:
+  /private/v1/measurements/ephemeral-analyze:
+    post:
+      summary: analyzeEphemeral en VirtualMeasurementController
+      operationId: VirtualMeasurementController_analyzeEphemeral
+      responses:
+        '200':
+          description: Operación exitosa
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/'
+  /private/v1/pdf/merge:
+    post:
+      summary: mergePdfs en PdfRestController
+      operationId: PdfRestController_mergePdfs
+      responses:
+        '200':
+          description: Operación exitosa
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/'
+  /private/v1/pdf/analyze-for-edit:
+    post:
+      summary: analyzeForEdit en PdfRestController
+      operationId: PdfRestController_analyzeForEdit
+      responses:
+        '200':
+          description: Operación exitosa
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/'
+  /private/v1/pdf/update-content:
+    put:
+      summary: updateContent en PdfRestController
+      operationId: PdfRestController_updateContent
+      responses:
+        '200':
+          description: Operación exitosa
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PdfEditableRequest'
+  /private/v1/pdf/refine-fidelity:
+    post:
+      summary: refineFidelity en PdfRestController
+      operationId: PdfRestController_refineFidelity
+      responses:
+        '200':
+          description: Operación exitosa
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PdfFidelityRequest'
+  /private/v1/whatsapp/qr:
+    get:
+      summary: incomingWebhook en WhatsAppRestController
+      operationId: WhatsAppRestController_incomingWebhook
+      responses:
+        '200':
+          description: Operación exitosa
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/final'
+  /private/v1/whatsapp/status:
+    get:
+      summary: getConnectionStatus en WhatsAppRestController
+      operationId: WhatsAppRestController_getConnectionStatus
+      responses:
+        '200':
+          description: Operación exitosa
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/'
+  /private/v1/whatsapp/contact:
+    post:
+      summary: saveContact en WhatsAppRestController
+      operationId: WhatsAppRestController_saveContact
+      responses:
+        '200':
+          description: Operación exitosa
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WhatsAppContact'
+  /public/v1/whatsapp/webhook:
+    post:
+      summary: incomingWebhook en WhatsAppRestController
+      operationId: WhatsAppRestController_incomingWebhook
+      responses:
+        '200':
+          description: Operación exitosa
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/'
+  /private/v1/whatsapp/contacts:
+    get:
+      summary: getContacts en WhatsAppRestController
+      operationId: WhatsAppRestController_getContacts
+      responses:
+        '200':
+          description: Operación exitosa
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/'
+  /private/v1/whatsapp/chat/{phoneNumber}:
+    get:
+      summary: getChatHistory en WhatsAppRestController
+      operationId: WhatsAppRestController_getChatHistory
+      responses:
+        '200':
+          description: Operación exitosa
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/'
+      parameters:
+      - name: String
+        in: path
+        required: true
+        schema:
+          $ref: '#/components/schemas/final'
+  /private/v1/whatsapp/send:
+    post:
+      summary: sendTranslated en WhatsAppRestController
+      operationId: WhatsAppRestController_sendTranslated
+      responses:
+        '200':
+          description: Operación exitosa
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/'
+  /private/v1/pdf/generate/document:
+    post:
+      summary: generateDocument en PdfGenerationController
+      operationId: PdfGenerationController_generateDocument
+      responses:
+        '200':
+          description: Operación exitosa
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/final'
+  /private/v1/pdf/editor/import:
+    post:
+      summary: importPdf en PdfEditorController
+      operationId: PdfEditorController_importPdf
+      responses:
+        '200':
+          description: Operación exitosa
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/'
+  /private/v1/pdf/editor/export:
+    post:
+      summary: exportPdf en PdfEditorController
+      operationId: PdfEditorController_exportPdf
+      responses:
+        '200':
+          description: Operación exitosa
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PdfEditorExportRequest'
+  /private/v1/pdf/editor/refine:
+    post:
+      summary: refine en PdfEditorController
+      operationId: PdfEditorController_refine
+      responses:
+        '200':
+          description: Operación exitosa
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PdfEditorRefineRequest'
+components:
+  schemas:
+    PdfService:
+      type: object
+      properties:
+        aiPromptCode:
+          type: string
+        maxMergeFiles:
+          type: integer
+        maxMergeFileBytes:
+          type: integer
+        maxMergeTotalBytes:
+          type: integer
+    MeasurementEngineService:
+      type: object
+      properties:
+        aiPromptCode:
+          type: string
+    AiLayoutRequest:
+      type: object
+      properties:
+        systemPrompt:
+          type: string
+        rawPdfData:
+          $ref: '#/components/schemas/PdfEditableStructure'
+    PromptAndVersionDTO:
+      type: object
+      properties:
+        prompt:
+          $ref: '#/components/schemas/RespPrompt'
+        finalVersion:
+          $ref: '#/components/schemas/PromptVersion'
+    PromptVersion:
+      type: object
+      properties:
+        version:
+          type: string
+        template:
+          type: string
+        variables:
+          type: array
+          items:
+            type: string
+        id:
+          $ref: '#/components/schemas/JsonNode'
+        promptId:
+          $ref: '#/components/schemas/JsonNode'
+    RespPrompt:
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/JsonNode'
+        code:
+          type: string
+        name:
+          type: string
+        category:
+          type: string
+        activeVersionId:
+          type: string
+    ReqBase:
+      type: object
+      properties:
+        payload:
+          $ref: '#/components/schemas/T'
+    JwtTokenProvider:
+      type: object
+      properties:
+        secretKey:
+          type: string
+    ReqPrompt:
+      type: object
+      properties:
+        id:
+          type: string
+        code:
+          type: string
+        name:
+          type: string
+        category:
+          type: string
+        modelConfig:
+          $ref: '#/components/schemas/ModelConfigDTO'
+        temperature:
+          type: number
+        maxTokens:
+          type: integer
+        modelName:
+          type: string
+    RespBase:
+      type: object
+      properties:
+        trace:
+          $ref: '#/components/schemas/Trace'
+        status:
+          $ref: '#/components/schemas/Status'
+        payload:
+          $ref: '#/components/schemas/T'
+        traceId:
+          type: string
+        success:
+          type: boolean
+        error:
+          $ref: '#/components/schemas/Error'
+        code:
+          type: string
+        httpCode:
+          type: string
+        messages:
+          type: array
+          items:
+            type: string
+    WhatsAppTranslationAdapter:
+      type: object
+      properties:
+        neuroIaUrl:
+          type: string
+    WhatsAppIntegrationAdapter:
+      type: object
+      properties:
+        evolutionUrl:
+          type: string
+        apiKey:
+          type: string
+    SecurityConfig:
+      type: object
+      properties:
+        allowedOrigins:
+          type: array
+          items:
+            type: string
+    for:
+      type: object
+      properties:
+        mongoUri:
+          type: string
+    ResponseUser:
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/ObjectId'
+        alias:
+          type: string
+        idSystem:
+          $ref: '#/components/schemas/ObjectId'
+        mail:
+          type: string
+        mobilPhone:
+          type: string
+        user:
+          type: string
+        username:
+          type: string
+        enabled:
+          type: integer
+        roles:
+          type: array
+          items:
+            type: string
+        tenantId:
+          type: string
+    MyJsonWebToken:
+      type: object
+      properties:
+        user:
+          $ref: '#/components/schemas/ResponseUser'
+        application:
+          $ref: '#/components/schemas/Application'
+        tenantId:
+          type: string
+        permissions:
+          type: array
+          items:
+            type: string
+        aplicationID:
+          $ref: '#/components/schemas/ObjectId'
+        name:
+          type: string
+        multiSession:
+          type: string
+    OpenAiVisionAdapter:
+      type: object
+      properties:
+        openAiApiKey:
+          type: string
+    NeuroIaMeasurementAdapter:
+      type: object
+      properties:
+        neuroIaUrl:
+          type: string
+    UserMeasurementMetadata:
+      type: object
+      properties:
+        heightCm:
+          type: number
+        weightKg:
+          type: number
+        gender:
+          type: string
+        fitPreference:
+          type: string
+        customFormFields:
+          $ref: '#/components/schemas/CustomFormFieldsDto'
+        selectedSize:
+          type: string
+        frontMath:
+          $ref: '#/components/schemas/MathMetricsDto'
+        sideMath:
+          $ref: '#/components/schemas/MathMetricsDto'
+        imageWidth:
+          type: number
+        imageHeight:
+          type: number
+        bodyHeightPixels:
+          type: number
+        shouldersWidthPixels:
+          type: number
+        chestWidthPixels:
+          type: number
+        waistWidthPixels:
+          type: number
+        hipsWidthPixels:
+          type: number
+        chestDepthPixels:
+          type: number
+        waistDepthPixels:
+          type: number
+        hipsDepthPixels:
+          type: number
+        segmentationUsed:
+          type: boolean
+        confidenceScore:
+          type: number
+        landmarks:
+          type: array
+          items:
+            $ref: '#/components/schemas/BodyLandmarkDto'
+        part:
+          type: string
+        x:
+          type: number
+        y:
+          type: number
+        z:
+          type: number
+        visibility:
+          type: number
+    NeuroIaPdfVisionAdapter:
+      type: object
+      properties:
+        promptCode:
+          type: string
+    OpenAiPdfVisionAdapter:
+      type: object
+      properties:
+        openAiApiKey:
+          type: string
+        model:
+          type: string

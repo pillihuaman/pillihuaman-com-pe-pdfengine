@@ -2,15 +2,19 @@ package pillihuaman.com.pe.engine.infrastructure.adapter.outbound;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.pdfbox.Loader;
+import org.apache.pdfbox.io.RandomAccessReadBuffer;
+import org.apache.pdfbox.multipdf.PDFMergerUtility;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
+import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.apache.pdfbox.pdmodel.font.PDFont;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
 import org.apache.pdfbox.pdmodel.font.Standard14Fonts;
 import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
 import org.springframework.stereotype.Component;
 import pillihuaman.com.pe.engine.application.port.outbound.PdfProcessingPort;
+import pillihuaman.com.pe.engine.domain.exception.BusinessLogicException;
 import pillihuaman.com.pe.engine.domain.model.GraphicElement;
 import pillihuaman.com.pe.engine.domain.model.PdfDocument;
 import pillihuaman.com.pe.engine.domain.model.PdfEditableStructure;
@@ -27,6 +31,7 @@ import java.io.IOException;
 import java.util.Base64;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 /**
  * Enterprise PDF Processing Adapter using Apache PDFBox 3.0.3.
@@ -305,9 +310,177 @@ public class PdfBoxAdapter implements PdfProcessingPort {
 
     @Override
     public Mono<PdfDocument> merge(List<PdfDocument> docs) {
-        return Mono.fromCallable(() -> {
-            return new PdfDocument("merged.pdf", new byte[0], 0, "SYSTEM", Map.of(), List.of());
-        });
+        return Mono.fromCallable(() -> mergeSync(docs))
+                .subscribeOn(Schedulers.boundedElastic());
+    }
+
+    /**
+     * Combina múltiples PDFs e imágenes en un único documento PDF.
+     * La detección de tipo se realiza por firma de contenido (magic bytes) y no por el MIME declarado,
+     * lo que hace el proceso robusto frente a nombres de archivo o cabeceras incorrectas.
+     */
+    private PdfDocument mergeSync(List<PdfDocument> docs) throws IOException {
+        if (docs == null || docs.isEmpty()) {
+            throw new BusinessLogicException("No se proporcionaron archivos para combinar.");
+        }
+
+        try (PDDocument target = new PDDocument()) {
+            PDFMergerUtility merger = new PDFMergerUtility();
+            int processedFiles = 0;
+
+            for (PdfDocument doc : docs) {
+                byte[] content = doc.content();
+                String fileName = (doc.fileName() == null || doc.fileName().isBlank())
+                        ? "archivo-desconocido"
+                        : doc.fileName();
+
+                if (content == null || content.length == 0) {
+                    throw new BusinessLogicException("El archivo '" + fileName + "' está vacío.");
+                }
+
+                if (isPdf(content)) {
+                    appendPdf(target, merger, content, fileName);
+                } else if (isImage(content)) {
+                    imageToPage(target, content, fileName);
+                } else {
+                    throw new BusinessLogicException(
+                            "Formato no soportado para el archivo '" + fileName
+                                    + "'. Solo se admiten PDF e imágenes (PNG, JPEG, GIF, BMP, TIFF).");
+                }
+                processedFiles++;
+            }
+
+            if (target.getNumberOfPages() == 0) {
+                throw new BusinessLogicException(
+                        "No se pudo generar ninguna página a partir de los archivos proporcionados.");
+            }
+
+            ByteArrayOutputStream out = new ByteArrayOutputStream();
+            target.save(out);
+            byte[] merged = out.toByteArray();
+
+            String mergedName = "merged_" + System.currentTimeMillis() + ".pdf";
+            log.info("Merge finalizado: {} páginas a partir de {} archivos ({} bytes)",
+                    target.getNumberOfPages(), processedFiles, merged.length);
+
+            return new PdfDocument(mergedName, merged, merged.length, null, Map.of(), List.of());
+        }
+    }
+
+    private void appendPdf(PDDocument target, PDFMergerUtility merger, byte[] content, String fileName) {
+        try (PDDocument source = Loader.loadPDF(new RandomAccessReadBuffer(content))) {
+            merger.appendDocument(target, source);
+        } catch (IOException e) {
+            throw new BusinessLogicException(
+                    "No se pudo procesar el PDF '" + fileName + "': " + e.getMessage(), e);
+        }
+    }
+
+    private PDPage imageToPage(PDDocument target, byte[] content, String fileName) throws IOException {
+        BufferedImage rgbImage = decodeToRgb(content, fileName);
+
+        ByteArrayOutputStream imageOut = new ByteArrayOutputStream();
+        if (!ImageIO.write(rgbImage, "png", imageOut)) {
+            throw new BusinessLogicException(
+                    "No se pudo codificar la imagen '" + fileName + "' para incluirla en el PDF.");
+        }
+
+        PDImageXObject xImage = PDImageXObject.createFromByteArray(
+                target, imageOut.toByteArray(), "img_" + UUID.randomUUID());
+
+        PDPage page = new PDPage(PDRectangle.A4);
+        target.addPage(page);
+
+        PDRectangle mediaBox = page.getMediaBox();
+
+        float margin = 24f;
+        float maxWidth = mediaBox.getWidth() - (2 * margin);
+        float maxHeight = mediaBox.getHeight() - (2 * margin);
+
+        float imageWidth = xImage.getWidth();
+        float imageHeight = xImage.getHeight();
+
+        // Ajusta la imagen dentro de la página sin ampliar más allá de su resolución nativa.
+        float scale = Math.min(1f, Math.min(maxWidth / imageWidth, maxHeight / imageHeight));
+        float drawWidth = imageWidth * scale;
+        float drawHeight = imageHeight * scale;
+
+        float x = (mediaBox.getWidth() - drawWidth) / 2f;
+        float y = (mediaBox.getHeight() - drawHeight) / 2f;
+
+        try (PDPageContentStream stream =
+                     new PDPageContentStream(target, page, PDPageContentStream.AppendMode.OVERWRITE, true, true)) {
+            stream.drawImage(xImage, x, y, drawWidth, drawHeight);
+        }
+
+        return page;
+    }
+
+    private BufferedImage decodeToRgb(byte[] content, String fileName) {
+        BufferedImage original;
+        try {
+            original = ImageIO.read(new ByteArrayInputStream(content));
+        } catch (IOException e) {
+            throw new BusinessLogicException(
+                    "No se pudo decodificar la imagen '" + fileName + "': " + e.getMessage(), e);
+        }
+
+        if (original == null) {
+            throw new BusinessLogicException(
+                    "No se pudo decodificar la imagen '" + fileName + "'. Formato corrupto o no soportado.");
+        }
+
+        // Aplana el canal alfa sobre fondo blanco para evitar transparencias problemáticas en PDF.
+        BufferedImage rgb = new BufferedImage(
+                original.getWidth(), original.getHeight(), BufferedImage.TYPE_INT_RGB);
+        Graphics2D graphics = rgb.createGraphics();
+        try {
+            graphics.setColor(Color.WHITE);
+            graphics.fillRect(0, 0, rgb.getWidth(), rgb.getHeight());
+            graphics.drawImage(original, 0, 0, null);
+        } finally {
+            graphics.dispose();
+        }
+        return rgb;
+    }
+
+    private boolean isPdf(byte[] bytes) {
+        return bytes.length >= 5
+                && bytes[0] == '%'
+                && bytes[1] == 'P'
+                && bytes[2] == 'D'
+                && bytes[3] == 'F'
+                && bytes[4] == '-';
+    }
+
+    private boolean isImage(byte[] bytes) {
+        if (bytes.length >= 8
+                && (bytes[0] & 0xFF) == 0x89
+                && bytes[1] == 'P' && bytes[2] == 'N' && bytes[3] == 'G') {
+            return true; // PNG
+        }
+        if (bytes.length >= 3
+                && (bytes[0] & 0xFF) == 0xFF
+                && (bytes[1] & 0xFF) == 0xD8
+                && (bytes[2] & 0xFF) == 0xFF) {
+            return true; // JPEG
+        }
+        if (bytes.length >= 6
+                && bytes[0] == 'G' && bytes[1] == 'I' && bytes[2] == 'F' && bytes[3] == '8') {
+            return true; // GIF
+        }
+        if (bytes.length >= 2 && bytes[0] == 'B' && bytes[1] == 'M') {
+            return true; // BMP
+        }
+        if (bytes.length >= 4) {
+            if (bytes[0] == 'I' && bytes[1] == 'I' && bytes[2] == 0x2A && bytes[3] == 0x00) {
+                return true; // TIFF little-endian
+            }
+            if (bytes[0] == 'M' && bytes[1] == 'M' && bytes[2] == 0x00 && bytes[3] == 0x2A) {
+                return true; // TIFF big-endian
+            }
+        }
+        return false;
     }
 
     @Override

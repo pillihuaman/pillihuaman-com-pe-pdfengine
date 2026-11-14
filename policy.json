@@ -1,0 +1,18 @@
+[
+  {
+    "name": "delete-old-images",
+    "action": { "type": "delete" },
+    "condition": {
+      "tagState": "any",
+      "olderThan": "7d"
+    }
+  },
+  {
+    "name": "keep-last-3",
+    "action": { "type": "keep" },
+    "condition": {
+      "tagState": "any",
+      "newerThan": "1d"
+    }
+  }
+]

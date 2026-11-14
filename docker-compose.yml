@@ -45,8 +45,8 @@ services:
       AUTHENTICATION_API_KEY: evolution-apikey-default
 
       WEBHOOK_GLOBAL_ENABLED: "true"
-      BACK_WEBHOOK_GLOBAL_URL_: https://engine-service-1068521170727.us-central1.run.app/public/v1/whatsapp/webhook
-      WEBHOOK_GLOBAL_URL: http://host.docker.internal:8078/public/v1/whatsapp/webhook
+      WEBHOOK_GLOBAL_URL: https://engine-service-1068521170727.us-central1.run.app/public/v1/whatsapp/webhook
+      LOCA_WEBHOOK_GLOBAL_URL: http://host.docker.internal:8078/public/v1/whatsapp/webhook
       WEBHOOK_BASE64: "true"
 
       WEBHOOK_EVENTS: "QRCODE_UPDATED,CONNECTION_UPDATE,MESSAGES_UPSERT,MESSAGES_UPDATE,CHATS_UPSERT,CONTACTS_UPSERT,PRESENCE_UPDATE"

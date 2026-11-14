@@ -12,12 +12,16 @@ import org.apache.pdfbox.pdmodel.graphics.image.PDImage;
 import org.apache.pdfbox.text.PDFTextStripper;
 import org.apache.pdfbox.text.TextPosition;
 import org.apache.pdfbox.util.Matrix;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import pillihuaman.com.pe.engine.application.port.outbound.PdfAnalyzerPort;
 import pillihuaman.com.pe.engine.domain.model.GraphicElement;
 import pillihuaman.com.pe.engine.domain.model.PdfEditableStructure;
 import pillihuaman.com.pe.engine.domain.model.PdfPageContent;
 import pillihuaman.com.pe.engine.domain.model.TextElement;
+import pillihuaman.com.pe.engine.domain.model.TranslatedDocument;
+import pillihuaman.com.pe.engine.domain.model.TranslatedElement;
+import pillihuaman.com.pe.engine.domain.model.TranslatedPage;
 import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Schedulers;
 
@@ -30,20 +34,21 @@ import java.io.IOException;
 import java.io.Writer;
 import java.util.*;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * Senior AI Geometry Compiler & Layout Restorer.
  * Especializado en reconstrucción de layouts perfectos para edición web desde PDFBox 3.0.3.
  */
 @Component
+@RequiredArgsConstructor
 public class PdfBoxAnalyzerAdapter implements PdfAnalyzerPort {
+
+    private final PdfToCssTranslator pdfToCssTranslator;
+    private final PdfPageRenderer pdfPageRenderer;
 
     // Constantes Determinísticas de Compilación
     private static final float FACTOR_ESCALA = 1.333333f; // 72 DPI -> 96 DPI (CSS Pixels)
-    private static final float HEIGHT_RATIO = 1.2f;       // Line-height para editabilidad
-    private static final float Y_THRESHOLD = 5.0f;
-    private static final float WIDTH_RATIO = 0.68f;       // Incrementado de 0.55f a 0.68f para prevenir truncamiento ("FACTU", "MONE")
+    private static final float WORD_GAP_THRESHOLD = 2.0f; // Separación mínima entre palabras (pt)
 
     @Override
     public Mono<PdfEditableStructure> analyze(final byte[] pdfBytes) {
@@ -56,138 +61,135 @@ public class PdfBoxAnalyzerAdapter implements PdfAnalyzerPort {
                     final PDRectangle mediaBox = page.getMediaBox();
                     final float pageHeight = mediaBox.getHeight();
 
-                    // Fase 1: Extracción Cruda de Elementos con Atributos
-                    List<TextElement> rawElements = extractRawElements(document, i + 1);
+                    // Fase 1: Extracción Cruda de Elementos (pt) y escalado a px.
+                    List<TextElement> rawElements = scaleToPx(extractRawElements(document, i + 1));
 
-                    // Fase 2: Compilación Geométrica Heurística (Agrupación y Normalización)
-                    List<TextElement> compiledElements = compileGeometry(rawElements);
-
-                    // Fase 3: Extracción de Gráficos Vectoriales e Imágenes
+                    // Fase 2: Extracción de Gráficos Vectoriales e Imágenes
                     List<GraphicElement> graphics = extractGraphics(page, pageHeight);
 
-                    pages.add(new PdfPageContent(i + 1, mediaBox.getWidth() * FACTOR_ESCALA, mediaBox.getHeight() * FACTOR_ESCALA, "px", page.getRotation(), compiledElements, graphics, "", !graphics.isEmpty(), compiledElements.size()));
+                    pages.add(new PdfPageContent(i + 1, mediaBox.getWidth() * FACTOR_ESCALA, mediaBox.getHeight() * FACTOR_ESCALA, "px", page.getRotation(), rawElements, graphics, "", !graphics.isEmpty(), rawElements.size()));
                 }
                 return new PdfEditableStructure("doc_" + System.currentTimeMillis(), pages, null);
             }
         }).subscribeOn(Schedulers.boundedElastic());
     }
 
-    private List<TextElement> compileGeometry(List<TextElement> rawElements) {
-        if (rawElements.isEmpty()) return rawElements;
+    @Override
+    public Mono<TranslatedDocument> analyzeTranslated(final byte[] pdfBytes) {
+        return Mono.fromCallable(() -> {
+            try (PDDocument document = Loader.loadPDF(new RandomAccessReadBuffer(pdfBytes))) {
+                final List<TranslatedPage> pages = new ArrayList<>();
 
-        // Agrupación por proximidad en el eje Y (Líneas)
-        Map<Integer, List<TextElement>> lineGroups = rawElements.stream().collect(Collectors.groupingBy(e -> Math.round(e.top() / Y_THRESHOLD)));
+                for (int i = 0; i < document.getNumberOfPages(); i++) {
+                    final PDPage page = document.getPage(i);
+                    final PDRectangle mediaBox = page.getMediaBox();
+                    if (mediaBox == null) {
+                        continue;
+                    }
+                    final float pageHeightPt = mediaBox.getHeight();
+                    final float widthPx = mediaBox.getWidth() * FACTOR_ESCALA;
+                    final float heightPx = pageHeightPt * FACTOR_ESCALA;
 
-        List<TextElement> compiledList = new ArrayList<>();
+                    final List<TranslatedElement> translatedElements = new ArrayList<>();
+                    for (TextElement raw : extractRawElements(document, i + 1)) {
+                        translatedElements.add(pdfToCssTranslator.translate(raw, pageHeightPt));
+                    }
 
-        lineGroups.keySet().stream().sorted().forEach(yKey -> {
-            List<TextElement> line = lineGroups.get(yKey);
-            line.sort(Comparator.comparingDouble(TextElement::left));
+                    final String backgroundImage = pdfPageRenderer.renderPageToBase64Png(document, i);
 
-            TextElement current = null;
-
-            for (TextElement next : line) {
-                if (current == null) {
-                    current = next;
-                    continue;
+                    pages.add(new TranslatedPage(i + 1, widthPx, heightPx, backgroundImage, translatedElements));
                 }
-
-                // Heurística de Fusión: Si la distancia X es menor que el tamaño de fuente, unir.
-                float distanceX = next.left() - (current.left() + current.width());
-                if (distanceX < current.fontSize() * 0.8f) {
-                    current = mergeElements(current, next);
-                } else {
-                    compiledList.add(applyGeometricRepair(current));
-                    current = next;
-                }
+                return new TranslatedDocument("doc_" + System.currentTimeMillis(), "HTML_CSS", pages);
             }
-            if (current != null) {
-                compiledList.add(applyGeometricRepair(current));
-            }
-        });
-
-        return compiledList;
-    }
-
-    private TextElement mergeElements(TextElement a, TextElement b) {
-        return new TextElement(
-                UUID.randomUUID().toString(),
-                a.text() + " " + b.text(),
-                a.left(), a.top(),
-                (b.left() + b.width()) - a.left(),
-                Math.max(a.height(), b.height()),
-                a.fontSize(), a.fontName(), a.fontWeight(), a.isItalic(),
-                "text", null,
-                null, null, null, null // 16 argumentos
-        );
-    }
-
-    private TextElement applyGeometricRepair(TextElement e) {
-        float scaledLeft = e.left() * FACTOR_ESCALA;
-        float scaledTop = (e.top() * FACTOR_ESCALA) - (e.fontSize() * 0.1f);
-        float repairedWidth = Math.round((e.text().length() * e.fontSize() * WIDTH_RATIO) * FACTOR_ESCALA);
-        float repairedHeight = Math.round((e.fontSize() * HEIGHT_RATIO) * FACTOR_ESCALA);
-
-        return new TextElement(
-                e.id(), e.text(), scaledLeft, scaledTop, repairedWidth, repairedHeight,
-                e.fontSize() * FACTOR_ESCALA, normalizeFontName(e.fontName()), e.fontWeight(), e.isItalic(),
-                "text", e.resourceReference(),
-                null, null, null, null // 16 argumentos
-        );
+        }).subscribeOn(Schedulers.boundedElastic());
     }
 
     private List<TextElement> extractRawElements(PDDocument doc, int pageNum) throws IOException {
         final List<TextElement> elements = new ArrayList<>();
-        PDPage pageObj = doc.getPage(pageNum - 1);
-        final PDRectangle mediaBox = pageObj.getMediaBox();
-        final float originX = mediaBox.getLowerLeftX();
-        final float originY = mediaBox.getLowerLeftY();
 
         PDFTextStripper stripper = new PDFTextStripper() {
             @Override
             protected void writeString(String string, List<TextPosition> textPositions) {
                 if (textPositions == null || textPositions.isEmpty()) return;
-                TextPosition first = textPositions.get(0);
+                List<TextPosition> sortedPositions = new ArrayList<>(textPositions);
+                // Ordenamos estrictamente por coordenada X para asegurar lectura visual correcta
+                sortedPositions.sort(Comparator.comparingDouble(TextPosition::getXDirAdj));
 
-                // Subtract mediaBox translation offsets to map 1:1 on actual page viewport space
-                float normalizedX = first.getXDirAdj() - originX;
-                float webTopY = (first.getYDirAdj() - originY) - first.getHeightDir();
+                List<TextPosition> word = new ArrayList<>();
+                TextPosition previous = null;
 
-                elements.add(new TextElement(
-                        UUID.randomUUID().toString(), string.trim(), normalizedX, webTopY,
-                        calculateTotalWidth(textPositions), first.getHeightDir(), first.getFontSizeInPt(),
-                        first.getFont().getName(), detectWeight(first), isItalic(first),
-                        "text", null,
-                        null, null, null, null // 16 argumentos
-                ));
+                for (TextPosition tp : sortedPositions) {
+                    if (previous != null) {
+                        float gap = tp.getXDirAdj() - (previous.getXDirAdj() + previous.getWidthDirAdj());
+
+                        // Separar si el gap es mayor al umbral O si hay un salto negativo (texto retrocede)
+                        if (gap > WORD_GAP_THRESHOLD || gap < -WORD_GAP_THRESHOLD) {
+                            addWordElement(elements, word);
+                            word = new ArrayList<>();
+                        }
+                    }
+                    word.add(tp);
+                    previous = tp;
+                }
+                addWordElement(elements, word);
             }
         };
         stripper.setStartPage(pageNum);
         stripper.setEndPage(pageNum);
+       stripper.setSortByPosition(true);
         stripper.writeText(doc, new Writer() {
-            @Override
-            public void write(char[] cbuf, int off, int len) {
-            }
-
-            @Override
-            public void flush() {
-            }
-
-            @Override
-            public void close() {
-            }
+            @Override public void write(char[] cbuf, int off, int len) {}
+            @Override public void flush() {}
+            @Override public void close() {}
         });
+
         return elements;
     }
+    private void addWordElement(List<TextElement> elements, List<TextPosition> word) {
+        if (word == null || word.isEmpty()) return;
+        TextPosition first = word.get(0);
 
+        // Métricas nativas en puntos (pt). La conversión pt -> px la hace PdfToCssTranslator.
+        StringBuilder text = new StringBuilder();
+        float widthPt = 0f;
+        for (TextPosition tp : word) {
+            if (tp.getUnicode() != null) text.append(tp.getUnicode());
+            widthPt += tp.getWidthDirAdj();
+        }
+        String fontName = (first.getFont() != null && first.getFont().getName() != null)
+                ? first.getFont().getName() : "Helvetica";
 
-    private String normalizeFontName(String font) {
-        if (font == null) return "Arial";
-        String f = font.toLowerCase();
-        if (f.contains("arial")) return "Arial";
-        if (f.contains("helvetica")) return "Helvetica";
-        if (f.contains("times")) return "Times New Roman";
-        return "Arial";
+        elements.add(new TextElement(
+                UUID.randomUUID().toString(),
+                text.toString().trim(),
+                first.getXDirAdj(),        // left (pt)
+                first.getYDirAdj(),        // top = baseline (pt)
+                widthPt,                   // width (pt)
+                first.getHeightDir(),      // height (pt)
+                first.getFontSizeInPt(),   // fontSize (pt)
+                fontName,
+                detectWeight(first),
+                isItalic(first),
+                "text",
+                null,
+                null, null, null, null
+        ));
+    }
+
+    private List<TextElement> scaleToPx(List<TextElement> rawElements) {
+        List<TextElement> px = new ArrayList<>(rawElements.size());
+        for (TextElement e : rawElements) {
+            px.add(new TextElement(
+                    e.id(), e.text(),
+                    e.left() * FACTOR_ESCALA,
+                    (e.top() - e.height()) * FACTOR_ESCALA,
+                    e.width() * FACTOR_ESCALA,
+                    e.height() * FACTOR_ESCALA,
+                    e.fontSize() * FACTOR_ESCALA,
+                    e.fontName(), e.fontWeight(), e.isItalic(),
+                    e.type(), e.resourceReference(), e.letterSpacing(), e.lineHeight(), e.textAlign(), e.cssTransform()));
+        }
+        return px;
     }
 
 
@@ -316,20 +318,15 @@ public class PdfBoxAnalyzerAdapter implements PdfAnalyzerPort {
     }
 
     private boolean isItalic(TextPosition tp) {
+        if (tp.getFont() == null) return false;
         boolean descriptorItalic = tp.getFont().getFontDescriptor() != null && tp.getFont().getFontDescriptor().isItalic();
-        return descriptorItalic || tp.getFont().getName().toLowerCase().contains("italic") || tp.getFont().getName().toLowerCase().contains("oblique");
+        String name = tp.getFont().getName();
+        return descriptorItalic || (name != null && (name.toLowerCase().contains("italic") || name.toLowerCase().contains("oblique")));
     }
 
     private String detectWeight(TextPosition tp) {
-        String name = tp.getFont().getName().toLowerCase();
+        String name = (tp.getFont() != null && tp.getFont().getName() != null) ? tp.getFont().getName().toLowerCase() : "";
         return (name.contains("bold") || name.contains("black") || name.contains("w7")) ? "bold" : "normal";
     }
-
-    private float calculateTotalWidth(List<TextPosition> positions) {
-        float width = 0;
-        for (TextPosition tp : positions) width += tp.getWidthDirAdj();
-        return width;
-    }
-
 
 }

@@ -14,7 +14,6 @@
     <artifactId>pe.com.pillihuaman.engine</artifactId>
     <version>1.0.0-SNAPSHOT</version>
 
-    <!-- BEGIN: properties -->
     <properties>
         <java.version>25</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -26,9 +25,31 @@
         <checkstyle.version>10.21.2</checkstyle.version>
         <impsort-maven-plugin.version>1.12.0</impsort-maven-plugin.version>
         <jjwt.version>0.12.6</jjwt.version>
-
+        <!-- Versión verificada en Maven Central -->
+        <openhtmltopdf.version>1.1.103</openhtmltopdf.version>
     </properties>
+
     <dependencies>
+        <!-- ========================================== -->
+        <!-- NUEVAS DEPENDENCIAS PARA GENERACIÓN DE PDF -->
+        <!-- ========================================== -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-thymeleaf</artifactId>
+        </dependency>
+
+        <dependency>
+            <!-- GroupId correcto para el fork activo -->
+            <groupId>io.github.openhtmltopdf</groupId>
+            <artifactId>openhtmltopdf-pdfbox</artifactId>
+            <version>${openhtmltopdf.version}</version>
+            <!--
+              NOTA: Al ser la versión 1.1.x, ya es compatible con PDFBox 3.x.
+              No se necesitan exclusiones para PDFBox.
+            -->
+        </dependency>
+        <!-- ========================================== -->
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-webflux</artifactId>
@@ -63,7 +84,6 @@
             <scope>runtime</scope>
         </dependency>
 
-        <!-- Lombok aligned with internal repository -->
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
@@ -71,7 +91,6 @@
             <scope>provided</scope>
         </dependency>
 
-        <!-- MapStruct WITHOUT processor -->
         <dependency>
             <groupId>org.mapstruct</groupId>
             <artifactId>mapstruct</artifactId>
@@ -99,9 +118,9 @@
             <artifactId>spring-boot-starter-data-mongodb-reactive</artifactId>
         </dependency>
     </dependencies>
+
     <build>
         <plugins>
-
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -110,12 +129,10 @@
                     <source>${java.version}</source>
                     <target>${java.version}</target>
                     <release>${java.version}</release>
-
                     <compilerArgs>
                         <arg>--enable-preview</arg>
                         <arg>-parameters</arg>
                         <arg>-Xlint:all</arg>
-
                         <arg>-J--add-opens=jdk.compiler/com.sun.tools.javac.code=ALL-UNNAMED</arg>
                         <arg>-J--add-opens=jdk.compiler/com.sun.tools.javac.comp=ALL-UNNAMED</arg>
                         <arg>-J--add-opens=jdk.compiler/com.sun.tools.javac.file=ALL-UNNAMED</arg>
@@ -126,7 +143,6 @@
                         <arg>-J--add-opens=jdk.compiler/com.sun.tools.javac.tree=ALL-UNNAMED</arg>
                         <arg>-J--add-opens=jdk.compiler/com.sun.tools.javac.util=ALL-UNNAMED</arg>
                     </compilerArgs>
-
                     <annotationProcessorPaths>
                         <path>
                             <groupId>org.projectlombok</groupId>
@@ -134,56 +150,23 @@
                             <version>${lombok.version}</version>
                         </path>
                     </annotationProcessorPaths>
-
                 </configuration>
             </plugin>
-            <!--  <plugin>
-                  <groupId>org.apache.maven.plugins</groupId>
-                  <artifactId>maven-pmd-plugin</artifactId>
-                  <version>${maven-pmd-plugin.version}</version>
-                  <configuration>
-                      <failOnViolation>true</failOnViolation>
-                      <printFailingErrors>true</printFailingErrors>
-                      <linkXRef>false</linkXRef>
-                      <rulesets>
-                          <ruleset>/category/java/bestpractices.xml</ruleset>
-                          <ruleset>/category/java/codestyle.xml</ruleset>
-                          <ruleset>/category/java/design.xml</ruleset>
-                          <ruleset>/category/java/errorprone.xml</ruleset>
-                          <ruleset>/category/java/multithreading.xml</ruleset>
-                          <ruleset>/category/java/performance.xml</ruleset>
-                      </rulesets>
-                      <targetJdk>21</targetJdk>
-                  </configuration>
-                  <executions>
-                      <execution>
-                          <id>pmd-check</id>
-                          <phase>compile</phase>
-                          <goals>
-                              <goal>check</goal>
-                          </goals>
-                      </execution>
-                  </executions>
-              </plugin>-->
 
             <plugin>
                 <groupId>com.diffplug.spotless</groupId>
                 <artifactId>spotless-maven-plugin</artifactId>
                 <version>2.43.0</version>
-
                 <configuration>
                     <java>
                         <googleJavaFormat>
                             <version>1.22.0</version>
                         </googleJavaFormat>
-
-                        <!-- Opcional pero recomendado -->
                         <removeUnusedImports/>
                         <trimTrailingWhitespace/>
                         <endWithNewline/>
                     </java>
                 </configuration>
-
                 <executions>
                     <execution>
                         <goals>
@@ -200,9 +183,7 @@
                     <jvmArguments>--enable-preview</jvmArguments>
                 </configuration>
             </plugin>
-
         </plugins>
     </build>
-    <!-- END: build -->
 
 </project>

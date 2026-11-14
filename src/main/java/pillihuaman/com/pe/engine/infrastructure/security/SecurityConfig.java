@@ -70,6 +70,8 @@ public class SecurityConfig {
             configuration.addAllowedOriginPattern("http://*.spicontrol.local:*");
             configuration.addAllowedOriginPattern("http://spicontrol.local:*");
             configuration.addAllowedOriginPattern("http://localhost:*");
+            configuration.addAllowedOriginPattern("http://localhost.local:*");
+            configuration.addAllowedOriginPattern("https://localhost.local:*");
         }
 
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"));

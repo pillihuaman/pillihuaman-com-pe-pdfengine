@@ -1,5 +1,6 @@
 package pillihuaman.com.pe.engine.infrastructure.security;
 
+import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Component;
 import org.springframework.web.server.ServerWebExchange;
 import org.springframework.web.server.WebFilter;
@@ -15,7 +16,12 @@ public class TenantWebFilter implements WebFilter {
     public Mono<Void> filter(ServerWebExchange exchange, WebFilterChain chain) {
         String tenantId = exchange.getRequest().getHeaders().getFirst("X-Tenant-ID");
         String path = exchange.getRequest().getPath().value();
+        HttpMethod method = exchange.getRequest().getMethod();
 
+        // 1. Bypass check for OPTIONS requests (CORS Preflight)
+        if (HttpMethod.OPTIONS.equals(method)) {
+            return chain.filter(exchange);
+        }
         if (path.startsWith("/private/") && (tenantId == null || tenantId.isBlank())) {
             exchange.getResponse().setStatusCode(org.springframework.http.HttpStatus.BAD_REQUEST);
             return exchange.getResponse().setComplete();

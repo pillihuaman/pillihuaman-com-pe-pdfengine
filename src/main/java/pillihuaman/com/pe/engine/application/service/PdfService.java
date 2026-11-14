@@ -8,19 +8,17 @@ import pillihuaman.com.pe.engine.application.dto.PdfEditableRequest;
 import pillihuaman.com.pe.engine.application.port.inbound.PdfUseCase;
 import pillihuaman.com.pe.engine.application.port.outbound.PdfAnalyzerPort;
 import pillihuaman.com.pe.engine.application.port.outbound.PdfProcessingPort;
-import pillihuaman.com.pe.engine.application.port.outbound.PdfStoragePort;
 import pillihuaman.com.pe.engine.application.port.outbound.PromptExternalPort;
+import pillihuaman.com.pe.engine.domain.exception.BusinessLogicException;
 import pillihuaman.com.pe.engine.domain.model.PdfDocument;
 import pillihuaman.com.pe.engine.domain.model.PdfEditableStructure;
 import pillihuaman.com.pe.engine.domain.model.PdfPageContent;
-import pillihuaman.com.pe.engine.domain.model.TextElement;
-import pillihuaman.com.pe.engine.domain.model.external.AiClassificationResponse;
+import pillihuaman.com.pe.engine.domain.model.TranslatedDocument;
 import pillihuaman.com.pe.engine.infrastructure.adapter.outbound.external.AiLayoutClientAdapter;
 import pillihuaman.com.pe.engine.infrastructure.security.TenantWebFilter;
 import reactor.core.publisher.Mono;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -28,30 +26,76 @@ import java.util.stream.Collectors;
 public class PdfService implements PdfUseCase {
 
     private final PdfProcessingPort pdfProcessingPort;
-    private final PdfStoragePort pdfStoragePort;
 
     private final PdfAnalyzerPort pdfAnalyzerPort;
     private final PromptExternalPort promptExternalPort;
     private final AiLayoutClientAdapter aiLayoutClientAdapter;
+
     @Value("${application.pdf.ai-prompt-code}")
     private String aiPromptCode;
 
+    @Value("${application.pdf.merge.max-files:100}")
+    private int maxMergeFiles;
+
+    @Value("${application.pdf.merge.max-file-bytes:52428800}")
+    private long maxMergeFileBytes;
+
+    @Value("${application.pdf.merge.max-total-bytes:262144000}")
+    private long maxMergeTotalBytes;
+
     @Override
-    public Mono<String> mergeDocuments(List<PdfDocument> documents) {
+    public Mono<PdfDocument> mergeDocuments(List<PdfDocument> documents) {
         if (documents == null || documents.isEmpty()) {
-            return Mono.error(new IllegalArgumentException("No documents provided for merging"));
+            return Mono.error(new BusinessLogicException("No se proporcionaron archivos para combinar."));
+        }
+
+        if (documents.size() > maxMergeFiles) {
+            return Mono.error(new BusinessLogicException(
+                    "Se excedió el número máximo de archivos permitidos (" + maxMergeFiles + ")."));
+        }
+
+        long totalBytes = documents.stream()
+                .map(PdfDocument::content)
+                .mapToLong(content -> content == null ? 0L : content.length)
+                .sum();
+
+        for (PdfDocument document : documents) {
+            byte[] content = document.content();
+            if (content == null || content.length == 0) {
+                return Mono.error(new BusinessLogicException(
+                        "El archivo '" + document.fileName() + "' está vacío."));
+            }
+            if (content.length > maxMergeFileBytes) {
+                return Mono.error(new BusinessLogicException(
+                        "El archivo '" + document.fileName() + "' excede el tamaño máximo permitido."));
+            }
+        }
+
+        if (totalBytes > maxMergeTotalBytes) {
+            return Mono.error(new BusinessLogicException(
+                    "El tamaño total de los archivos excede el límite permitido."));
         }
 
         return Mono.deferContextual(ctx -> {
             String tenantId = ctx.getOrDefault(TenantWebFilter.TENANT_KEY, "UNKNOWN");
-            log.info("Starting Merge Operation for Tenant: {} | Total Docs: {}", tenantId, documents.size());
+            log.info("Starting Merge Operation for Tenant: {} | Total Files: {} | Total Bytes: {}",
+                    tenantId, documents.size(), totalBytes);
 
-            return pdfProcessingPort.merge(documents).flatMap(mergedDoc -> {
-
-                PdfDocument docWithTenant = new PdfDocument("merged_" + System.currentTimeMillis() + ".pdf", mergedDoc.content(), mergedDoc.size(), tenantId, Map.of("processedAt", String.valueOf(System.currentTimeMillis())), Collections.emptyList());
-
-                return pdfStoragePort.upload(docWithTenant);
-            }).doOnSuccess(fileId -> log.info("Successfully merged and stored PDF: {}", fileId)).doOnError(e -> log.error("Critical error during PDF merge: {}", e.getMessage()));
+            return pdfProcessingPort.merge(documents)
+                    .map(merged -> new PdfDocument(
+                            merged.fileName(),
+                            merged.content(),
+                            merged.size(),
+                            tenantId,
+                            Map.of(
+                                    "processedAt", String.valueOf(System.currentTimeMillis()),
+                                    "sourceFiles", String.valueOf(documents.size()),
+                                    "totalBytes", String.valueOf(totalBytes)
+                            ),
+                            List.of()))
+                    .doOnSuccess(doc -> log.info("PDF merge completed: {} ({} bytes)",
+                            doc.fileName(), doc.size()))
+                    .doOnError(e -> log.error("Critical error during PDF merge: {}", e.getMessage(), e));
         });
     }
 
@@ -114,40 +158,13 @@ public class PdfService implements PdfUseCase {
 
     @Override
     public Mono<PdfEditableStructure> analyzeAndOptimize(byte[] pdfBytes, String bearerToken) {
-        return pdfAnalyzerPort.analyze(pdfBytes)
-                .flatMap(rawStructure -> {
-                    // Extraer data mínima (ID y Texto) para la IA
-                    List<Map<String, String>> minimalData = rawStructure.pages().stream()
-                            .flatMap(p -> p.elements().stream())
-                            .map(e -> Map.of("id", e.id(), "text", e.text()))
-                            .collect(Collectors.toList());
-
-                    // Llamamos a la IA y unimos los resultados
-                    return aiLayoutClientAdapter.callNeuroIaToClassify(minimalData, "PDF_LAYOUT_AI_GEOMETRY_COMPILER_V2", bearerToken)
-                            .map(classifications -> performSemanticJoin(rawStructure, classifications))
-                            .onErrorReturn(rawStructure); // Fallback seguro
-                });
+        // ETAPA 1: extracción geométrica pura, sin llamadas a la IA.
+        return pdfAnalyzerPort.analyze(pdfBytes);
     }
 
-    private PdfEditableStructure performSemanticJoin(PdfEditableStructure geometry, List<AiClassificationResponse.ClassificationItem> classifications) {
-        Map<String, String> typeMap = classifications.stream()
-                .collect(Collectors.toMap(AiClassificationResponse.ClassificationItem::id, AiClassificationResponse.ClassificationItem::type, (a, b) -> a));
-
-        List<PdfPageContent> enrichedPages = geometry.pages().stream().map(page -> {
-            List<TextElement> enrichedElements = page.elements().stream().map(e -> new TextElement(
-                    e.id(), e.text(), e.left(), e.top(), e.width(), e.height(),
-                    e.fontSize(), e.fontName(), e.fontWeight(), e.isItalic(),
-                    typeMap.getOrDefault(e.id(), "text"), // <--- AQUÍ SE ASIGNA EL TIPO DE LA IA
-                    e.resourceReference(), null, // letterSpacing
-                    null, // lineHeight
-                    null, // textAlign
-                    null
-            )).collect(Collectors.toList());
-
-            return new PdfPageContent(page.pageNumber(), page.width(), page.height(), page.units(), page.rotation(), enrichedElements, page.graphics(), page.rawText(), page.hasImages(), page.fontCount());
-        }).collect(Collectors.toList());
-
-        return new PdfEditableStructure(geometry.documentId(), enrichedPages, geometry.info());
+    @Override
+    public Mono<TranslatedDocument> translatePdf(byte[] pdfBytes, String bearerToken) {
+        return pdfAnalyzerPort.analyzeTranslated(pdfBytes);
     }
 
 

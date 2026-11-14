@@ -1,7 +1,9 @@
 package pillihuaman.com.pe.engine.infrastructure.adapter.inbound.rest;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.buffer.DataBufferUtils;
+import org.springframework.http.ContentDisposition;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -13,12 +15,15 @@ import pillihuaman.com.pe.engine.application.port.inbound.PdfUseCase;
 import pillihuaman.com.pe.engine.application.port.outbound.PdfAnalyzerPort;
 import pillihuaman.com.pe.engine.domain.model.PdfDocument;
 import pillihuaman.com.pe.engine.domain.model.PdfEditableStructure;
+import pillihuaman.com.pe.engine.domain.model.TranslatedDocument;
 import pillihuaman.com.pe.engine.infrastructure.common.RespBase;
+import pillihuaman.com.pe.engine.infrastructure.security.TenantWebFilter;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.util.Collections;
 
+@Slf4j
 @RestController
 @RequestMapping("/private/v1/pdf")
 @RequiredArgsConstructor
@@ -27,15 +32,22 @@ public class PdfRestController {
     private final PdfAnalyzerPort pdfAnalyzerPort;
 
     /**
-     * Merges multiple PDFs and wraps result in RespBase.
+     * Combina múltiples PDFs e imágenes y devuelve un único PDF descargable.
      */
-    @PostMapping(value = "/merge", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public Mono<RespBase<String>> mergePdfs(@RequestPart("files") Flux<FilePart> files) {
+    @PostMapping(value = "/merge",
+            consumes = MediaType.MULTIPART_FORM_DATA_VALUE,
+            produces = MediaType.APPLICATION_PDF_VALUE)
+    public Mono<ResponseEntity<byte[]>> mergePdfs(@RequestPart("files") Flux<FilePart> files) {
         return files
                 .flatMap(this::mapToFilePart)
                 .collectList()
                 .flatMap(pdfUseCase::mergeDocuments)
-                .map(result -> new RespBase<String>().ok(result));
+                .map(merged -> ResponseEntity.ok()
+                        .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_PDF_VALUE)
+                        .header(HttpHeaders.CONTENT_DISPOSITION,
+                                ContentDisposition.attachment().filename(merged.fileName()).build().toString())
+                        .contentLength(merged.content().length)
+                        .body(merged.content()));
     }
 
     /**
@@ -44,16 +56,25 @@ public class PdfRestController {
     @PostMapping(value = "/analyze-for-edit", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public Mono<RespBase<PdfEditableStructure>> analyzeForEdit(
             @RequestPart("file") Mono<FilePart> filePartMono,
-            // >>> CHANGE
             @RequestHeader(HttpHeaders.AUTHORIZATION) String bearerToken) {
-        // <<< CHANGE
-
-        // >>> CHANGE
         return filePartMono
                 .flatMap(this::mapToFileBytes)
                 .flatMap(bytes -> pdfUseCase.analyzeAndOptimize(bytes, bearerToken))
                 .map(result -> new RespBase<PdfEditableStructure>().ok(result));
-        // <<< CHANGE
+    }
+
+    @PostMapping(value = "/translate", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public Mono<RespBase<TranslatedDocument>> translate(
+            @RequestPart("file") Mono<FilePart> filePartMono,
+            @RequestHeader(HttpHeaders.AUTHORIZATION) String bearerToken) {
+        return Mono.deferContextual(ctx -> {
+            String tenantId = ctx.getOrDefault(TenantWebFilter.TENANT_KEY, "DEFAULT");
+            log.info("PDF translate requested for tenant: {}", tenantId);
+            return filePartMono
+                    .flatMap(this::mapToFileBytes)
+                    .flatMap(bytes -> pdfUseCase.translatePdf(bytes, bearerToken))
+                    .map(result -> new RespBase<TranslatedDocument>().ok(result));
+        });
     }
 
 

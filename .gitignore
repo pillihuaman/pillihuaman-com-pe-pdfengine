@@ -126,3 +126,6 @@ Desktop.ini
 ######################
 .eslintcache
 /.nb-gradle/
+.exe
+.kse
+/.kse
