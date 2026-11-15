@@ -15,7 +15,9 @@ public interface PdfUseCase {
 
     Mono<PdfEditableStructure> analyzeAndOptimize(byte[] pdfBytes, String bearerToken);
 
-    Mono<TranslatedDocument> translatePdf(byte[] pdfBytes, String bearerToken);
+    Mono<TranslatedDocument> translatePdf(byte[] pdfBytes, String screenshotBase64, boolean skipAI, String bearerToken);
+
+    Mono<TranslatedDocument> refineTranslatedDocument(TranslatedDocument base, String screenshotBase64, String bearerToken);
 
     Mono<byte[]> updateDocumentContent(PdfEditableRequest request);
 

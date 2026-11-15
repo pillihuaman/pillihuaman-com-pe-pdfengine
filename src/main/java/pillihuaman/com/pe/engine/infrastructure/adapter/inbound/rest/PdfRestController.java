@@ -66,13 +66,15 @@ public class PdfRestController {
     @PostMapping(value = "/translate", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public Mono<RespBase<TranslatedDocument>> translate(
             @RequestPart("file") Mono<FilePart> filePartMono,
+            @RequestPart(value = "screenshot", required = false) String screenshotBase64,
+            @RequestParam(value = "skipAI", defaultValue = "false") boolean skipAI,
             @RequestHeader(HttpHeaders.AUTHORIZATION) String bearerToken) {
         return Mono.deferContextual(ctx -> {
             String tenantId = ctx.getOrDefault(TenantWebFilter.TENANT_KEY, "DEFAULT");
             log.info("PDF translate requested for tenant: {}", tenantId);
             return filePartMono
                     .flatMap(this::mapToFileBytes)
-                    .flatMap(bytes -> pdfUseCase.translatePdf(bytes, bearerToken))
+                    .flatMap(bytes -> pdfUseCase.translatePdf(bytes, screenshotBase64, skipAI, bearerToken))
                     .map(result -> new RespBase<TranslatedDocument>().ok(result));
         });
     }
@@ -124,5 +126,15 @@ public class PdfRestController {
 
         return pdfUseCase.refineFidelity(request.layout(), request.screenshot(), token)
                 .map(result -> new RespBase<PdfEditableStructure>().ok(result));
+    }
+    public record RefineN2Request(TranslatedDocument base, String screenshot) {}
+
+    @PostMapping(value = "/refine-n2", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public Mono<RespBase<TranslatedDocument>> refineN2(
+            @RequestBody RefineN2Request request,
+            @RequestHeader(HttpHeaders.AUTHORIZATION) String bearerToken) {
+
+        return pdfUseCase.refineTranslatedDocument(request.base(), request.screenshot(), bearerToken)
+                .map(result -> new RespBase<TranslatedDocument>().ok(result));
     }
 }

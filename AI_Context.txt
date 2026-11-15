@@ -1544,6 +1544,7 @@ import pillihuaman.com.pe.engine.domain.exception.BusinessLogicException;
 import pillihuaman.com.pe.engine.domain.model.PdfDocument;
 import pillihuaman.com.pe.engine.domain.model.PdfEditableStructure;
 import pillihuaman.com.pe.engine.domain.model.PdfPageContent;
+import pillihuaman.com.pe.engine.domain.model.TranslatedDocument;
 import pillihuaman.com.pe.engine.infrastructure.adapter.outbound.external.AiLayoutClientAdapter;
 import pillihuaman.com.pe.engine.infrastructure.security.TenantWebFilter;
 import reactor.core.publisher.Mono;
@@ -1650,6 +1651,10 @@ public class PdfService implements PdfUseCase {
 
     @Override
     public Mono<PdfEditableStructure> refineFidelity(PdfEditableStructure currentStructure, String base64Image, String bearerToken) {
+        if (base64Image == null || base64Image.isBlank()) {
+            log.warn("Screenshot ausente; se omite refinamiento IA. Devolviendo N1.");
+            return Mono.just(currentStructure);
+        }
         log.info("Starting Extreme Mathematical Alignment pass (Logical Snapping)...");
 
         return aiLayoutClientAdapter.callNeuroIaToRefineVisuals(
@@ -1690,6 +1695,11 @@ public class PdfService implements PdfUseCase {
     public Mono<PdfEditableStructure> analyzeAndOptimize(byte[] pdfBytes, String bearerToken) {
         // ETAPA 1: extracción geométrica pura, sin llamadas a la IA.
         return pdfAnalyzerPort.analyze(pdfBytes);
+    }
+
+    @Override
+    public Mono<TranslatedDocument> translatePdf(byte[] pdfBytes, String bearerToken) {
+        return pdfAnalyzerPort.analyzeTranslated(pdfBytes);
     }
 
 
@@ -2065,10 +2075,13 @@ FILE: src/main/java/pillihuaman/com/pe/engine/application/port/outbound/PdfAnaly
 package pillihuaman.com.pe.engine.application.port.outbound;
 
 import pillihuaman.com.pe.engine.domain.model.PdfEditableStructure;
+import pillihuaman.com.pe.engine.domain.model.TranslatedDocument;
 import reactor.core.publisher.Mono;
 
 public interface PdfAnalyzerPort {
     Mono<PdfEditableStructure> analyze(byte[] pdfBytes);
+
+    Mono<TranslatedDocument> analyzeTranslated(byte[] pdfBytes);
 }
 
 
@@ -2279,6 +2292,7 @@ package pillihuaman.com.pe.engine.application.port.inbound;
 import pillihuaman.com.pe.engine.application.dto.PdfEditableRequest;
 import pillihuaman.com.pe.engine.domain.model.PdfDocument;
 import pillihuaman.com.pe.engine.domain.model.PdfEditableStructure;
+import pillihuaman.com.pe.engine.domain.model.TranslatedDocument;
 import reactor.core.publisher.Mono;
 
 import java.util.List;
@@ -2289,6 +2303,8 @@ public interface PdfUseCase {
 
 
     Mono<PdfEditableStructure> analyzeAndOptimize(byte[] pdfBytes, String bearerToken);
+
+    Mono<TranslatedDocument> translatePdf(byte[] pdfBytes, String bearerToken);
 
     Mono<byte[]> updateDocumentContent(PdfEditableRequest request);
 
@@ -3407,6 +3423,7 @@ FILE: src/main/java/pillihuaman/com/pe/engine/infrastructure/adapter/inbound/res
 package pillihuaman.com.pe.engine.infrastructure.adapter.inbound.rest;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.buffer.DataBufferUtils;
 import org.springframework.http.ContentDisposition;
 import org.springframework.http.HttpHeaders;
@@ -3420,12 +3437,15 @@ import pillihuaman.com.pe.engine.application.port.inbound.PdfUseCase;
 import pillihuaman.com.pe.engine.application.port.outbound.PdfAnalyzerPort;
 import pillihuaman.com.pe.engine.domain.model.PdfDocument;
 import pillihuaman.com.pe.engine.domain.model.PdfEditableStructure;
+import pillihuaman.com.pe.engine.domain.model.TranslatedDocument;
 import pillihuaman.com.pe.engine.infrastructure.common.RespBase;
+import pillihuaman.com.pe.engine.infrastructure.security.TenantWebFilter;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.util.Collections;
 
+@Slf4j
 @RestController
 @RequestMapping("/private/v1/pdf")
 @RequiredArgsConstructor
@@ -3463,6 +3483,20 @@ public class PdfRestController {
                 .flatMap(this::mapToFileBytes)
                 .flatMap(bytes -> pdfUseCase.analyzeAndOptimize(bytes, bearerToken))
                 .map(result -> new RespBase<PdfEditableStructure>().ok(result));
+    }
+
+    @PostMapping(value = "/translate", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public Mono<RespBase<TranslatedDocument>> translate(
+            @RequestPart("file") Mono<FilePart> filePartMono,
+            @RequestHeader(HttpHeaders.AUTHORIZATION) String bearerToken) {
+        return Mono.deferContextual(ctx -> {
+            String tenantId = ctx.getOrDefault(TenantWebFilter.TENANT_KEY, "DEFAULT");
+            log.info("PDF translate requested for tenant: {}", tenantId);
+            return filePartMono
+                    .flatMap(this::mapToFileBytes)
+                    .flatMap(bytes -> pdfUseCase.translatePdf(bytes, bearerToken))
+                    .map(result -> new RespBase<TranslatedDocument>().ok(result));
+        });
     }
 
 
@@ -3513,6 +3547,9 @@ public class PdfRestController {
         return pdfUseCase.refineFidelity(request.layout(), request.screenshot(), token)
                 .map(result -> new RespBase<PdfEditableStructure>().ok(result));
     }
+    public record RefineN2Request(TranslatedDocument base, String screenshot) {}
+
+
 }
 
 ===================================================
@@ -5133,12 +5170,16 @@ import org.apache.pdfbox.pdmodel.graphics.image.PDImage;
 import org.apache.pdfbox.text.PDFTextStripper;
 import org.apache.pdfbox.text.TextPosition;
 import org.apache.pdfbox.util.Matrix;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import pillihuaman.com.pe.engine.application.port.outbound.PdfAnalyzerPort;
 import pillihuaman.com.pe.engine.domain.model.GraphicElement;
 import pillihuaman.com.pe.engine.domain.model.PdfEditableStructure;
 import pillihuaman.com.pe.engine.domain.model.PdfPageContent;
 import pillihuaman.com.pe.engine.domain.model.TextElement;
+import pillihuaman.com.pe.engine.domain.model.TranslatedDocument;
+import pillihuaman.com.pe.engine.domain.model.TranslatedElement;
+import pillihuaman.com.pe.engine.domain.model.TranslatedPage;
 import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Schedulers;
 
@@ -5157,7 +5198,11 @@ import java.util.List;
  * Especializado en reconstrucción de layouts perfectos para edición web desde PDFBox 3.0.3.
  */
 @Component
+@RequiredArgsConstructor
 public class PdfBoxAnalyzerAdapter implements PdfAnalyzerPort {
+
+    private final PdfToCssTranslator pdfToCssTranslator;
+    private final PdfPageRenderer pdfPageRenderer;
 
     // Constantes Determinísticas de Compilación
     private static final float FACTOR_ESCALA = 1.333333f; // 72 DPI -> 96 DPI (CSS Pixels)
@@ -5174,8 +5219,8 @@ public class PdfBoxAnalyzerAdapter implements PdfAnalyzerPort {
                     final PDRectangle mediaBox = page.getMediaBox();
                     final float pageHeight = mediaBox.getHeight();
 
-                    // Fase 1: Extracción Cruda de Elementos con Bounding Box nativo (sin heurísticas)
-                    List<TextElement> rawElements = extractRawElements(document, i + 1);
+                    // Fase 1: Extracción Cruda de Elementos (pt) y escalado a px.
+                    List<TextElement> rawElements = scaleToPx(extractRawElements(document, i + 1));
 
                     // Fase 2: Extracción de Gráficos Vectoriales e Imágenes
                     List<GraphicElement> graphics = extractGraphics(page, pageHeight);
@@ -5183,6 +5228,36 @@ public class PdfBoxAnalyzerAdapter implements PdfAnalyzerPort {
                     pages.add(new PdfPageContent(i + 1, mediaBox.getWidth() * FACTOR_ESCALA, mediaBox.getHeight() * FACTOR_ESCALA, "px", page.getRotation(), rawElements, graphics, "", !graphics.isEmpty(), rawElements.size()));
                 }
                 return new PdfEditableStructure("doc_" + System.currentTimeMillis(), pages, null);
+            }
+        }).subscribeOn(Schedulers.boundedElastic());
+    }
+
+    @Override
+    public Mono<TranslatedDocument> analyzeTranslated(final byte[] pdfBytes) {
+        return Mono.fromCallable(() -> {
+            try (PDDocument document = Loader.loadPDF(new RandomAccessReadBuffer(pdfBytes))) {
+                final List<TranslatedPage> pages = new ArrayList<>();
+
+                for (int i = 0; i < document.getNumberOfPages(); i++) {
+                    final PDPage page = document.getPage(i);
+                    final PDRectangle mediaBox = page.getMediaBox();
+                    if (mediaBox == null) {
+                        continue;
+                    }
+                    final float pageHeightPt = mediaBox.getHeight();
+                    final float widthPx = mediaBox.getWidth() * FACTOR_ESCALA;
+                    final float heightPx = pageHeightPt * FACTOR_ESCALA;
+
+                    final List<TranslatedElement> translatedElements = new ArrayList<>();
+                    for (TextElement raw : extractRawElements(document, i + 1)) {
+                        translatedElements.add(pdfToCssTranslator.translate(raw, pageHeightPt));
+                    }
+
+                    final String backgroundImage = pdfPageRenderer.renderPageToBase64Png(document, i);
+
+                    pages.add(new TranslatedPage(i + 1, widthPx, heightPx, backgroundImage, translatedElements));
+                }
+                return new TranslatedDocument("doc_" + System.currentTimeMillis(), "HTML_CSS", pages);
             }
         }).subscribeOn(Schedulers.boundedElastic());
     }
@@ -5232,41 +5307,47 @@ public class PdfBoxAnalyzerAdapter implements PdfAnalyzerPort {
         if (word == null || word.isEmpty()) return;
         TextPosition first = word.get(0);
 
-        // 1. Extraer métricas nativas de PDFBox (cero heurísticas).
+        // Métricas nativas en puntos (pt). La conversión pt -> px la hace PdfToCssTranslator.
         StringBuilder text = new StringBuilder();
-        float widthPts = 0f;
+        float widthPt = 0f;
         for (TextPosition tp : word) {
             if (tp.getUnicode() != null) text.append(tp.getUnicode());
-            widthPts += tp.getWidthDirAdj();
+            widthPt += tp.getWidthDirAdj();
         }
-        float heightPts = first.getHeightDir();
-        // getYDirAdj() ya devuelve la coordenada desde el TOP de la página.
-        float topPts = first.getYDirAdj() - heightPts;
-        float leftPts = first.getXDirAdj();
+        String fontName = (first.getFont() != null && first.getFont().getName() != null)
+                ? first.getFont().getName() : "Helvetica";
 
-        // 2. Aplicar la escala (72 DPI -> 96 DPI) para pasar de puntos a píxeles CSS.
-        float finalLeft = leftPts * FACTOR_ESCALA;
-        float finalTop = topPts * FACTOR_ESCALA;
-        float finalWidth = widthPts * FACTOR_ESCALA;
-        float finalHeight = heightPts * FACTOR_ESCALA;
-        float finalFontSize = first.getFontSizeInPt() * FACTOR_ESCALA;
-
-        // 3. Crear el TextElement con los 16 argumentos en el orden del record.
         elements.add(new TextElement(
                 UUID.randomUUID().toString(),
                 text.toString().trim(),
-                finalLeft,
-                finalTop,
-                finalWidth,
-                finalHeight,
-                finalFontSize,
-                first.getFont().getName(),
+                first.getXDirAdj(),        // left (pt)
+                first.getYDirAdj(),        // top = baseline (pt)
+                widthPt,                   // width (pt)
+                first.getHeightDir(),      // height (pt)
+                first.getFontSizeInPt(),   // fontSize (pt)
+                fontName,
                 detectWeight(first),
                 isItalic(first),
                 "text",
                 null,
                 null, null, null, null
         ));
+    }
+
+    private List<TextElement> scaleToPx(List<TextElement> rawElements) {
+        List<TextElement> px = new ArrayList<>(rawElements.size());
+        for (TextElement e : rawElements) {
+            px.add(new TextElement(
+                    e.id(), e.text(),
+                    e.left() * FACTOR_ESCALA,
+                    (e.top() - e.height()) * FACTOR_ESCALA,
+                    e.width() * FACTOR_ESCALA,
+                    e.height() * FACTOR_ESCALA,
+                    e.fontSize() * FACTOR_ESCALA,
+                    e.fontName(), e.fontWeight(), e.isItalic(),
+                    e.type(), e.resourceReference(), e.letterSpacing(), e.lineHeight(), e.textAlign(), e.cssTransform()));
+        }
+        return px;
     }
 
 
@@ -5395,12 +5476,14 @@ public class PdfBoxAnalyzerAdapter implements PdfAnalyzerPort {
     }
 
     private boolean isItalic(TextPosition tp) {
+        if (tp.getFont() == null) return false;
         boolean descriptorItalic = tp.getFont().getFontDescriptor() != null && tp.getFont().getFontDescriptor().isItalic();
-        return descriptorItalic || tp.getFont().getName().toLowerCase().contains("italic") || tp.getFont().getName().toLowerCase().contains("oblique");
+        String name = tp.getFont().getName();
+        return descriptorItalic || (name != null && (name.toLowerCase().contains("italic") || name.toLowerCase().contains("oblique")));
     }
 
     private String detectWeight(TextPosition tp) {
-        String name = tp.getFont().getName().toLowerCase();
+        String name = (tp.getFont() != null && tp.getFont().getName() != null) ? tp.getFont().getName().toLowerCase() : "";
         return (name.contains("bold") || name.contains("black") || name.contains("w7")) ? "bold" : "normal";
     }
 
@@ -5920,22 +6003,31 @@ package pillihuaman.com.pe.engine.infrastructure.adapter.outbound.external;
 
 
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.web.reactive.function.client.WebClientResponseException;
 import pillihuaman.com.pe.engine.domain.model.PdfEditableStructure;
+import pillihuaman.com.pe.engine.domain.model.TranslatedDocument;
+import pillihuaman.com.pe.engine.domain.model.TranslatedElement;
+import pillihuaman.com.pe.engine.domain.model.TranslatedPage;
 import pillihuaman.com.pe.engine.domain.model.external.AiClassificationResponse;
 import pillihuaman.com.pe.engine.domain.model.external.AiLayoutRequest;
 import pillihuaman.com.pe.engine.infrastructure.common.ReqBase;
 import pillihuaman.com.pe.engine.infrastructure.common.RespBase;
 import reactor.core.publisher.Mono;
+import reactor.util.retry.Retry;
 
+import java.time.Duration;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeoutException;
 
 import static org.reflections.Reflections.log;
 
@@ -6101,6 +6193,103 @@ public class AiLayoutClientAdapter {
             return json.substring(json.indexOf("```json") + 7, json.lastIndexOf("```")).trim();
         }
         return json.trim();
+    }
+    public Mono<TranslatedDocument> correctVisualDeviations(
+            TranslatedDocument base,
+            String screenshotBase64,
+            String promptCode,
+            String bearerToken) {
+
+        Map<String, Object> payloadMap = new HashMap<>();
+        payloadMap.put("systemPrompt", promptCode);
+        payloadMap.put("rawPdfData", base);
+        payloadMap.put("screenshot", screenshotBase64);
+
+        // ENVOLVER EN ReqBase PARA NEUROIA
+        ReqBase<Map<String, Object>> request = new ReqBase<>();
+        request.setPayload(payloadMap);
+
+        return webClient.post()
+                .uri(neuroIaUrl + "/private/v1/ia/iaService/normalize-pdf-layout")
+                .header(HttpHeaders.AUTHORIZATION, bearerToken)
+                .contentType(MediaType.APPLICATION_JSON)
+                .bodyValue(request) // <--- Aquí enviamos el request envuelto
+                .retrieve()
+                .bodyToMono(String.class)
+                .timeout(Duration.ofSeconds(30))
+                .retryWhen(Retry.backoff(1, Duration.ofSeconds(3)).filter(this::isRetryable))
+                .flatMap(rawResponse -> applyCorrections(base, rawResponse))
+                .onErrorResume(e -> {
+                    log.warn("Refinamiento visual IA no disponible: {}", e.getMessage());
+                    return Mono.just(base); // Fallback silencioso a N1
+                });
+    }
+
+    private Mono<TranslatedDocument> applyCorrections(TranslatedDocument base, String rawResponse) {
+        try {
+            String cleanJson = cleanMarkdown(rawResponse);
+            JsonNode root = objectMapper.readTree(cleanJson);
+            JsonNode payloadNode = root.has("payload") ? root.get("payload") : root;
+            JsonNode correctionsNode = (payloadNode != null && payloadNode.has("corrections"))
+                    ? payloadNode.get("corrections") : null;
+            if (correctionsNode == null || !correctionsNode.isArray() || correctionsNode.isEmpty()) {
+                return Mono.just(base);
+            }
+
+            Map<String, Correction> corrections = new HashMap<>();
+            for (JsonNode c : correctionsNode) {
+                if (!c.hasNonNull("id")) continue;
+                corrections.put(c.get("id").asText(), new Correction(
+                        c.get("id").asText(),
+                        c.hasNonNull("x") ? (float) c.get("x").asDouble() : null,
+                        c.hasNonNull("y") ? (float) c.get("y").asDouble() : null,
+                        c.hasNonNull("width") ? (float) c.get("width").asDouble() : null,
+                        c.hasNonNull("height") ? (float) c.get("height").asDouble() : null,
+                        c.hasNonNull("fontSize") ? (float) c.get("fontSize").asDouble() : null));
+            }
+            if (corrections.isEmpty()) {
+                return Mono.just(base);
+            }
+
+            List<TranslatedPage> newPages = new ArrayList<>();
+            for (TranslatedPage page : base.pages()) {
+                List<TranslatedElement> newElements = new ArrayList<>();
+                for (TranslatedElement e : page.elements()) {
+                    Correction correction = corrections.get(e.id());
+                    newElements.add(correction == null ? e : applyDelta(e, correction));
+                }
+                newPages.add(new TranslatedPage(page.pageNumber(), page.widthPx(), page.heightPx(),
+                        page.backgroundImageBase64(), newElements));
+            }
+            return Mono.just(new TranslatedDocument(base.documentId(), base.renderStrategy(), newPages));
+        } catch (Exception e) {
+            log.warn("No se pudo parsear la respuesta de refinamiento visual: {}. raw={}", e.getMessage(), rawResponse);
+            return Mono.just(base);
+        }
+    }
+
+    private TranslatedElement applyDelta(TranslatedElement e, Correction correction) {
+        return new TranslatedElement(
+                e.id(), e.text(), e.type(),
+                correction.x() != null ? correction.x() : e.x(),
+                correction.y() != null ? correction.y() : e.y(),
+                correction.width() != null ? correction.width() : e.width(),
+                correction.height() != null ? correction.height() : e.height(),
+                correction.fontSize() != null ? correction.fontSize() : e.fontSize(),
+                e.lineHeight(), e.fontFamily(), e.fontWeight(), e.isItalic(), e.resourceReference());
+    }
+
+    private boolean isRetryable(Throwable t) {
+        if (t instanceof TimeoutException) {
+            return true;
+        }
+        if (t instanceof WebClientResponseException e) {
+            return e.getStatusCode() != null && e.getStatusCode().is5xxServerError();
+        }
+        return false;
+    }
+
+    private record Correction(String id, Float x, Float y, Float width, Float height, Float fontSize) {
     }
 }
 
@@ -6561,6 +6750,17 @@ paths:
     post:
       summary: analyzeForEdit en PdfRestController
       operationId: PdfRestController_analyzeForEdit
+      responses:
+        '200':
+          description: Operación exitosa
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/'
+  /private/v1/pdf/translate:
+    post:
+      summary: translate en PdfRestController
+      operationId: PdfRestController_translate
       responses:
         '200':
           description: Operación exitosa
@@ -10199,6 +10399,162 @@ public class PdfEditorController {
         }
         return DEFAULT_EXPORT_NAME;
     }
+}
+
+
+===================================================
+FILE: src/main/java/pillihuaman/com/pe/engine/domain/model/TranslatedDocument.java
+===================================================
+
+package pillihuaman.com.pe.engine.domain.model;
+
+import java.io.Serializable;
+import java.util.List;
+
+public record TranslatedDocument(
+        String documentId,
+        String renderStrategy,
+        List<TranslatedPage> pages
+) implements Serializable {
+}
+
+
+===================================================
+FILE: src/main/java/pillihuaman/com/pe/engine/domain/model/TranslatedPage.java
+===================================================
+
+package pillihuaman.com.pe.engine.domain.model;
+
+import java.io.Serializable;
+import java.util.List;
+
+public record TranslatedPage(
+        int pageNumber,
+        float widthPx,
+        float heightPx,
+        String backgroundImageBase64,
+        List<TranslatedElement> elements
+) implements Serializable {
+}
+
+
+===================================================
+FILE: src/main/java/pillihuaman/com/pe/engine/infrastructure/adapter/outbound/PdfPageRenderer.java
+===================================================
+
+package pillihuaman.com.pe.engine.infrastructure.adapter.outbound;
+
+import lombok.extern.slf4j.Slf4j;
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.rendering.PDFRenderer;
+import org.springframework.stereotype.Component;
+
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.util.Base64;
+
+@Slf4j
+@Component
+public class PdfPageRenderer {
+
+    private static final float RENDER_DPI = 150f;
+
+    public String renderPageToBase64Png(PDDocument doc, int pageIndex) throws IOException {
+        if (doc == null || pageIndex < 0 || pageIndex >= doc.getNumberOfPages()) {
+            return null;
+        }
+        try {
+            PDFRenderer renderer = new PDFRenderer(doc);
+            BufferedImage image = renderer.renderImageWithDPI(pageIndex, RENDER_DPI);
+            if (image == null) {
+                return null;
+            }
+            ByteArrayOutputStream out = new ByteArrayOutputStream();
+            if (!ImageIO.write(image, "png", out)) {
+                return null;
+            }
+            return "data:image/png;base64," + Base64.getEncoder().encodeToString(out.toByteArray());
+        } catch (IOException | RuntimeException e) {
+            log.warn("No se pudo renderizar la página {} a PNG: {}", pageIndex + 1, e.getMessage());
+            return null;
+        }
+    }
+}
+
+
+===================================================
+FILE: src/main/java/pillihuaman/com/pe/engine/infrastructure/adapter/outbound/PdfToCssTranslator.java
+===================================================
+
+package pillihuaman.com.pe.engine.infrastructure.adapter.outbound;
+
+import org.springframework.stereotype.Component;
+import pillihuaman.com.pe.engine.domain.model.TextElement;
+import pillihuaman.com.pe.engine.domain.model.TranslatedElement;
+
+@Component
+public class PdfToCssTranslator {
+
+    private static final float PT_TO_PX = 1.333333f;
+    private static final float ASCENT_FACTOR = 0.75f;
+    private static final float BOX_HEIGHT_RATIO = 1.3f;
+    private static final float LINE_HEIGHT_RATIO = 1.15f;
+
+    public TranslatedElement translate(TextElement raw, float pageHeightPt) {
+        float cssFontSize = raw.fontSize() * PT_TO_PX;
+
+        // CORRECCIÓN: raw.top() ya es Top-Down (0 = borde superior).
+        // Solo lo pasamos a píxeles y le restamos el ajuste de la fuente.
+        float cssTop = (raw.top() * PT_TO_PX) - (cssFontSize * ASCENT_FACTOR);
+
+        float cssLeft = raw.left() * PT_TO_PX;
+        float cssWidth = raw.width() * PT_TO_PX;
+        float cssHeight = cssFontSize * BOX_HEIGHT_RATIO;
+        float cssLineHeight = cssFontSize * LINE_HEIGHT_RATIO;
+
+        return new TranslatedElement(
+                raw.id(),
+                raw.text(),
+                "text",
+                cssLeft,
+                cssTop,
+                cssWidth,
+                cssHeight,
+                cssFontSize,
+                cssLineHeight,
+                raw.fontName(),
+                raw.fontWeight(),
+                raw.isItalic(),
+                raw.resourceReference()
+        );
+    }
+}
+
+===================================================
+FILE: src/main/java/pillihuaman/com/pe/engine/domain/model/TranslatedElement.java
+===================================================
+
+package pillihuaman.com.pe.engine.domain.model;
+
+import java.io.Serializable;
+
+public record TranslatedElement(
+        String id,
+        String text,
+        String type,
+        float x,
+        float y,
+        float width,
+        float height,
+        float fontSize,
+        float lineHeight,
+        String fontFamily,
+        String fontWeight,
+        boolean isItalic,
+        String resourceReference
+) implements Serializable {
 }
 
 

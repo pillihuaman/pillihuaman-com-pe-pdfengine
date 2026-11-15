@@ -14,7 +14,11 @@ public class PdfToCssTranslator {
 
     public TranslatedElement translate(TextElement raw, float pageHeightPt) {
         float cssFontSize = raw.fontSize() * PT_TO_PX;
-        float cssTop = (pageHeightPt - raw.top()) * PT_TO_PX - (cssFontSize * ASCENT_FACTOR);
+
+        // CORRECCIÓN: raw.top() ya es Top-Down (0 = borde superior).
+        // Solo lo pasamos a píxeles y le restamos el ajuste de la fuente.
+        float cssTop = (raw.top() * PT_TO_PX) - (cssFontSize * ASCENT_FACTOR);
+
         float cssLeft = raw.left() * PT_TO_PX;
         float cssWidth = raw.width() * PT_TO_PX;
         float cssHeight = cssFontSize * BOX_HEIGHT_RATIO;

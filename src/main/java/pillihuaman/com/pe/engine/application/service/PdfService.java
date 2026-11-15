@@ -28,6 +28,7 @@ public class PdfService implements PdfUseCase {
     private final PdfProcessingPort pdfProcessingPort;
 
     private final PdfAnalyzerPort pdfAnalyzerPort;
+    private final PdfTranslationOrchestrator pdfTranslationOrchestrator;
     private final PromptExternalPort promptExternalPort;
     private final AiLayoutClientAdapter aiLayoutClientAdapter;
 
@@ -120,6 +121,10 @@ public class PdfService implements PdfUseCase {
 
     @Override
     public Mono<PdfEditableStructure> refineFidelity(PdfEditableStructure currentStructure, String base64Image, String bearerToken) {
+        if (base64Image == null || base64Image.isBlank()) {
+            log.warn("Screenshot ausente; se omite refinamiento IA. Devolviendo N1.");
+            return Mono.just(currentStructure);
+        }
         log.info("Starting Extreme Mathematical Alignment pass (Logical Snapping)...");
 
         return aiLayoutClientAdapter.callNeuroIaToRefineVisuals(
@@ -163,9 +168,19 @@ public class PdfService implements PdfUseCase {
     }
 
     @Override
-    public Mono<TranslatedDocument> translatePdf(byte[] pdfBytes, String bearerToken) {
-        return pdfAnalyzerPort.analyzeTranslated(pdfBytes);
+    public Mono<TranslatedDocument> translatePdf(byte[] pdfBytes, String screenshotBase64, boolean skipAI, String bearerToken) {
+        return pdfTranslationOrchestrator.translate(pdfBytes, screenshotBase64, skipAI, bearerToken);
     }
 
+    @Override
+    public Mono<TranslatedDocument> refineTranslatedDocument(
+            TranslatedDocument base, String screenshotBase64, String bearerToken) {
+        if (screenshotBase64 == null || screenshotBase64.isBlank()) {
+            log.warn("Screenshot ausente; se omite refinamiento N2. Devolviendo N1.");
+            return Mono.just(base);
+        }
+        return aiLayoutClientAdapter.correctVisualDeviations(
+                base, screenshotBase64, "PDF_CSS_DELTA_CORRECTOR_V1", bearerToken);
+    }
 
 }

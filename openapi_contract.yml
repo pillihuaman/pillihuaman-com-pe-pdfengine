@@ -39,6 +39,17 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/'
+  /private/v1/pdf/translate:
+    post:
+      summary: translate en PdfRestController
+      operationId: PdfRestController_translate
+      responses:
+        '200':
+          description: Operación exitosa
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/'
   /private/v1/pdf/update-content:
     put:
       summary: updateContent en PdfRestController
